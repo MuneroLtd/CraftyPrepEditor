@@ -1,0 +1,25 @@
+# Development Dockerfile for CraftyPrep
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install development tools
+RUN apk add --no-cache \
+    git \
+    curl
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose dev server port and debugger port
+EXPOSE 5173 9229
+
+# Start development server with hot reload
+CMD ["npm", "run", "dev"]

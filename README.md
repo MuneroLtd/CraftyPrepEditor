@@ -1,0 +1,1 @@
+I want a simple react based app, no login, just an editor page where I can upload an image and prep it for laser engraving. With an 'auto prep' button, with sliders and options to refine it further. It must run on craftyprep.demosrv.uk using the traefik_demosrv traefik network. 
