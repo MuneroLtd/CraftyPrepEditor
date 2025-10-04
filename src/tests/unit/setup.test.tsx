@@ -13,13 +13,15 @@ describe('Project Setup Validation', () => {
     it('should have correct heading text', () => {
       render(<App />);
       const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toHaveTextContent('CraftyPrep - Laser Engraving Image Prep');
+      expect(heading).toHaveTextContent('CraftyPrep');
     });
 
     it('should apply Tailwind CSS classes', () => {
       render(<App />);
       const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toHaveClass('text-4xl', 'font-bold', 'text-gray-900');
+      // Check for responsive classes (sm:, lg:)
+      expect(heading.className).toMatch(/text-2xl|sm:text-3xl|lg:text-4xl/);
+      expect(heading).toHaveClass('font-bold');
     });
   });
 

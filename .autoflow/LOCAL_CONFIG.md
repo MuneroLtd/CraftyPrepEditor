@@ -22,15 +22,18 @@
 ### Development Environment
 ```
 Primary Dev URL: https://craftyprep.demosrv.uk
-Local URL: http://localhost:5173
+Local Dev URL: http://localhost:5173 (Docker)
 Port: 5173
 ```
+
+**Development Deployment**: craftyprep.demosrv.uk (via Traefik on traefik_demosrv network)
+**Production**: Configured via .env (not in scope for current build)
 
 **IMPORTANT**: Commands will use Primary Dev URL by default!
 - ✅ `/verify-implementation` → https://craftyprep.demosrv.uk
 - ✅ E2E/Playwright tests → https://craftyprep.demosrv.uk
 - ✅ Accessibility testing → https://craftyprep.demosrv.uk
-- ⚠️  Local development → http://localhost:5173
+- ⚠️  Local Docker development → http://localhost:5173
 
 **To change the URL**:
 1. Edit "Primary Dev URL:" line above
