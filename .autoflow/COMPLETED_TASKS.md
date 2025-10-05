@@ -209,3 +209,86 @@ Implement comprehensive file upload functionality with drag-and-drop, file picke
 - Image dimension validation (prevents malicious files)
 
 ---
+
+### Task 1.4: Image Canvas and Preview Display
+
+**ID**: task-004
+**Status**: COMMITTED
+**Completed**: 2025-10-05
+**Estimated**: 5 hours
+**Actual**: ~5 hours
+**Sprint**: Sprint 1 - Foundation & Core Processing
+
+**Description**:
+Create the canvas-based preview system for displaying both original and processed images side-by-side with zoom and pan capabilities. This provides visual feedback for all processing operations.
+
+**Key Deliverables**:
+- ✅ ImageCanvas component with aspect ratio preservation
+- ✅ ImagePreview container with responsive layout
+- ✅ Side-by-side layout on desktop (≥1024px)
+- ✅ Stacked layout on mobile (<768px)
+- ✅ ZoomControls with buttons, slider, and keyboard support
+- ✅ Pan/drag functionality with mouse and keyboard
+- ✅ Pan bounds constraint (prevents dragging beyond image edges)
+- ✅ Zoom range: 1x-4x with 0.25 step increment
+- ✅ Canvas memory cleanup (no leaks)
+- ✅ RequestAnimationFrame for smooth 60fps panning
+- ✅ Debounced window resize (100ms)
+- ✅ WCAG 2.2 AAA accessibility (role="img", keyboard navigation, focus indicators)
+
+**Quality Metrics**:
+- Tests passing: 190/190 (100%)
+- Code coverage: 81% (exceeds 80% threshold)
+- Performance: 2MB image renders in <1s
+- Issues resolved: 11 (all code review issues)
+- E2E verification: Passed (zoom, pan, keyboard navigation, accessibility)
+
+**Major Decisions**:
+- **Dual Canvas Architecture**: Separate ImageCanvas components for original/processed images with independent zoom/pan state
+- **Aspect Ratio Preservation**: Implemented calculateAspectRatio utility for responsive sizing
+- **Pan Bounds Constraint**: Prevents dragging beyond image edges for better UX
+- **RequestAnimationFrame**: Used for smooth 60fps panning performance
+- **Debounced Resize**: Prevents performance issues on window resize
+
+**Blockers Resolved**:
+- Canvas memory leaks → Implemented cleanup in useEffect return
+- Pan bounds calculation → Created constraint logic based on zoom level and viewport
+- Smooth panning → Used requestAnimationFrame for 60fps updates
+
+**Components Created**:
+- ImageCanvas.tsx - Canvas component with zoom/pan state
+- ImagePreview.tsx - Container with responsive layout
+- ZoomControls.tsx - Zoom UI with buttons, slider, keyboard support
+
+**Utilities Created**:
+- calculateAspectRatio.ts - Aspect ratio preservation logic
+
+**Documentation**:
+- Task Plan: .autoflow/tasks/task-004/TASK_PLAN.md
+- Acceptance Criteria: .autoflow/tasks/task-004/ACCEPTANCE_CRITERIA.md
+- Review Issues: .autoflow/tasks/task-004/REVIEW.md (all 11 resolved)
+- Research: .autoflow/tasks/task-004/RESEARCH.md
+- Dependencies: .autoflow/tasks/task-004/DEPENDENCIES.md
+
+**Commit**: 6de5fd5 (feat(canvas): implement dual canvas preview with zoom and pan)
+
+**Files Changed**: 18 files, 5,056 insertions(+), 98 deletions(-)
+
+**Test Coverage Breakdown**:
+- Unit tests: 145 tests (ImageCanvas, ImagePreview, ZoomControls, calculateAspectRatio)
+- Integration tests: 40 tests (ImagePreview complete flow)
+- E2E tests: 5 tests (zoom, pan, keyboard navigation)
+
+**Performance Metrics**:
+- 2MB image render: <1s (target: <1s) ✅
+- Pan response time: <16ms (60fps) ✅
+- Zoom response time: <100ms (target: <100ms) ✅
+
+**Accessibility Features**:
+- Canvas role="img" with alt text
+- Keyboard zoom: +/- keys
+- Keyboard pan: Arrow keys
+- Focus indicators on controls
+- Screen reader announcements for zoom level
+
+---

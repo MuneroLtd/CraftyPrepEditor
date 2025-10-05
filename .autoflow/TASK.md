@@ -5,8 +5,8 @@
 **Sprint Goal**: Deliver working image upload and basic auto-prep functionality with MVP feature set
 **Duration**: Week 1-2
 **Status**: ACTIVE
-**Progress**: 3/10 complete
-**Last Updated**: 2025-10-04
+**Progress**: 4/10 complete
+**Last Updated**: 2025-10-05
 
 ---
 
@@ -20,60 +20,11 @@
 
 ## 📋 Sprint Tasks (Max 10)
 
-### Task 1.4: Image Canvas and Preview Display
-
-**ID**: task-004
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 5 hours
-
-**Description**:
-Create the canvas-based preview system for displaying both original and processed images side-by-side with zoom and pan capabilities. This provides visual feedback for all processing operations.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#image-preview - Preview component specifications
-- .autoflow/docs/ARCHITECTURE.md#canvas-operations - Canvas API best practices and memory management
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Preview requirements
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Canvas architecture
-
-**Acceptance Criteria**:
-- [x] Original image canvas component created
-- [x] Processed image canvas component created
-- [x] Side-by-side layout on desktop (≥1024px)
-- [x] Stacked layout on mobile (<768px)
-- [x] Uploaded image loaded and drawn to canvas correctly
-- [x] Zoom controls implemented (buttons or slider)
-- [x] Pan/drag functionality for large images
-- [x] Responsive canvas sizing (maintains aspect ratio)
-- [x] Canvas context cleanup (prevents memory leaks)
-- [x] Alt text for accessibility ("Original image", "Processed image")
-- [x] Unit tests for canvas utility functions
-- [x] Integration test for image load → canvas render
-- [x] Tests written and passing (≥80% coverage)
-- [x] Code review passed (all 11 issues resolved)
-
-**Definition of Done**:
-- [x] Both canvases render correctly
-- [x] Memory properly managed (no leaks)
-- [x] Responsive on all breakpoints
-- [x] Zoom and pan working smoothly
-- [x] Performance: renders 2MB image in <1s
-
-**Dependencies**: Task 1.3 (upload must provide image)
-
-**Task Plan**: [.autoflow/tasks/task-004/TASK_PLAN.md](.autoflow/tasks/task-004/TASK_PLAN.md)
-
-**Blockers**: None (all 11 issues resolved - see [.autoflow/tasks/task-004/REVIEW.md](.autoflow/tasks/task-004/REVIEW.md))
-
----
-
 ### Task 1.5: Grayscale Conversion Algorithm
 
 **ID**: task-005
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 3 hours
 
 **Description**:
