@@ -29,6 +29,7 @@ function App() {
     processedImage,
     processedCanvas,
     baselineImageData,
+    otsuThreshold,
     isProcessing,
     error: processingError,
     runAutoPrepAsync,
@@ -41,6 +42,7 @@ function App() {
   const [threshold, setThreshold] = useState(128);
   const debouncedBrightness = useDebounce(brightness, 100);
   const debouncedContrast = useDebounce(contrast, 100);
+  const debouncedThreshold = useDebounce(threshold, 100);
 
   // Background removal state
   const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(false);
@@ -50,20 +52,33 @@ function App() {
   /**
    * State flow documentation:
    * 1. Background removal changes → runs auto-prep → sets baselineImageData
-   * 2. baselineImageData changes → re-applies brightness/contrast adjustments
+   * 2. baselineImageData changes → re-applies brightness/contrast/threshold adjustments
    *
    * This cascading is intentional:
    * - Background removal requires full pipeline re-run
-   * - Brightness/contrast are quick adjustments on existing baseline
+   * - Brightness/contrast/threshold are quick adjustments on existing baseline
    * - isProcessing state shows loading indicator during auto-prep
    */
 
-  // Apply brightness/contrast adjustments when debounced values change
+  // Apply brightness/contrast/threshold adjustments when debounced values change
   useEffect(() => {
     if (baselineImageData) {
-      applyAdjustments(debouncedBrightness, debouncedContrast);
+      applyAdjustments(debouncedBrightness, debouncedContrast, debouncedThreshold);
     }
-  }, [debouncedBrightness, debouncedContrast, baselineImageData, applyAdjustments]);
+  }, [
+    debouncedBrightness,
+    debouncedContrast,
+    debouncedThreshold,
+    baselineImageData,
+    applyAdjustments,
+  ]);
+
+  // Update threshold slider when Otsu value is calculated
+  useEffect(() => {
+    if (otsuThreshold !== null) {
+      setThreshold(otsuThreshold);
+    }
+  }, [otsuThreshold]);
 
   // Re-run auto-prep when background removal settings change
   // Note: runAutoPrepAsync sets isProcessing=true, showing loading indicator

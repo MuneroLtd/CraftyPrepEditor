@@ -22,9 +22,10 @@ import { useState, useCallback } from 'react';
 import {
   convertToGrayscale,
   applyHistogramEqualization,
-  applyOtsuThreshold,
+  calculateOptimalThreshold,
   applyBrightness,
   applyContrast,
+  applyThreshold,
   removeBackground,
 } from '../lib/imageProcessing';
 
@@ -77,6 +78,8 @@ export interface UseImageProcessingReturn {
   processedCanvas: HTMLCanvasElement | null;
   /** Baseline ImageData after auto-prep (before adjustments) - used for re-processing */
   baselineImageData: ImageData | null;
+  /** Optimal threshold calculated by Otsu's method (null until auto-prep completes) */
+  otsuThreshold: number | null;
   /** Whether processing is currently in progress */
   isProcessing: boolean;
   /** User-friendly error message (null if no error) */
@@ -90,7 +93,7 @@ export interface UseImageProcessingReturn {
     }
   ) => Promise<void>;
   /** Apply brightness/contrast/threshold adjustments to baseline */
-  applyAdjustments: (brightness: number, contrast: number) => Promise<void>;
+  applyAdjustments: (brightness: number, contrast: number, threshold: number) => Promise<void>;
 }
 
 /**
@@ -113,6 +116,7 @@ export function useImageProcessing(): UseImageProcessingReturn {
   const [processedImage, setProcessedImage] = useState<HTMLImageElement | null>(null);
   const [processedCanvas, setProcessedCanvas] = useState<HTMLCanvasElement | null>(null);
   const [baselineImageData, setBaselineImageData] = useState<ImageData | null>(null);
+  const [otsuThreshold, setOtsuThreshold] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -174,10 +178,12 @@ export function useImageProcessing(): UseImageProcessingReturn {
         // Step 4: Apply histogram equalization (preserve alpha if background removed)
         imageData = applyHistogramEqualization(imageData, hasBackgroundRemoval);
 
-        // Step 5: Apply Otsu's method (calculates optimal threshold and applies binarization)
-        imageData = applyOtsuThreshold(imageData);
+        // Step 5: Calculate optimal threshold using Otsu's method (but don't apply yet)
+        const otsuValue = calculateOptimalThreshold(imageData);
+        setOtsuThreshold(otsuValue);
 
-        // Store baseline ImageData for adjustments (brightness, contrast, threshold)
+        // Store GRAYSCALE baseline (BEFORE threshold application)
+        // This allows manual threshold adjustment to work correctly
         // Clone ImageData to prevent mutation
         const baseline = new ImageData(
           new Uint8ClampedArray(imageData.data),
@@ -186,7 +192,10 @@ export function useImageProcessing(): UseImageProcessingReturn {
         );
         setBaselineImageData(baseline);
 
-        // Step 6: Convert ImageData back to HTMLImageElement
+        // Step 6: Apply threshold to get initial binarized preview
+        imageData = applyThreshold(imageData, otsuValue);
+
+        // Step 7: Convert ImageData back to HTMLImageElement
         const { image: resultImage, canvas: resultCanvas } = await convertImageDataToImage(
           imageData,
           'Failed to load processed image'
@@ -208,6 +217,7 @@ export function useImageProcessing(): UseImageProcessingReturn {
         setProcessedImage(null);
         setProcessedCanvas(null);
         setBaselineImageData(null);
+        setOtsuThreshold(null);
       }
     },
     // Empty deps: only uses setState functions (stable by React design) and pure functions
@@ -223,9 +233,10 @@ export function useImageProcessing(): UseImageProcessingReturn {
    *
    * @param brightness - Brightness adjustment (-100 to +100, 0 = no change)
    * @param contrast - Contrast adjustment (-100 to +100, 0 = no change)
+   * @param threshold - Threshold value (0 to 255, default from Otsu's method)
    */
   const applyAdjustments = useCallback(
-    async (brightness: number, contrast: number) => {
+    async (brightness: number, contrast: number, threshold: number) => {
       // Validate baseline exists
       if (!baselineImageData) {
         console.warn('Cannot apply adjustments: no baseline ImageData available');
@@ -253,6 +264,9 @@ export function useImageProcessing(): UseImageProcessingReturn {
           adjustedData = applyContrast(adjustedData, contrast);
         }
 
+        // Apply threshold adjustment (always - re-applies binarization with new threshold)
+        adjustedData = applyThreshold(adjustedData, threshold);
+
         // Convert ImageData to HTMLImageElement
         const { image: resultImage, canvas: resultCanvas } = await convertImageDataToImage(
           adjustedData,
@@ -277,6 +291,7 @@ export function useImageProcessing(): UseImageProcessingReturn {
     processedImage,
     processedCanvas,
     baselineImageData,
+    otsuThreshold,
     isProcessing,
     error,
     runAutoPrepAsync,

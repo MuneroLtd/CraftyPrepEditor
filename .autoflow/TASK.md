@@ -6,7 +6,7 @@
 **Duration**: Week 3-4
 **Status**: ACTIVE
 **Progress**: 4/11 complete
-**Last Updated**: 2025-10-05
+**Last Updated**: 2025-10-05 (task-015 PLANNED)
 
 ---
 
@@ -24,7 +24,7 @@
 
 **ID**: task-015
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 3 hours
 
 **Description**:
@@ -55,7 +55,7 @@ Implement manual threshold override and integrate with slider.
 
 **Dependencies**: Task 2.1 (slider component)
 
-**Task Plan**: (Will be created by `/plan`)
+**Task Plan**: [.autoflow/tasks/task-015/TASK_PLAN.md](.autoflow/tasks/task-015/TASK_PLAN.md)
 
 **Blockers**: None
 

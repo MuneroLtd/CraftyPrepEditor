@@ -10,4 +10,5 @@ export { applyHistogramEqualization } from './histogramEqualization';
 export { calculateOptimalThreshold, applyOtsuThreshold } from './otsuThreshold';
 export { applyBrightness } from './applyBrightness';
 export { applyContrast } from './applyContrast';
+export { applyThreshold } from './applyThreshold';
 export { removeBackground, type RGB } from './backgroundRemoval';
