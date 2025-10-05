@@ -5,7 +5,7 @@
 **Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 3/11 complete
+**Progress**: 4/11 complete
 **Last Updated**: 2025-10-05
 
 ---
@@ -19,47 +19,6 @@
 ---
 
 ## 📋 Sprint Tasks (Max 12)
-
-### Task 2.4: Contrast Adjustment Implementation
-
-**ID**: task-014
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 3 hours
-
-**Description**:
-Implement contrast adjustment algorithm and integrate with slider control.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#contrast-adjustment - Algorithm specification
-- .autoflow/docs/ARCHITECTURE.md#processing-patterns - Pipeline integration
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Contrast algorithm
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Processing patterns
-
-**Acceptance Criteria**:
-- [ ] Contrast formula implemented (see FUNCTIONAL.md)
-- [ ] Factor calculated from slider value
-- [ ] Applied to RGB channels
-- [ ] Slider triggers contrast adjustment
-- [ ] Preview updates with debounce
-- [ ] Unit tests for contrast calculation
-- [ ] Edge cases tested
-
-**Definition of Done**:
-- [ ] Contrast adjustment working
-- [ ] Real-time preview updates
-- [ ] Tests passing
-- [ ] Code review passed
-
-**Dependencies**: Task 2.1 (slider component)
-
-**Task Plan**: (Will be created by `/plan`)
-
-**Blockers**: None
-
----
 
 ### Task 2.5: Threshold Adjustment Implementation
 
