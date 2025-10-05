@@ -1,4 +1,3 @@
-import { useFileUpload } from '@/hooks/useFileUpload';
 import { FileDropzone } from './FileDropzone';
 import { FileUploadError } from './FileUploadError';
 import { FileUploadInfo } from './FileUploadInfo';
@@ -6,22 +5,37 @@ import { FileUploadProgress } from './FileUploadProgress';
 import { FILE_UPLOAD } from '@/lib/constants';
 
 /**
- * Main file upload component integrating dropzone, error display, and progress indicator.
- * Manages file validation and state with full accessibility support.
+ * Props interface for FileUploadComponent.
+ * All state and handlers are passed from parent component to maintain single source of truth.
  */
-export function FileUploadComponent() {
-  const {
-    selectedFile,
-    uploadedImage,
-    isLoading,
-    error,
-    info,
-    progress,
-    handleFileSelect,
-    clearError,
-    clearInfo,
-  } = useFileUpload();
+interface FileUploadComponentProps {
+  selectedFile: File | null;
+  uploadedImage: HTMLImageElement | null;
+  isLoading: boolean;
+  error: string | null;
+  info: string | null;
+  progress: number;
+  handleFileSelect: (file: File) => void;
+  clearError: () => void;
+  clearInfo: () => void;
+}
 
+/**
+ * Main file upload component integrating dropzone, error display, and progress indicator.
+ * Receives all state and handlers as props from parent component (App.tsx).
+ * This ensures single source of truth for file upload state.
+ */
+export function FileUploadComponent({
+  selectedFile,
+  uploadedImage,
+  isLoading,
+  error,
+  info,
+  progress,
+  handleFileSelect,
+  clearError,
+  clearInfo,
+}: FileUploadComponentProps) {
   const isLargeFile = selectedFile && selectedFile.size > FILE_UPLOAD.LARGE_FILE_THRESHOLD_BYTES;
   const showProgress = isLoading && isLargeFile;
 

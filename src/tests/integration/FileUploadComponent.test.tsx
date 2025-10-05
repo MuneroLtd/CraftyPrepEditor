@@ -3,13 +3,30 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FileUploadComponent } from '@/components/FileUploadComponent';
 
+/**
+ * Helper function to create default props for FileUploadComponent tests.
+ * Allows overriding specific props while providing sensible defaults.
+ */
+const createDefaultProps = (overrides = {}) => ({
+  selectedFile: null,
+  uploadedImage: null,
+  isLoading: false,
+  error: null,
+  info: null,
+  progress: 0,
+  handleFileSelect: vi.fn(),
+  clearError: vi.fn(),
+  clearInfo: vi.fn(),
+  ...overrides,
+});
+
 describe('FileUploadComponent Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render dropzone initially', () => {
-    render(<FileUploadComponent />);
+    render(<FileUploadComponent {...createDefaultProps()} />);
 
     expect(screen.getByRole('button', { name: /upload image file/i })).toBeInTheDocument();
     expect(screen.getByText(/drag image here or click to browse/i)).toBeInTheDocument();
@@ -53,7 +70,7 @@ describe('FileUploadComponent Integration', () => {
     global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
     global.URL.revokeObjectURL = vi.fn();
 
-    render(<FileUploadComponent />);
+    render(<FileUploadComponent {...createDefaultProps()} />);
 
     const dropzone = screen.getByRole('button', { name: /upload image file/i });
     await user.click(dropzone);
@@ -77,7 +94,7 @@ describe('FileUploadComponent Integration', () => {
 
     const file = new File(['test'], 'document.pdf', { type: 'application/pdf' });
 
-    render(<FileUploadComponent />);
+    render(<FileUploadComponent {...createDefaultProps()} />);
 
     const dropzone = screen.getByRole('button', { name: /upload image file/i });
     await user.click(dropzone);
@@ -101,7 +118,7 @@ describe('FileUploadComponent Integration', () => {
 
     const file = new File(['test'], 'invalid.pdf', { type: 'application/pdf' });
 
-    render(<FileUploadComponent />);
+    render(<FileUploadComponent {...createDefaultProps()} />);
 
     const dropzone = screen.getByRole('button', { name: /upload image file/i });
     await user.click(dropzone);
@@ -129,7 +146,7 @@ describe('FileUploadComponent Integration', () => {
   it('should be keyboard accessible', async () => {
     const user = userEvent.setup();
 
-    render(<FileUploadComponent />);
+    render(<FileUploadComponent {...createDefaultProps()} />);
 
     const dropzone = screen.getByRole('button', { name: /upload image file/i });
 

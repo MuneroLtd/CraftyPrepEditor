@@ -24,7 +24,7 @@
 
 **ID**: task-012
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 3 hours
 
 **Description**:
@@ -53,9 +53,9 @@ Implement brightness adjustment algorithm and wire to slider with real-time prev
 - [ ] Performance <100ms
 - [ ] Tests passing
 
-**Dependencies**: Task 2.1 (slider component)
+**Dependencies**: Task 2.1 (slider component) ✅
 
-**Task Plan**: (Will be created by `/plan`)
+**Task Plan**: [.autoflow/tasks/task-012/TASK_PLAN.md](.autoflow/tasks/task-012/TASK_PLAN.md)
 
 **Blockers**: None
 
