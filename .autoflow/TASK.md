@@ -5,7 +5,7 @@
 **Sprint Goal**: Deliver working image upload and basic auto-prep functionality with MVP feature set
 **Duration**: Week 1-2
 **Status**: ACTIVE
-**Progress**: 2/10 complete
+**Progress**: 3/10 complete
 **Last Updated**: 2025-10-04
 
 ---
@@ -20,67 +20,11 @@
 
 ## 📋 Sprint Tasks (Max 10)
 
-### Task 1.3: File Upload Component
-
-**ID**: task-003
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 6 hours
-
-**Description**:
-Implement comprehensive file upload functionality with drag-and-drop, file picker, validation (type, size, MIME), and user feedback. This is the entry point for all user workflows.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#feature-1-image-upload-system - Complete upload specifications, edge cases, UI requirements
-- .autoflow/docs/SECURITY.md#input-validation - File validation for security (whitelist, size limits, sanitization)
-- .autoflow/docs/ACCESSIBILITY.md#keyboard-navigation - Keyboard accessibility requirements
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Upload feature details
-- 📘 [.autoflow/docs/SECURITY.md](.autoflow/docs/SECURITY.md) - Security requirements
-- 📘 [.autoflow/docs/TESTING.md](.autoflow/docs/TESTING.md) - Testing strategy for upload
-
-**Task Plan**: [.autoflow/tasks/task-003/TASK_PLAN.md](.autoflow/tasks/task-003/TASK_PLAN.md)
-
-**Acceptance Criteria**:
-- [x] Drag-and-drop zone component created with visual feedback
-- [x] File picker integration (click dropzone to browse)
-- [x] File type validation: JPG, JPEG, PNG, GIF, BMP only (whitelist)
-- [x] File size validation: 10MB maximum
-- [x] MIME type verification (not just extension check)
-- [x] Filename sanitization implemented (remove dangerous characters)
-- [x] Upload progress indicator for large files (>2MB)
-- [x] Clear error messages for invalid files (type, size, corrupted)
-- [x] Visual states: default, hover, active drop, loading, error
-- [x] Keyboard accessible (Tab to dropzone, Enter to open picker)
-- [x] Screen reader announcements for upload status
-- [x] Unit tests for all validation logic
-- [x] Integration test for complete upload flow
-- [x] Tests written and passing (≥80% coverage)
-- [x] Code review passed (FINAL REVIEW COMPLETE - All quality gates passed)
-- [x] Security review passed
-- [x] All tests passing (138/138 - 100%)
-
-**Definition of Done**:
-- [x] Implementation matches functional spec
-- [x] All validation tests passing
-- [x] Security validation working (MIME + extension)
-- [x] Accessibility tested
-- [x] Edge cases handled (corrupted files, >10MB, multiple files)
-
-**Dependencies**: Task 1.2 (layout must exist) - COMPLETE
-
-**Blockers**: None (all resolved)
-
-**Review Issues**: [.autoflow/tasks/task-003/REVIEW.md](.autoflow/tasks/task-003/REVIEW.md) - ✅ All 8 issues resolved. Ready for E2E verification.
-
----
-
 ### Task 1.4: Image Canvas and Preview Display
 
 **ID**: task-004
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 5 hours
 
 **Description**:
@@ -95,33 +39,33 @@ Create the canvas-based preview system for displaying both original and processe
 - 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Canvas architecture
 
 **Acceptance Criteria**:
-- [ ] Original image canvas component created
-- [ ] Processed image canvas component created
-- [ ] Side-by-side layout on desktop (≥1024px)
-- [ ] Stacked layout on mobile (<768px)
-- [ ] Uploaded image loaded and drawn to canvas correctly
-- [ ] Zoom controls implemented (buttons or slider)
-- [ ] Pan/drag functionality for large images
-- [ ] Responsive canvas sizing (maintains aspect ratio)
-- [ ] Canvas context cleanup (prevents memory leaks)
-- [ ] Alt text for accessibility ("Original image", "Processed image")
-- [ ] Unit tests for canvas utility functions
-- [ ] Integration test for image load → canvas render
-- [ ] Tests written and passing (≥80% coverage)
-- [ ] Code review passed
+- [x] Original image canvas component created
+- [x] Processed image canvas component created
+- [x] Side-by-side layout on desktop (≥1024px)
+- [x] Stacked layout on mobile (<768px)
+- [x] Uploaded image loaded and drawn to canvas correctly
+- [x] Zoom controls implemented (buttons or slider)
+- [x] Pan/drag functionality for large images
+- [x] Responsive canvas sizing (maintains aspect ratio)
+- [x] Canvas context cleanup (prevents memory leaks)
+- [x] Alt text for accessibility ("Original image", "Processed image")
+- [x] Unit tests for canvas utility functions
+- [x] Integration test for image load → canvas render
+- [x] Tests written and passing (≥80% coverage)
+- [x] Code review passed (all 11 issues resolved)
 
 **Definition of Done**:
-- [ ] Both canvases render correctly
-- [ ] Memory properly managed (no leaks)
-- [ ] Responsive on all breakpoints
-- [ ] Zoom and pan working smoothly
-- [ ] Performance: renders 2MB image in <1s
+- [x] Both canvases render correctly
+- [x] Memory properly managed (no leaks)
+- [x] Responsive on all breakpoints
+- [x] Zoom and pan working smoothly
+- [x] Performance: renders 2MB image in <1s
 
 **Dependencies**: Task 1.3 (upload must provide image)
 
-**Task Plan**: (Will be added by /plan command)
+**Task Plan**: [.autoflow/tasks/task-004/TASK_PLAN.md](.autoflow/tasks/task-004/TASK_PLAN.md)
 
-**Blockers**: None
+**Blockers**: None (all 11 issues resolved - see [.autoflow/tasks/task-004/REVIEW.md](.autoflow/tasks/task-004/REVIEW.md))
 
 ---
 

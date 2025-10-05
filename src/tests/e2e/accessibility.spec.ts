@@ -6,7 +6,9 @@ test.describe('Accessibility Testing - WCAG 2.2 AAA', () => {
     await page.goto('https://craftyprep.demosrv.uk');
   });
 
-  test('should not have any automatically detectable accessibility violations', async ({ page }) => {
+  test('should not have any automatically detectable accessibility violations', async ({
+    page,
+  }) => {
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag2aaa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
@@ -87,9 +89,7 @@ test.describe('Accessibility Testing - WCAG 2.2 AAA', () => {
       .analyze();
 
     // Ensure no ARIA violations
-    const ariaViolations = accessibilityScanResults.violations.filter(
-      (v) => v.id.includes('aria')
-    );
+    const ariaViolations = accessibilityScanResults.violations.filter((v) => v.id.includes('aria'));
 
     expect(ariaViolations).toEqual([]);
   });
