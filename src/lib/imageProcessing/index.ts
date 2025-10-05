@@ -7,3 +7,4 @@
 
 export { convertToGrayscale } from './grayscale';
 export { applyHistogramEqualization } from './histogramEqualization';
+export { calculateOptimalThreshold, applyOtsuThreshold } from './otsuThreshold';
