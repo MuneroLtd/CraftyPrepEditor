@@ -48,15 +48,13 @@ describe('RefinementSlider', () => {
     it('has correct aria-label', () => {
       render(<RefinementSlider {...defaultProps} />);
       const slider = screen.getByRole('slider');
-      const sliderRoot = slider.parentElement?.parentElement;
-      expect(sliderRoot).toHaveAttribute('aria-label', 'Test Slider: 50');
+      expect(slider).toHaveAttribute('aria-label', 'Test Slider: 50');
     });
 
     it('uses custom ariaLabel when provided', () => {
       render(<RefinementSlider {...defaultProps} ariaLabel="Custom ARIA label for test slider" />);
       const slider = screen.getByRole('slider');
-      const sliderRoot = slider.parentElement?.parentElement;
-      expect(sliderRoot).toHaveAttribute('aria-label', 'Custom ARIA label for test slider');
+      expect(slider).toHaveAttribute('aria-label', 'Custom ARIA label for test slider');
     });
 
     it('has correct aria-valuemin', () => {

@@ -5,7 +5,7 @@ import { FileUploadComponent } from './components/FileUploadComponent';
 import { AutoPrepButton } from './components/AutoPrepButton';
 import { ImagePreview } from './components/ImagePreview';
 import { DownloadButton } from './components/DownloadButton';
-import { BrightnessSlider } from './components/BrightnessSlider';
+import { RefinementControls } from './components/RefinementControls';
 import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
@@ -35,9 +35,27 @@ function App() {
     applyAdjustments,
   } = useImageProcessing();
 
-  // Brightness adjustment state
+  // Adjustment states
   const [brightness, setBrightness] = useState(0);
+  const [contrast, setContrast] = useState(0);
+  const [threshold, setThreshold] = useState(128);
   const debouncedBrightness = useDebounce(brightness, 100);
+
+  // Background removal state
+  const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(false);
+  const [backgroundRemovalSensitivity, setBackgroundRemovalSensitivity] = useState(128);
+  const debouncedBgSensitivity = useDebounce(backgroundRemovalSensitivity, 100);
+
+  /**
+   * State flow documentation:
+   * 1. Background removal changes → runs auto-prep → sets baselineImageData
+   * 2. baselineImageData changes → re-applies brightness adjustment
+   *
+   * This cascading is intentional:
+   * - Background removal requires full pipeline re-run
+   * - Brightness is a quick adjustment on existing baseline
+   * - isProcessing state shows loading indicator during auto-prep
+   */
 
   // Apply brightness adjustment when debounced value changes
   useEffect(() => {
@@ -46,10 +64,24 @@ function App() {
     }
   }, [debouncedBrightness, baselineImageData, applyAdjustments]);
 
+  // Re-run auto-prep when background removal settings change
+  // Note: runAutoPrepAsync sets isProcessing=true, showing loading indicator
+  useEffect(() => {
+    if (uploadedImage && backgroundRemovalEnabled) {
+      runAutoPrepAsync(uploadedImage, {
+        removeBackground: backgroundRemovalEnabled,
+        bgSensitivity: debouncedBgSensitivity,
+      });
+    }
+  }, [uploadedImage, backgroundRemovalEnabled, debouncedBgSensitivity, runAutoPrepAsync]);
+
   // Handle Auto-Prep button click
   const handleAutoPrepClick = () => {
     if (uploadedImage) {
-      runAutoPrepAsync(uploadedImage);
+      runAutoPrepAsync(uploadedImage, {
+        removeBackground: backgroundRemovalEnabled,
+        bgSensitivity: backgroundRemovalSensitivity,
+      });
       // Reset brightness when running auto-prep
       setBrightness(0);
     }
@@ -108,9 +140,17 @@ function App() {
           {baselineImageData && (
             <div className="w-full max-w-2xl mx-auto px-4 space-y-6">
               <h3 className="text-xl font-semibold text-center">Refine Your Image</h3>
-              <BrightnessSlider
-                value={brightness}
-                onChange={setBrightness}
+              <RefinementControls
+                brightness={brightness}
+                contrast={contrast}
+                threshold={threshold}
+                backgroundRemovalEnabled={backgroundRemovalEnabled}
+                backgroundRemovalSensitivity={backgroundRemovalSensitivity}
+                onBrightnessChange={setBrightness}
+                onContrastChange={setContrast}
+                onThresholdChange={setThreshold}
+                onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
+                onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
                 disabled={isProcessing}
               />
             </div>

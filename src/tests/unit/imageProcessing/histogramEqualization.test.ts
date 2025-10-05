@@ -246,4 +246,129 @@ describe('Histogram Equalization', () => {
       expect(result.data.length).toBe(100 * 50 * 4);
     });
   });
+
+  describe('preserveAlpha Parameter', () => {
+    it('should skip transparent pixels when preserveAlpha is true', () => {
+      // Create image with some transparent pixels
+      const imageData = new ImageData(3, 3);
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        imageData.data[i] = 100; // R
+        imageData.data[i + 1] = 100; // G
+        imageData.data[i + 2] = 100; // B
+        // Make every other pixel transparent
+        imageData.data[i + 3] = i % 8 === 0 ? 0 : 255; // A
+      }
+
+      const result = applyHistogramEqualization(imageData, true);
+
+      // Transparent pixels should remain unchanged
+      for (let i = 0; i < result.data.length; i += 4) {
+        if (imageData.data[i + 3] === 0) {
+          expect(result.data[i]).toBe(100); // Original value preserved
+          expect(result.data[i + 1]).toBe(100);
+          expect(result.data[i + 2]).toBe(100);
+          expect(result.data[i + 3]).toBe(0); // Still transparent
+        }
+      }
+    });
+
+    it('should preserve transparent pixels in output when preserveAlpha is true', () => {
+      const imageData = new ImageData(4, 4);
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const value = Math.floor(Math.random() * 256);
+        imageData.data[i] = value;
+        imageData.data[i + 1] = value;
+        imageData.data[i + 2] = value;
+        imageData.data[i + 3] = i % 8 === 0 ? 0 : 255; // Some transparent
+      }
+
+      const result = applyHistogramEqualization(imageData, true);
+
+      // Check alpha preservation
+      for (let i = 0; i < result.data.length; i += 4) {
+        expect(result.data[i + 3]).toBe(imageData.data[i + 3]);
+      }
+    });
+
+    it('should handle mixed opaque/transparent images when preserveAlpha is true', () => {
+      const imageData = new ImageData(10, 10);
+      // Half transparent, half opaque
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const value = Math.floor(Math.random() * 256);
+        imageData.data[i] = value;
+        imageData.data[i + 1] = value;
+        imageData.data[i + 2] = value;
+        imageData.data[i + 3] = i < imageData.data.length / 2 ? 0 : 255;
+      }
+
+      const result = applyHistogramEqualization(imageData, true);
+
+      expect(result).toBeInstanceOf(ImageData);
+      expect(result.width).toBe(10);
+      expect(result.height).toBe(10);
+    });
+
+    it('should produce different histograms with/without preserveAlpha', () => {
+      // Create image where transparent pixels would skew histogram
+      const imageData = new ImageData(20, 20);
+      let pixelIdx = 0;
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        // Most transparent pixels are dark (would skew histogram to darker)
+        // Opaque pixels are brighter
+        const isTransparent = pixelIdx % 4 === 0;
+        const value = isTransparent ? 30 : 150; // Clear separation
+        imageData.data[i] = value;
+        imageData.data[i + 1] = value;
+        imageData.data[i + 2] = value;
+        imageData.data[i + 3] = isTransparent ? 0 : 255;
+        pixelIdx++;
+      }
+
+      const resultWithAlpha = applyHistogramEqualization(imageData, true);
+      const resultWithoutAlpha = applyHistogramEqualization(imageData, false);
+
+      // With preserveAlpha=true: only opaque pixels (value 150) contribute to histogram
+      // With preserveAlpha=false: all pixels contribute (mix of 30 and 150)
+      // This should produce different equalization results
+
+      // Check opaque pixels for difference
+      let sumWithAlpha = 0;
+      let sumWithoutAlpha = 0;
+      let opaqueCount = 0;
+
+      for (let i = 0; i < resultWithAlpha.data.length; i += 4) {
+        if (imageData.data[i + 3] === 255) {
+          sumWithAlpha += resultWithAlpha.data[i];
+          sumWithoutAlpha += resultWithoutAlpha.data[i];
+          opaqueCount++;
+        }
+      }
+
+      const avgWithAlpha = sumWithAlpha / opaqueCount;
+      const avgWithoutAlpha = sumWithoutAlpha / opaqueCount;
+
+      // Averages should differ significantly (at least 10 units)
+      expect(Math.abs(avgWithAlpha - avgWithoutAlpha)).toBeGreaterThan(10);
+    });
+
+    it('should handle edge case: all pixels transparent', () => {
+      const imageData = new ImageData(5, 5);
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        imageData.data[i] = 128;
+        imageData.data[i + 1] = 128;
+        imageData.data[i + 2] = 128;
+        imageData.data[i + 3] = 0; // All transparent
+      }
+
+      const result = applyHistogramEqualization(imageData, true);
+
+      // All pixels should remain unchanged
+      for (let i = 0; i < result.data.length; i += 4) {
+        expect(result.data[i]).toBe(128);
+        expect(result.data[i + 1]).toBe(128);
+        expect(result.data[i + 2]).toBe(128);
+        expect(result.data[i + 3]).toBe(0);
+      }
+    });
+  });
 });

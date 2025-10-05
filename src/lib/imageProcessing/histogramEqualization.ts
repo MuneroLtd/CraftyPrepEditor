@@ -8,13 +8,19 @@
 /**
  * Calculate histogram of grayscale image
  * @param imageData - Grayscale ImageData (R=G=B)
+ * @param skipTransparent - If true, skip pixels with alpha = 0
  * @returns Array of 256 bins with frequency counts
  */
-function calculateHistogram(imageData: ImageData): Uint32Array {
+function calculateHistogram(imageData: ImageData, skipTransparent = false): Uint32Array {
   const histogram = new Uint32Array(256);
 
   // Iterate through pixels (step by 4 for RGBA)
   for (let i = 0; i < imageData.data.length; i += 4) {
+    // Skip transparent pixels if requested
+    if (skipTransparent && imageData.data[i + 3] === 0) {
+      continue;
+    }
+
     const gray = imageData.data[i]; // R channel (same as G and B in grayscale)
     histogram[gray]++;
   }
@@ -81,33 +87,53 @@ function normalizeCDF(cdf: Uint32Array, totalPixels: number): Uint8ClampedArray 
  * 4. Map each pixel value through normalized CDF
  *
  * @param imageData - Grayscale ImageData (R=G=B for all pixels)
+ * @param preserveAlpha - If true, skip transparent pixels (alpha = 0) in histogram calculation
  * @returns New ImageData with equalized histogram
  */
-export function applyHistogramEqualization(imageData: ImageData): ImageData {
-  // Step 1: Calculate histogram
-  const histogram = calculateHistogram(imageData);
+export function applyHistogramEqualization(imageData: ImageData, preserveAlpha = false): ImageData {
+  // Step 1: Calculate histogram (skip transparent pixels if preserveAlpha is true)
+  const histogram = calculateHistogram(imageData, preserveAlpha);
 
   // Step 2: Compute CDF
   const cdf = computeCDF(histogram);
 
   // Step 3: Normalize CDF to create lookup table
-  const totalPixels = imageData.width * imageData.height;
+  // Count only non-transparent pixels if preserving alpha
+  let totalPixels = imageData.width * imageData.height;
+  if (preserveAlpha) {
+    totalPixels = 0;
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      if (imageData.data[i + 3] !== 0) {
+        totalPixels++;
+      }
+    }
+  }
   const lookupTable = normalizeCDF(cdf, totalPixels);
 
   // Step 4: Map pixels through lookup table
   const result = new ImageData(imageData.width, imageData.height);
 
   for (let i = 0; i < imageData.data.length; i += 4) {
-    const oldValue = imageData.data[i]; // Grayscale value
-    const newValue = lookupTable[oldValue]; // Map through equalized CDF
+    const alpha = imageData.data[i + 3];
 
-    // Set RGB (all same for grayscale)
-    result.data[i] = newValue;
-    result.data[i + 1] = newValue;
-    result.data[i + 2] = newValue;
+    // If transparent pixel and preserving alpha, keep it transparent
+    if (preserveAlpha && alpha === 0) {
+      result.data[i] = imageData.data[i]; // R (keep original)
+      result.data[i + 1] = imageData.data[i + 1]; // G (keep original)
+      result.data[i + 2] = imageData.data[i + 2]; // B (keep original)
+      result.data[i + 3] = 0; // A (transparent)
+    } else {
+      const oldValue = imageData.data[i]; // Grayscale value
+      const newValue = lookupTable[oldValue]; // Map through equalized CDF
 
-    // Preserve alpha
-    result.data[i + 3] = imageData.data[i + 3];
+      // Set RGB (all same for grayscale)
+      result.data[i] = newValue;
+      result.data[i + 1] = newValue;
+      result.data[i + 2] = newValue;
+
+      // Preserve alpha
+      result.data[i + 3] = alpha;
+    }
   }
 
   return result;

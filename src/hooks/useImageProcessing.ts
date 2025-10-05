@@ -24,6 +24,7 @@ import {
   applyHistogramEqualization,
   applyOtsuThreshold,
   applyBrightness,
+  removeBackground,
 } from '../lib/imageProcessing';
 
 /**
@@ -80,7 +81,13 @@ export interface UseImageProcessingReturn {
   /** User-friendly error message (null if no error) */
   error: string | null;
   /** Trigger auto-prep processing pipeline */
-  runAutoPrepAsync: (uploadedImage: HTMLImageElement) => Promise<void>;
+  runAutoPrepAsync: (
+    uploadedImage: HTMLImageElement,
+    options?: {
+      removeBackground?: boolean;
+      bgSensitivity?: number;
+    }
+  ) => Promise<void>;
   /** Apply brightness/contrast/threshold adjustments to baseline */
   applyAdjustments: (brightness: number) => Promise<void>;
 }
@@ -114,77 +121,98 @@ export function useImageProcessing(): UseImageProcessingReturn {
    * Pipeline steps:
    * 1. HTMLImageElement → Canvas → ImageData
    * 2. Grayscale conversion
-   * 3. Histogram equalization
-   * 4. Otsu threshold calculation
-   * 5. Threshold application (binarization)
+   * 3. Background removal (optional, if enabled)
+   * 4. Histogram equalization (preserves alpha if background removed)
+   * 5. Otsu threshold calculation and application
    * 6. ImageData → Canvas → data URL → HTMLImageElement
    *
    * @param uploadedImage - Source image to process
+   * @param options - Processing options
+   * @param options.removeBackground - Whether to remove background
+   * @param options.bgSensitivity - Background removal sensitivity (0-255)
    */
-  const runAutoPrepAsync = useCallback(async (uploadedImage: HTMLImageElement) => {
-    // Reset state
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      // Step 1: Convert HTMLImageElement to ImageData
-      const canvas = document.createElement('canvas');
-      canvas.width = uploadedImage.width;
-      canvas.height = uploadedImage.height;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('Failed to get canvas context');
+  const runAutoPrepAsync = useCallback(
+    async (
+      uploadedImage: HTMLImageElement,
+      options?: {
+        removeBackground?: boolean;
+        bgSensitivity?: number;
       }
+    ) => {
+      // Reset state
+      setIsProcessing(true);
+      setError(null);
 
-      // Draw image to canvas
-      ctx.drawImage(uploadedImage, 0, 0);
+      try {
+        // Step 1: Convert HTMLImageElement to ImageData
+        const canvas = document.createElement('canvas');
+        canvas.width = uploadedImage.width;
+        canvas.height = uploadedImage.height;
 
-      // Extract ImageData
-      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          throw new Error('Failed to get canvas context');
+        }
 
-      // Step 2: Apply grayscale conversion
-      imageData = convertToGrayscale(imageData);
+        // Draw image to canvas
+        ctx.drawImage(uploadedImage, 0, 0);
 
-      // Step 3: Apply histogram equalization (contrast enhancement)
-      imageData = applyHistogramEqualization(imageData);
+        // Extract ImageData
+        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-      // Step 4: Apply Otsu's method (calculates optimal threshold and applies binarization)
-      imageData = applyOtsuThreshold(imageData);
+        // Step 2: Apply grayscale conversion
+        imageData = convertToGrayscale(imageData);
 
-      // Store baseline ImageData for adjustments (brightness, contrast, threshold)
-      // Clone ImageData to prevent mutation
-      const baseline = new ImageData(
-        new Uint8ClampedArray(imageData.data),
-        imageData.width,
-        imageData.height
-      );
-      setBaselineImageData(baseline);
+        // Step 3: Apply background removal (if enabled)
+        const hasBackgroundRemoval = options?.removeBackground ?? false;
+        if (hasBackgroundRemoval) {
+          const sensitivity = options?.bgSensitivity ?? 128;
+          imageData = removeBackground(imageData, sensitivity);
+        }
 
-      // Step 6: Convert ImageData back to HTMLImageElement
-      const { image: resultImage, canvas: resultCanvas } = await convertImageDataToImage(
-        imageData,
-        'Failed to load processed image'
-      );
+        // Step 4: Apply histogram equalization (preserve alpha if background removed)
+        imageData = applyHistogramEqualization(imageData, hasBackgroundRemoval);
 
-      // Update state with processed image and canvas
-      setProcessedImage(resultImage);
-      setProcessedCanvas(resultCanvas);
-      setIsProcessing(false);
-    } catch (err) {
-      // Log technical error to console for debugging
-      console.error('Image processing failed:', err);
+        // Step 5: Apply Otsu's method (calculates optimal threshold and applies binarization)
+        imageData = applyOtsuThreshold(imageData);
 
-      // Set user-friendly error message
-      setError(
-        'Unable to process image. The image may be corrupted or in an unsupported format. Please try a different image.'
-      );
-      setIsProcessing(false);
-      setProcessedImage(null);
-      setProcessedCanvas(null);
-      setBaselineImageData(null);
-    }
-  }, []);
+        // Store baseline ImageData for adjustments (brightness, contrast, threshold)
+        // Clone ImageData to prevent mutation
+        const baseline = new ImageData(
+          new Uint8ClampedArray(imageData.data),
+          imageData.width,
+          imageData.height
+        );
+        setBaselineImageData(baseline);
+
+        // Step 6: Convert ImageData back to HTMLImageElement
+        const { image: resultImage, canvas: resultCanvas } = await convertImageDataToImage(
+          imageData,
+          'Failed to load processed image'
+        );
+
+        // Update state with processed image and canvas
+        setProcessedImage(resultImage);
+        setProcessedCanvas(resultCanvas);
+        setIsProcessing(false);
+      } catch (err) {
+        // Log technical error to console for debugging
+        console.error('Image processing failed:', err);
+
+        // Set user-friendly error message
+        setError(
+          'Unable to process image. The image may be corrupted or in an unsupported format. Please try a different image.'
+        );
+        setIsProcessing(false);
+        setProcessedImage(null);
+        setProcessedCanvas(null);
+        setBaselineImageData(null);
+      }
+    },
+    // Empty deps: only uses setState functions (stable by React design) and pure functions
+    // No external state or props are captured, so no stale closure risk
+    []
+  );
 
   /**
    * Apply adjustments (brightness, contrast, threshold) to the baseline ImageData.

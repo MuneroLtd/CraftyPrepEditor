@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useImageProcessing } from '../../../hooks/useImageProcessing';
 import * as imageProcessing from '../../../lib/imageProcessing';
 
@@ -45,7 +45,7 @@ describe('useImageProcessing Hook', () => {
     // Mock canvas.getContext to return our mock context
     vi.spyOn(mockCanvas, 'getContext').mockReturnValue(mockContext);
 
-    // Create mock image
+    // Create mock image - use default 100x100 for most tests
     mockImage = new Image();
     mockImage.width = 100;
     mockImage.height = 100;
@@ -60,7 +60,8 @@ describe('useImageProcessing Hook', () => {
     // Setup default return values for processing functions
     vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(mockImageData);
     vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockImageData);
-    vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(128);
+    // NOTE: calculateOptimalThreshold is NOT called directly by the hook
+    // It's called internally by applyOtsuThreshold, so we only mock applyOtsuThreshold
     vi.mocked(imageProcessing.applyOtsuThreshold).mockReturnValue(mockImageData);
   });
 
@@ -99,21 +100,26 @@ describe('useImageProcessing Hook', () => {
     it('sets isProcessing to true when pipeline starts', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      // Start processing (don't await yet)
-      const promise = result.current.runAutoPrepAsync(mockImage);
-
-      // Should be processing immediately
-      await waitFor(() => {
-        expect(result.current.isProcessing).toBe(true);
+      // Start processing - isProcessing is set synchronously at start
+      act(() => {
+        result.current.runAutoPrepAsync(mockImage);
       });
 
-      await promise;
+      // Should be processing immediately (sync state update)
+      expect(result.current.isProcessing).toBe(true);
+
+      // Wait for completion
+      await waitFor(() => {
+        expect(result.current.isProcessing).toBe(false);
+      });
     });
 
     it('sets isProcessing to false when pipeline completes', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.isProcessing).toBe(false);
@@ -123,7 +129,9 @@ describe('useImageProcessing Hook', () => {
     it('calls convertToGrayscale with image ImageData', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(imageProcessing.convertToGrayscale).toHaveBeenCalledTimes(1);
@@ -136,43 +144,32 @@ describe('useImageProcessing Hook', () => {
       const mockGrayscaleData = new ImageData(100, 100);
       vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(mockGrayscaleData);
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledWith(mockGrayscaleData);
+        // Note: applyHistogramEqualization is called with preserveAlpha parameter (false by default)
+        expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledWith(
+          mockGrayscaleData,
+          false
+        );
       });
     });
 
-    it('calls calculateOptimalThreshold with equalized result', async () => {
+    it('calls applyOtsuThreshold with equalized result', async () => {
       const { result } = renderHook(() => useImageProcessing());
       const mockEqualizedData = new ImageData(100, 100);
       vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockEqualizedData);
 
-      await result.current.runAutoPrepAsync(mockImage);
-
-      await waitFor(() => {
-        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledWith(mockEqualizedData);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
       });
-    });
-
-    it('calls applyOtsuThreshold with equalized data and calculated threshold', async () => {
-      const { result } = renderHook(() => useImageProcessing());
-      const mockEqualizedData = new ImageData(100, 100);
-      const mockThreshold = 150;
-
-      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockEqualizedData);
-      vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(mockThreshold);
-
-      await result.current.runAutoPrepAsync(mockImage);
 
       await waitFor(() => {
         expect(imageProcessing.applyOtsuThreshold).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.applyOtsuThreshold).toHaveBeenCalledWith(
-          mockEqualizedData,
-          mockThreshold
-        );
+        expect(imageProcessing.applyOtsuThreshold).toHaveBeenCalledWith(mockEqualizedData);
       });
     });
 
@@ -188,31 +185,26 @@ describe('useImageProcessing Hook', () => {
         callOrder.push('equalization');
         return data;
       });
-      vi.mocked(imageProcessing.calculateOptimalThreshold).mockImplementation(() => {
-        callOrder.push('calculate-threshold');
-        return 128;
-      });
       vi.mocked(imageProcessing.applyOtsuThreshold).mockImplementation((data) => {
         callOrder.push('apply-threshold');
         return data;
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
-        expect(callOrder).toEqual([
-          'grayscale',
-          'equalization',
-          'calculate-threshold',
-          'apply-threshold',
-        ]);
+        expect(callOrder).toEqual(['grayscale', 'equalization', 'apply-threshold']);
       });
     });
 
     it('populates processedImage after successful processing', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.processedImage).not.toBeNull();
@@ -223,7 +215,9 @@ describe('useImageProcessing Hook', () => {
     it('converts final ImageData to HTMLImageElement', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(mockCanvas.toDataURL).toHaveBeenCalledWith('image/png');
@@ -240,7 +234,9 @@ describe('useImageProcessing Hook', () => {
         throw new Error('Processing failed');
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.error).not.toBeNull();
@@ -254,7 +250,9 @@ describe('useImageProcessing Hook', () => {
         throw new Error('Technical error');
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.error).toContain('Unable to process image');
@@ -272,7 +270,9 @@ describe('useImageProcessing Hook', () => {
         throw technicalError;
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(consoleErrorSpy).toHaveBeenCalledWith('Image processing failed:', technicalError);
@@ -288,7 +288,9 @@ describe('useImageProcessing Hook', () => {
         throw new Error('Error');
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.isProcessing).toBe(false);
@@ -302,7 +304,9 @@ describe('useImageProcessing Hook', () => {
         throw new Error('Error');
       });
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.processedImage).toBeNull();
@@ -316,7 +320,9 @@ describe('useImageProcessing Hook', () => {
       vi.mocked(imageProcessing.convertToGrayscale).mockImplementationOnce(() => {
         throw new Error('Error');
       });
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.error).not.toBeNull();
@@ -324,7 +330,9 @@ describe('useImageProcessing Hook', () => {
 
       // Second run: success
       vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(new ImageData(100, 100));
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       await waitFor(() => {
         expect(result.current.error).toBeNull();
@@ -337,11 +345,15 @@ describe('useImageProcessing Hook', () => {
       const { result } = renderHook(() => useImageProcessing());
 
       // First run
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
       const firstImage = result.current.processedImage;
 
       // Second run
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
       const secondImage = result.current.processedImage;
 
       // Should produce new image instance
@@ -353,10 +365,11 @@ describe('useImageProcessing Hook', () => {
       const { result } = renderHook(() => useImageProcessing());
 
       // Start two processing calls simultaneously
-      const promise1 = result.current.runAutoPrepAsync(mockImage);
-      const promise2 = result.current.runAutoPrepAsync(mockImage);
-
-      await Promise.all([promise1, promise2]);
+      await act(async () => {
+        const promise1 = result.current.runAutoPrepAsync(mockImage);
+        const promise2 = result.current.runAutoPrepAsync(mockImage);
+        await Promise.all([promise1, promise2]);
+      });
 
       // Should complete without errors
       await waitFor(() => {
@@ -371,7 +384,9 @@ describe('useImageProcessing Hook', () => {
       const { result } = renderHook(() => useImageProcessing());
       const start = performance.now();
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       const duration = performance.now() - start;
       expect(duration).toBeLessThan(5000); // 5 seconds
@@ -390,7 +405,9 @@ describe('useImageProcessing Hook', () => {
     it('cleans up canvas references', async () => {
       const { result } = renderHook(() => useImageProcessing());
 
-      await result.current.runAutoPrepAsync(mockImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(mockImage);
+      });
 
       // Canvas should be created but not kept in memory
       // (Implementation detail: check no memory leaks via cleanup)
@@ -408,7 +425,9 @@ describe('useImageProcessing Hook', () => {
       const tinyImageData = new ImageData(1, 1);
       vi.mocked(mockContext.getImageData).mockReturnValue(tinyImageData);
 
-      await result.current.runAutoPrepAsync(tinyImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(tinyImage);
+      });
 
       await waitFor(() => {
         expect(result.current.processedImage).not.toBeNull();
@@ -424,7 +443,9 @@ describe('useImageProcessing Hook', () => {
       const largeImageData = new ImageData(4096, 4096);
       vi.mocked(mockContext.getImageData).mockReturnValue(largeImageData);
 
-      await result.current.runAutoPrepAsync(largeImage);
+      await act(async () => {
+        await result.current.runAutoPrepAsync(largeImage);
+      });
 
       await waitFor(() => {
         expect(result.current.processedImage).not.toBeNull();
@@ -440,7 +461,14 @@ describe('useImageProcessing Hook', () => {
       const wideImageData = new ImageData(200, 50);
       vi.mocked(mockContext.getImageData).mockReturnValue(wideImageData);
 
-      await result.current.runAutoPrepAsync(wideImage);
+      // Mock processing functions to return correct dimensions
+      vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(wideImageData);
+      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(wideImageData);
+      vi.mocked(imageProcessing.applyOtsuThreshold).mockReturnValue(wideImageData);
+
+      await act(async () => {
+        await result.current.runAutoPrepAsync(wideImage);
+      });
 
       await waitFor(() => {
         expect(result.current.processedImage).not.toBeNull();
@@ -456,7 +484,9 @@ describe('useImageProcessing Hook', () => {
 
       // Run processing multiple times
       for (let i = 0; i < 5; i++) {
-        await result.current.runAutoPrepAsync(mockImage);
+        await act(async () => {
+          await result.current.runAutoPrepAsync(mockImage);
+        });
       }
 
       // Should not accumulate canvas elements

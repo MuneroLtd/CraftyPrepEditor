@@ -258,14 +258,24 @@ For each pixel (R, G, B):
 
 ### Functional Requirements
 
-#### FR3.1: Brightness Slider
+#### FR3.1: Background Removal
+- Applied as part of Auto-Prep pipeline (after grayscale, before histogram equalization)
+- Detects and removes solid or near-solid backgrounds
+- Uses edge detection and flood-fill algorithm
+- White background becomes transparent (alpha channel)
+- Manual threshold slider allows fine-tuning background detection sensitivity
+- Default: Auto-detect background from image edges
+- Range: 0-255 (sensitivity threshold)
+- Preview updates in real-time with debounce
+
+#### FR3.2: Brightness Slider
 - Range: -100 to +100
 - Default: 0 (no adjustment)
 - Step size: 1
 - Updates preview in real-time (<100ms after drag stops)
 - Formula: `newValue = clamp(originalValue + brightness, 0, 255)`
 
-#### FR3.2: Contrast Slider
+#### FR3.3: Contrast Slider
 - Range: -100 to +100
 - Default: 0 (no adjustment)
 - Step size: 1
@@ -273,19 +283,19 @@ For each pixel (R, G, B):
 - Formula: `newValue = clamp(((originalValue - 127) * contrastFactor) + 127, 0, 255)`
   - Where `contrastFactor = (100 + contrast) / 100`
 
-#### FR3.3: Threshold Slider
+#### FR3.4: Threshold Slider
 - Range: 0 to 255
 - Default: Auto-calculated by Otsu's method
 - Step size: 1
 - Updates preview in real-time
 - Formula: `newValue = originalValue < threshold ? 0 : 255`
 
-#### FR3.4: Reset Functionality
+#### FR3.5: Reset Functionality
 - "Reset" button returns all sliders to default values
 - Re-applies auto-prep algorithm
 - Discards all manual adjustments
 
-#### FR3.5: Preview Updates
+#### FR3.6: Preview Updates
 - Preview updates as sliders are adjusted (debounced to 100ms)
 - Shows processing indicator if update takes >500ms
 - Updates are non-blocking (UI remains responsive)

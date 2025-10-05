@@ -75,8 +75,7 @@ describe('ContrastSlider', () => {
     it('has descriptive aria-label', () => {
       render(<ContrastSlider {...defaultProps} />);
       const slider = screen.getByRole('slider');
-      const sliderRoot = slider.parentElement?.parentElement;
-      const ariaLabel = sliderRoot?.getAttribute('aria-label') || '';
+      const ariaLabel = slider.getAttribute('aria-label') || '';
       expect(ariaLabel).toMatch(/contrast/i);
       expect(ariaLabel).toMatch(/-100.*\+100/i);
     });

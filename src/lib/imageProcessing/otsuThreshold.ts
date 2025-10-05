@@ -140,7 +140,7 @@ export function applyOtsuThreshold(imageData: ImageData): ImageData {
     outputData[i] = binaryValue; // R
     outputData[i + 1] = binaryValue; // G
     outputData[i + 2] = binaryValue; // B
-    outputData[i + 3] = 255; // A (fully opaque)
+    outputData[i + 3] = data[i + 3]; // A (preserve alpha channel from input)
   }
 
   return output;

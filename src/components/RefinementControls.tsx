@@ -1,6 +1,8 @@
+import { memo } from 'react';
 import { BrightnessSlider } from '@/components/BrightnessSlider';
 import { ContrastSlider } from '@/components/ContrastSlider';
 import { ThresholdSlider } from '@/components/ThresholdSlider';
+import { BackgroundRemovalControl } from '@/components/BackgroundRemovalControl';
 import { cn } from '@/lib/utils';
 
 /**
@@ -13,12 +15,20 @@ export interface RefinementControlsProps {
   contrast: number;
   /** Current threshold value (0 to 255) */
   threshold: number;
+  /** Whether background removal is enabled */
+  backgroundRemovalEnabled?: boolean;
+  /** Background removal sensitivity (0-255) */
+  backgroundRemovalSensitivity?: number;
   /** Callback fired when brightness changes */
   onBrightnessChange: (value: number) => void;
   /** Callback fired when contrast changes */
   onContrastChange: (value: number) => void;
   /** Callback fired when threshold changes */
   onThresholdChange: (value: number) => void;
+  /** Callback fired when background removal toggle changes */
+  onBackgroundRemovalToggle?: (enabled: boolean) => void;
+  /** Callback fired when background removal sensitivity changes */
+  onBackgroundRemovalSensitivityChange?: (value: number) => void;
   /** Whether the controls are disabled */
   disabled?: boolean;
   /** Additional CSS classes */
@@ -30,6 +40,8 @@ export interface RefinementControlsProps {
  *
  * Groups the Brightness, Contrast, and Threshold sliders in a semantic,
  * accessible container with proper heading and spacing.
+ *
+ * Memoized to prevent unnecessary re-renders when parent re-renders.
  *
  * Features:
  * - Semantic HTML (section + heading)
@@ -49,13 +61,17 @@ export interface RefinementControlsProps {
  * />
  * ```
  */
-export function RefinementControls({
+export const RefinementControls = memo(function RefinementControls({
   brightness,
   contrast,
   threshold,
+  backgroundRemovalEnabled = false,
+  backgroundRemovalSensitivity = 128,
   onBrightnessChange,
   onContrastChange,
   onThresholdChange,
+  onBackgroundRemovalToggle,
+  onBackgroundRemovalSensitivityChange,
   disabled = false,
   className = '',
 }: RefinementControlsProps): React.JSX.Element {
@@ -65,6 +81,17 @@ export function RefinementControls({
         Refinement Controls
       </h2>
 
+      {/* Background Removal (before other adjustments in pipeline) */}
+      {onBackgroundRemovalToggle && onBackgroundRemovalSensitivityChange && (
+        <BackgroundRemovalControl
+          enabled={backgroundRemovalEnabled}
+          sensitivity={backgroundRemovalSensitivity}
+          onToggle={onBackgroundRemovalToggle}
+          onSensitivityChange={onBackgroundRemovalSensitivityChange}
+          disabled={disabled}
+        />
+      )}
+
       <BrightnessSlider value={brightness} onChange={onBrightnessChange} disabled={disabled} />
 
       <ContrastSlider value={contrast} onChange={onContrastChange} disabled={disabled} />
@@ -72,4 +99,4 @@ export function RefinementControls({
       <ThresholdSlider value={threshold} onChange={onThresholdChange} disabled={disabled} />
     </section>
   );
-}
+});

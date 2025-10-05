@@ -79,7 +79,13 @@ export function RefinementSlider({
         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
           {label}
         </label>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{value}</span>
+        <span
+          className="text-sm font-medium text-slate-600 dark:text-slate-400"
+          data-testid={`${label.toLowerCase()}-value`}
+          aria-live="polite"
+        >
+          {value}
+        </span>
       </div>
 
       {/* Slider with enhanced accessibility */}
