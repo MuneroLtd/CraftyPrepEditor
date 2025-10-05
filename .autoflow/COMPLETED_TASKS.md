@@ -630,3 +630,224 @@ Implement automatic background removal with manual sensitivity control as part o
 **Sprint 2 Progress**: 3/11 tasks complete
 
 ---
+
+### Task 2.4: Contrast Adjustment Implementation
+
+**ID**: task-014
+**Status**: COMMITTED
+**Completed**: 2025-10-05
+**Estimated**: 3 hours
+**Actual**: ~3 hours
+**Sprint**: Sprint 2 - Refinement Controls & UX
+
+**Description**:
+Implement contrast adjustment algorithm with real-time preview updates. Enables precise contrast control for laser engraving preparation with debounced slider adjustment (<100ms response).
+
+**Key Deliverables**:
+- ✅ Contrast algorithm: `newValue = clamp(((value - 128) * factor) + 128, 0, 255)`
+- ✅ Factor calculation: `factor = (contrast + 100) / 100` (range: 0 to 2)
+- ✅ Applied to all RGB channels independently
+- ✅ Contrast slider integrated with debounce (300ms)
+- ✅ Real-time preview updates after drag stops
+- ✅ State management in App.tsx
+- ✅ 16 comprehensive unit tests with edge cases
+- ✅ Integration tests verify pipeline
+- ✅ E2E verification with Playwright (WCAG 2.2 AAA)
+
+**Quality Metrics**:
+- Tests passing: 100%
+- Code coverage: ≥80% on new code
+- Performance: <100ms response time ✅
+- Issues resolved: 0 (clean implementation)
+- E2E verification: Passed (accessibility, visual verification)
+
+**Major Decisions**:
+- **Algorithm Choice**: Midpoint-based contrast formula for predictable behavior
+  - Contrast = -100: All pixels become mid-gray (128, 128, 128)
+  - Contrast = 0: No change (identity operation)
+  - Contrast = +100: Maximum contrast expansion
+- **Integration**: Reused existing debounce and state management patterns
+- **Component Reuse**: Extended RefinementSlider component for contrast control
+
+**Blockers Resolved**:
+- None (smooth implementation following established patterns)
+
+**Components Created**:
+- applyContrast.ts - Contrast adjustment algorithm
+
+**Files Modified**:
+- App.tsx - Added contrast state and debouncing
+- RefinementControls.tsx - Integrated contrast slider
+- useImageProcessing.ts - Added contrast to adjustment pipeline
+- index.ts - Exported applyContrast function
+
+**Tests Created**:
+- src/tests/unit/lib/imageProcessing/applyContrast.test.ts - 16 comprehensive tests
+- src/tests/e2e/task-014-contrast-slider.spec.ts - E2E verification
+
+**Documentation**:
+- Task Plan: .autoflow/tasks/task-014/TASK_PLAN.md
+- Acceptance Criteria: .autoflow/tasks/task-014/ACCEPTANCE_CRITERIA.md
+- Review Issues: .autoflow/tasks/task-014/REVIEW.md (clean - no issues)
+- Dependencies: .autoflow/tasks/task-014/DEPENDENCIES.md
+- Research: .autoflow/tasks/task-014/RESEARCH.md
+
+**Commit**: 4e300ca (feat(image-processing): implement contrast adjustment with real-time preview)
+
+**Files Changed**: 13 files, 1,256 insertions(+), 9 deletions(-)
+
+**Test Coverage Breakdown**:
+- Unit tests: 16 tests (algorithm, edge cases, validation)
+- E2E tests: 5 tests (slider interaction, preview update, accessibility)
+
+**Performance Metrics**:
+- Debounce delay: 300ms (prevents excessive processing) ✅
+- Preview update: <100ms (target met) ✅
+- 2MB image contrast adjustment: <50ms ✅
+
+**Accessibility Features**:
+- Contrast slider keyboard accessible ✅
+- ARIA labels for screen readers ✅
+- Focus indicators on slider ✅
+- Touch target: 44px height ✅
+
+**Lessons Learned**:
+- Midpoint-based contrast formula provides intuitive, predictable behavior
+- Reusing established patterns (debounce, RefinementSlider) accelerates development
+- Edge case testing (-100, 0, +100) validates algorithm correctness
+- State lifting to App.tsx enables future coordinated adjustments
+
+**Sprint 2 Progress**: 4/11 tasks complete
+
+---
+
+### Task 2.5: Threshold Adjustment Implementation
+
+**ID**: task-015
+**Status**: COMMITTED
+**Completed**: 2025-10-05
+**Estimated**: 3 hours
+**Actual**: ~3 hours
+**Sprint**: Sprint 2 - Refinement Controls & UX
+
+**Description**:
+Implement manual threshold adjustment with slider for binarization control. Enables users to override auto-calculated Otsu threshold and fine-tune black/white separation point for different laser engraving materials.
+
+**Key Deliverables**:
+- ✅ Threshold binarization function (0-255 range)
+- ✅ Single-pass algorithm (grayscale conversion + threshold in one loop)
+- ✅ Auto-calculation via Otsu's method (default value)
+- ✅ Manual override via threshold slider
+- ✅ Grayscale baseline architecture (enables visual adjustment)
+- ✅ Debounced preview updates (100ms, no UI blocking)
+- ✅ Integration with brightness/contrast pipeline
+- ✅ 24 comprehensive unit tests (100% coverage)
+- ✅ E2E verification passed (WCAG 2.2 AAA compliant)
+
+**Quality Metrics**:
+- Tests passing: 24/24 (100% for task-015 tests)
+- Code coverage: 100% on applyThreshold function
+- Performance: <250ms for 2MP image (47% faster than initial) ✅
+- Issues resolved: 2 (1 performance blocker, 1 UI integration blocker)
+- E2E verification: Passed (threshold adjustment visual feedback)
+
+**Major Decisions**:
+- **Single-Pass Algorithm**: Combined grayscale conversion and threshold application in one loop
+  - Performance: O(n) instead of O(2n)
+  - Result: 47% faster (~477ms → <250ms for 2MP image)
+- **Grayscale Baseline Architecture**: Store grayscale baseline BEFORE threshold
+  - Problem: Binary baseline prevented threshold adjustment visibility
+  - Solution: Store grayscale, apply threshold as adjustment
+  - Data flow: grayscale baseline → brightness → contrast → threshold → preview
+- **Otsu Auto-Sync**: Threshold slider auto-syncs to Otsu value after auto-prep
+  - User sees auto-calculated default
+  - Can immediately adjust from that starting point
+- **Component Reuse**: Extended RefinementSlider for threshold control
+
+**Blockers Resolved**:
+1. **Performance Blocker (HIGH)**:
+   - Problem: Two-pass algorithm (~477ms for 2MP image)
+   - Root cause: Separate convertToGrayscale() call + threshold loop
+   - Solution: Single-pass algorithm (grayscale + threshold in one iteration)
+   - Result: <250ms for 2MP image (47% improvement)
+
+2. **UI Integration Blocker (CRITICAL)**:
+   - Problem: Threshold slider not affecting preview canvas
+   - Root cause: Binary baseline stored (already thresholded) → re-applying threshold to binary data = no visual change
+   - Solution: Changed pipeline to store grayscale baseline, apply threshold as adjustment
+   - Result: Threshold adjustments now visually update preview
+
+**Components Created**:
+- applyThreshold.ts - Single-pass threshold binarization function
+
+**Files Modified** (13 files):
+- App.tsx - Added threshold state, Otsu sync useEffect
+- useImageProcessing.ts - Changed to calculateOptimalThreshold (not apply), store grayscale baseline, return otsuThreshold
+- index.ts - Export applyThreshold
+- FUNCTIONAL.md - Updated threshold implementation status
+- TASK.md - Updated task-015 status to COMPLETE
+
+**Tests Created**:
+- src/tests/unit/lib/imageProcessing/applyThreshold.test.ts - 24 comprehensive tests
+- src/tests/integration/thresholdAdjustment.integration.test.ts - Pipeline integration test
+- src/tests/e2e/task-014-contrast-slider.spec.ts - Updated for threshold verification
+
+**Documentation**:
+- Task Plan: .autoflow/tasks/task-015/TASK_PLAN.md
+- Acceptance Criteria: .autoflow/tasks/task-015/ACCEPTANCE_CRITERIA.md
+- Review Issues: .autoflow/tasks/task-015/REVIEW.md (2 issues resolved)
+- Dependencies: .autoflow/tasks/task-015/DEPENDENCIES.md
+- Research: .autoflow/tasks/task-015/RESEARCH.md
+
+**Commit**: c484fd6 (feat(image-processing): implement manual threshold adjustment with slider)
+
+**Files Changed**: 13 files, 2,776 insertions(+), 24 deletions(-)
+
+**Test Coverage Breakdown**:
+- Unit tests: 24 tests (algorithm, edge cases, validation, performance)
+- Integration tests: Pipeline verification (grayscale → threshold)
+- E2E tests: Visual verification (threshold 0/255/135, accessibility)
+
+**Performance Metrics**:
+- Algorithm complexity: O(n) (single-pass) ✅
+- 2MP image processing: <250ms (target met, 47% faster than initial) ✅
+- Debounce delay: 100ms (prevents excessive processing) ✅
+- UI response: No blocking during processing ✅
+
+**Accessibility Features** (WCAG 2.2 AAA):
+- Threshold slider keyboard accessible ✅
+- ARIA labels for screen readers ✅
+- Focus indicators on slider ✅
+- Touch target: 44px height ✅
+- Value display with aria-live ✅
+
+**Why This Matters (User Benefit)**:
+Different laser engraving materials require different threshold values for optimal results:
+- Wood may need threshold=120 (more black preserved)
+- Acrylic might need threshold=180 (higher contrast)
+- Auto-prep provides good defaults via Otsu's method
+- Manual control enables users to match their specific engraving machine and material characteristics
+- Completes refinement control suite: brightness → contrast → threshold
+
+**Technical Achievements**:
+- **Single-Pass Optimization**: 47% performance improvement
+- **Baseline Architecture**: Enables all adjustments to work on grayscale data
+- **Pure Function**: No side effects, creates new ImageData
+- **Alpha Channel Preservation**: Maintained throughout pipeline
+- **100% Test Coverage**: All edge cases validated
+
+**Quality Loops**:
+- Loop 1: /build → /code-review → REVIEWFIX (performance blocker)
+- Loop 2: /review-fix → /test → TEST (all passing)
+- Loop 3: /verify-implementation → REVIEWFIX (UI integration blocker)
+- Final: /review-fix → /verify-implementation → COMPLETE
+
+**Lessons Learned**:
+- **Baseline Data Flow**: Architecture matters - store grayscale baseline, apply adjustments as transformations
+- **Performance First**: Single-pass algorithms significantly improve UX
+- **E2E Testing Catches Integration Bugs**: Unit tests passed, E2E revealed UI integration issue
+- **State Management**: Careful coordination needed between auto-calculated values and manual overrides
+
+**Sprint 2 Progress**: 5/11 tasks complete
+
+---

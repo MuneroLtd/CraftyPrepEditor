@@ -5,8 +5,8 @@
 **Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 4/11 complete
-**Last Updated**: 2025-10-05 (task-015 PLANNED)
+**Progress**: 5/11 complete
+**Last Updated**: 2025-10-05 (task-015 COMMITTED)
 
 ---
 
@@ -19,47 +19,6 @@
 ---
 
 ## 📋 Sprint Tasks (Max 12)
-
-### Task 2.5: Threshold Adjustment Implementation
-
-**ID**: task-015
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 3 hours
-
-**Description**:
-Implement manual threshold override and integrate with slider.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#threshold-adjustment - Threshold application
-- .autoflow/docs/ARCHITECTURE.md#processing-layer - Integration
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Threshold specification
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Processing layer
-
-**Acceptance Criteria**:
-- [ ] Threshold binarization function created
-- [ ] Default value from Otsu's method
-- [ ] Manual override via slider
-- [ ] Grayscale conversion + threshold application
-- [ ] Preview updates with debounce
-- [ ] Unit tests for threshold ranges
-- [ ] Visual feedback for threshold effect
-
-**Definition of Done**:
-- [ ] Threshold adjustment working
-- [ ] Manual override functional
-- [ ] Tests passing
-- [ ] Code review passed
-
-**Dependencies**: Task 2.1 (slider component)
-
-**Task Plan**: [.autoflow/tasks/task-015/TASK_PLAN.md](.autoflow/tasks/task-015/TASK_PLAN.md)
-
-**Blockers**: None
-
----
 
 ### Task 2.6: Debounced Preview Updates
 
