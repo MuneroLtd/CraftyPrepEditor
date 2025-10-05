@@ -24,6 +24,7 @@ import {
   applyHistogramEqualization,
   applyOtsuThreshold,
   applyBrightness,
+  applyContrast,
   removeBackground,
 } from '../lib/imageProcessing';
 
@@ -89,7 +90,7 @@ export interface UseImageProcessingReturn {
     }
   ) => Promise<void>;
   /** Apply brightness/contrast/threshold adjustments to baseline */
-  applyAdjustments: (brightness: number) => Promise<void>;
+  applyAdjustments: (brightness: number, contrast: number) => Promise<void>;
 }
 
 /**
@@ -221,9 +222,10 @@ export function useImageProcessing(): UseImageProcessingReturn {
    * Adjustments are applied to the stored baseline for efficiency.
    *
    * @param brightness - Brightness adjustment (-100 to +100, 0 = no change)
+   * @param contrast - Contrast adjustment (-100 to +100, 0 = no change)
    */
   const applyAdjustments = useCallback(
-    async (brightness: number) => {
+    async (brightness: number, contrast: number) => {
       // Validate baseline exists
       if (!baselineImageData) {
         console.warn('Cannot apply adjustments: no baseline ImageData available');
@@ -244,6 +246,11 @@ export function useImageProcessing(): UseImageProcessingReturn {
         // Apply brightness adjustment (if not zero)
         if (brightness !== 0) {
           adjustedData = applyBrightness(adjustedData, brightness);
+        }
+
+        // Apply contrast adjustment (if not zero)
+        if (contrast !== 0) {
+          adjustedData = applyContrast(adjustedData, contrast);
         }
 
         // Convert ImageData to HTMLImageElement

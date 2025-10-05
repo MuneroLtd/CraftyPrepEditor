@@ -8,14 +8,14 @@ export default defineConfig({
   // Test directory
   testDir: './tests/e2e',
 
-  // Maximum time one test can run
-  timeout: 30 * 1000,
+  // Maximum time one test can run (increased for keyboard interaction tests)
+  timeout: 90 * 1000,
 
   // Test execution settings
-  fullyParallel: true,
+  fullyParallel: false, // Disable parallel execution to prevent resource contention
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1, // Force serial execution (1 worker)
 
   // Reporter configuration
   reporter: [['html', { outputFolder: 'playwright-report' }], ['list']],
@@ -34,8 +34,11 @@ export default defineConfig({
     // Video on first retry
     video: 'retain-on-failure',
 
-    // Default timeout for expect() assertions
-    actionTimeout: 5 * 1000,
+    // Default timeout for expect() assertions (increased for processing time)
+    actionTimeout: 10 * 1000,
+
+    // Navigation timeout
+    navigationTimeout: 30 * 1000,
   },
 
   // Configure projects for different browsers

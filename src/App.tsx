@@ -40,6 +40,7 @@ function App() {
   const [contrast, setContrast] = useState(0);
   const [threshold, setThreshold] = useState(128);
   const debouncedBrightness = useDebounce(brightness, 100);
+  const debouncedContrast = useDebounce(contrast, 100);
 
   // Background removal state
   const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(false);
@@ -49,20 +50,20 @@ function App() {
   /**
    * State flow documentation:
    * 1. Background removal changes → runs auto-prep → sets baselineImageData
-   * 2. baselineImageData changes → re-applies brightness adjustment
+   * 2. baselineImageData changes → re-applies brightness/contrast adjustments
    *
    * This cascading is intentional:
    * - Background removal requires full pipeline re-run
-   * - Brightness is a quick adjustment on existing baseline
+   * - Brightness/contrast are quick adjustments on existing baseline
    * - isProcessing state shows loading indicator during auto-prep
    */
 
-  // Apply brightness adjustment when debounced value changes
+  // Apply brightness/contrast adjustments when debounced values change
   useEffect(() => {
     if (baselineImageData) {
-      applyAdjustments(debouncedBrightness);
+      applyAdjustments(debouncedBrightness, debouncedContrast);
     }
-  }, [debouncedBrightness, baselineImageData, applyAdjustments]);
+  }, [debouncedBrightness, debouncedContrast, baselineImageData, applyAdjustments]);
 
   // Re-run auto-prep when background removal settings change
   // Note: runAutoPrepAsync sets isProcessing=true, showing loading indicator
@@ -82,8 +83,9 @@ function App() {
         removeBackground: backgroundRemovalEnabled,
         bgSensitivity: backgroundRemovalSensitivity,
       });
-      // Reset brightness when running auto-prep
+      // Reset adjustments when running auto-prep
       setBrightness(0);
+      setContrast(0);
     }
   };
 
