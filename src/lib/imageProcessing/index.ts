@@ -6,3 +6,4 @@
  */
 
 export { convertToGrayscale } from './grayscale';
+export { applyHistogramEqualization } from './histogramEqualization';

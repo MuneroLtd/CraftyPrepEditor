@@ -5,7 +5,7 @@
 **Sprint Goal**: Deliver working image upload and basic auto-prep functionality with MVP feature set
 **Duration**: Week 1-2
 **Status**: ACTIVE
-**Progress**: 4/10 complete
+**Progress**: 5/10 complete
 **Last Updated**: 2025-10-05
 
 ---
@@ -70,7 +70,7 @@ Implement the weighted grayscale conversion algorithm (luminosity method: 0.299R
 
 **ID**: task-006
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 4 hours
 
 **Description**:
@@ -106,7 +106,7 @@ Implement histogram equalization to enhance image contrast automatically as part
 
 **Dependencies**: Task 1.5 (works on grayscale image)
 
-**Task Plan**: (Will be added by /plan command)
+**Task Plan**: [.autoflow/tasks/task-006/TASK_PLAN.md](.autoflow/tasks/task-006/TASK_PLAN.md)
 
 **Blockers**: None
 
