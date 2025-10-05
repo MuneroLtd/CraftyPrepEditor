@@ -14,6 +14,10 @@ vi.mock('../../../lib/imageProcessing', () => ({
   applyHistogramEqualization: vi.fn(),
   calculateOptimalThreshold: vi.fn(),
   applyOtsuThreshold: vi.fn(),
+  applyThreshold: vi.fn(),
+  applyBrightness: vi.fn(),
+  applyContrast: vi.fn(),
+  removeBackground: vi.fn(),
 }));
 
 describe('useImageProcessing Hook', () => {
@@ -60,9 +64,12 @@ describe('useImageProcessing Hook', () => {
     // Setup default return values for processing functions
     vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(mockImageData);
     vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockImageData);
-    // NOTE: calculateOptimalThreshold is NOT called directly by the hook
-    // It's called internally by applyOtsuThreshold, so we only mock applyOtsuThreshold
+    vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(128);
     vi.mocked(imageProcessing.applyOtsuThreshold).mockReturnValue(mockImageData);
+    vi.mocked(imageProcessing.applyThreshold).mockReturnValue(mockImageData);
+    vi.mocked(imageProcessing.applyBrightness).mockReturnValue(mockImageData);
+    vi.mocked(imageProcessing.applyContrast).mockReturnValue(mockImageData);
+    vi.mocked(imageProcessing.removeBackground).mockReturnValue(mockImageData);
   });
 
   afterEach(() => {
@@ -158,18 +165,21 @@ describe('useImageProcessing Hook', () => {
       });
     });
 
-    it('calls applyOtsuThreshold with equalized result', async () => {
+    it('calls calculateOptimalThreshold and applyThreshold with equalized result', async () => {
       const { result } = renderHook(() => useImageProcessing());
       const mockEqualizedData = new ImageData(100, 100);
       vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockEqualizedData);
+      vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(128);
 
       await act(async () => {
         await result.current.runAutoPrepAsync(mockImage);
       });
 
       await waitFor(() => {
-        expect(imageProcessing.applyOtsuThreshold).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.applyOtsuThreshold).toHaveBeenCalledWith(mockEqualizedData);
+        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledTimes(1);
+        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledWith(mockEqualizedData);
+        expect(imageProcessing.applyThreshold).toHaveBeenCalledTimes(1);
+        expect(imageProcessing.applyThreshold).toHaveBeenCalledWith(mockEqualizedData, 128);
       });
     });
 
@@ -185,7 +195,11 @@ describe('useImageProcessing Hook', () => {
         callOrder.push('equalization');
         return data;
       });
-      vi.mocked(imageProcessing.applyOtsuThreshold).mockImplementation((data) => {
+      vi.mocked(imageProcessing.calculateOptimalThreshold).mockImplementation(() => {
+        callOrder.push('calculate-threshold');
+        return 128;
+      });
+      vi.mocked(imageProcessing.applyThreshold).mockImplementation((data) => {
         callOrder.push('apply-threshold');
         return data;
       });
@@ -195,7 +209,12 @@ describe('useImageProcessing Hook', () => {
       });
 
       await waitFor(() => {
-        expect(callOrder).toEqual(['grayscale', 'equalization', 'apply-threshold']);
+        expect(callOrder).toEqual([
+          'grayscale',
+          'equalization',
+          'calculate-threshold',
+          'apply-threshold',
+        ]);
       });
     });
 
@@ -464,7 +483,12 @@ describe('useImageProcessing Hook', () => {
       // Mock processing functions to return correct dimensions
       vi.mocked(imageProcessing.convertToGrayscale).mockReturnValue(wideImageData);
       vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(wideImageData);
-      vi.mocked(imageProcessing.applyOtsuThreshold).mockReturnValue(wideImageData);
+      vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(128);
+      vi.mocked(imageProcessing.applyThreshold).mockReturnValue(wideImageData);
+
+      // Update canvas dimensions to match
+      mockCanvas.width = 200;
+      mockCanvas.height = 50;
 
       await act(async () => {
         await result.current.runAutoPrepAsync(wideImage);

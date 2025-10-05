@@ -6,7 +6,7 @@
  * and WCAG 2.2 AAA accessibility compliance.
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const TEST_IMAGE_PATH = '/opt/workspaces/craftyprep.com/src/tests/fixtures/sample-image.jpg';
@@ -41,12 +41,12 @@ async function setSliderValue(page: Page, sliderName: RegExp, targetValue: numbe
   const normalized = (targetValue - min) / (max - min); // 0 to 1
 
   // Calculate target X position on track
-  const targetX = trackBox.x + (trackBox.width * normalized);
-  const targetY = trackBox.y + (trackBox.height / 2);
+  const targetX = trackBox.x + trackBox.width * normalized;
+  const targetY = trackBox.y + trackBox.height / 2;
 
   // Drag from current thumb position to target position
-  const thumbCenterX = thumbBox.x + (thumbBox.width / 2);
-  const thumbCenterY = thumbBox.y + (thumbBox.height / 2);
+  const thumbCenterX = thumbBox.x + thumbBox.width / 2;
+  const thumbCenterY = thumbBox.y + thumbBox.height / 2;
 
   await page.mouse.move(thumbCenterX, thumbCenterY);
   await page.mouse.down();
@@ -78,7 +78,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
 
     const [fileChooser] = await Promise.all([
       page.waitForEvent('filechooser', { timeout: 10000 }),
-      uploadButton.click()
+      uploadButton.click(),
     ]);
     await fileChooser.setFiles([TEST_IMAGE_PATH]);
 
@@ -91,7 +91,9 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
     await autoPrepButton.click();
 
     // Wait for sliders to appear and for processing to complete
-    await expect(page.getByRole('slider', { name: /adjust image contrast/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('slider', { name: /adjust image contrast/i })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Wait for initial processing to complete
     await page.waitForTimeout(1000);
@@ -143,7 +145,10 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       expect(parseInt(ariaValueNow || '0')).toBeLessThanOrEqual(55);
 
       // Verify the value display also updated
-      const valueDisplay = page.locator('text=Contrast').locator('..').getByText(/50|49|48|47|46|51|52|53|54|55/);
+      const valueDisplay = page
+        .locator('text=Contrast')
+        .locator('..')
+        .getByText(/50|49|48|47|46|51|52|53|54|55/);
       await expect(valueDisplay).toBeVisible();
     });
 
@@ -162,7 +167,10 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       expect(parseInt(ariaValueNow || '0')).toBeLessThanOrEqual(-45);
 
       // Verify the value display also updated
-      const valueDisplay = page.locator('text=Contrast').locator('..').getByText(/-50|-49|-48|-47|-46|-51|-52|-53|-54|-55/);
+      const valueDisplay = page
+        .locator('text=Contrast')
+        .locator('..')
+        .getByText(/-50|-49|-48|-47|-46|-51|-52|-53|-54|-55/);
       await expect(valueDisplay).toBeVisible();
     });
 
@@ -177,7 +185,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
         await page.keyboard.press('ArrowRight');
       }
 
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       // Check value increased
       const value = await contrastSlider.getAttribute('aria-valuenow');
@@ -195,7 +203,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       await contrastSlider.focus();
       await page.keyboard.press('Home');
 
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       // Check value is at minimum
       const value = await contrastSlider.getAttribute('aria-valuenow');
@@ -209,7 +217,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       await contrastSlider.focus();
       await page.keyboard.press('End');
 
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       // Check value is at maximum
       const value = await contrastSlider.getAttribute('aria-valuenow');
@@ -224,11 +232,11 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
 
       // Adjust brightness
       await setSliderValue(page, /adjust image brightness/i, 30);
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       // Then adjust contrast
       await setSliderValue(page, /adjust image contrast/i, 40);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       // Both values should be set (approximately, allowing for slider increments)
       const brightnessValue = await brightnessSlider.getAttribute('aria-valuenow');
@@ -246,11 +254,11 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
 
       // Adjust contrast
       await setSliderValue(page, /adjust image contrast/i, 50);
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       // Then adjust threshold
       await setSliderValue(page, /adjust binarization threshold/i, 150);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       // Both values should be set (approximately)
       const contrastValue = await contrastSlider.getAttribute('aria-valuenow');
@@ -273,18 +281,20 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
 
       // Adjust all three
       await setSliderValue(page, /adjust image brightness/i, 20);
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       await setSliderValue(page, /adjust image contrast/i, 30);
-      await page.waitForTimeout(800);  // Increased for debounce
+      await page.waitForTimeout(800); // Increased for debounce
 
       await setSliderValue(page, /adjust binarization threshold/i, 140);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       // Verify all values set correctly (approximately)
-      const brightnessValue = parseInt(await brightnessSlider.getAttribute('aria-valuenow') || '0');
-      const contrastValue = parseInt(await contrastSlider.getAttribute('aria-valuenow') || '0');
-      const thresholdValue = parseInt(await thresholdSlider.getAttribute('aria-valuenow') || '0');
+      const brightnessValue = parseInt(
+        (await brightnessSlider.getAttribute('aria-valuenow')) || '0'
+      );
+      const contrastValue = parseInt((await contrastSlider.getAttribute('aria-valuenow')) || '0');
+      const thresholdValue = parseInt((await thresholdSlider.getAttribute('aria-valuenow')) || '0');
 
       expect(brightnessValue).toBeGreaterThanOrEqual(15);
       expect(brightnessValue).toBeLessThanOrEqual(25);
@@ -313,7 +323,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       await setSliderValue(page, /adjust image contrast/i, 40);
 
       // Wait for debounce to settle
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       const endTime = Date.now();
       const totalTime = endTime - startTime;
@@ -333,7 +343,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       const contrastSlider = page.getByRole('slider', { name: /adjust image contrast/i });
 
       await setSliderValue(page, /adjust image contrast/i, 100);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       const value = await contrastSlider.getAttribute('aria-valuenow');
       expect(value).toBe('100');
@@ -347,7 +357,7 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       const contrastSlider = page.getByRole('slider', { name: /adjust image contrast/i });
 
       await setSliderValue(page, /adjust image contrast/i, -100);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       const value = await contrastSlider.getAttribute('aria-valuenow');
       expect(value).toBe('-100');
@@ -358,8 +368,6 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
     });
 
     test('should maintain performance with large adjustments', async ({ page }) => {
-      const contrastSlider = page.getByRole('slider', { name: /adjust image contrast/i });
-
       const startTime = Date.now();
 
       // Large jump from 0 to 100 using End key (most efficient)
@@ -386,7 +394,9 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       let attempts = 0;
       while (attempts < 20) {
         await page.keyboard.press('Tab');
-        const focused = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
+        const focused = await page.evaluate(() =>
+          document.activeElement?.getAttribute('aria-label')
+        );
         if (focused?.includes('contrast')) {
           break;
         }
@@ -394,7 +404,9 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       }
 
       // Should have focused the contrast slider
-      const focusedElement = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
+      const focusedElement = await page.evaluate(() =>
+        document.activeElement?.getAttribute('aria-label')
+      );
       expect(focusedElement).toContain('contrast');
     });
 
@@ -453,14 +465,16 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
       expect(hasFocusIndicator).toBeTruthy();
     });
 
-    test('should meet WCAG 2.2 focus indicator requirements (3px, 3:1 contrast)', async ({ page }) => {
+    test('should meet WCAG 2.2 focus indicator requirements (3px, 3:1 contrast)', async ({
+      page,
+    }) => {
       const contrastSlider = page.getByRole('slider', { name: /adjust image contrast/i });
       await contrastSlider.focus();
 
       // Take screenshot for manual verification if needed
       await page.screenshot({
         path: '/opt/workspaces/craftyprep.com/src/tests/e2e/screenshots/contrast-slider-focus.png',
-        fullPage: false
+        fullPage: false,
       });
 
       // This is a visual check - automated testing can verify presence,
@@ -550,11 +564,9 @@ test.describe('task-014: Contrast Slider E2E Tests', () => {
 
   test.describe('IR-1: Integration - Export Functionality', () => {
     test('should include contrast adjustments in exported image', async ({ page }) => {
-      const contrastSlider = page.getByRole('slider', { name: /adjust image contrast/i });
-
       // Adjust contrast
       await setSliderValue(page, /adjust image contrast/i, 60);
-      await page.waitForTimeout(1000);  // Increased for processing time
+      await page.waitForTimeout(1000); // Increased for processing time
 
       // Click download button
       const downloadButton = page.getByRole('button', { name: /download/i });

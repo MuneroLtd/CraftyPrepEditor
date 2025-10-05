@@ -13,6 +13,8 @@ export interface ImagePreviewProps {
   originalImage: HTMLImageElement | null;
   /** Processed image after auto-prep */
   processedImage: HTMLImageElement | null;
+  /** Whether to show loading overlay (only shown if processing >500ms) */
+  isLoading?: boolean;
 }
 
 interface PanOffset {
@@ -89,16 +91,22 @@ function CanvasWrapper({
  * - Synchronized zoom across both canvases
  * - Pan/drag when zoomed (zoom > 1x)
  * - Debounced window resize handling
+ * - Loading overlay (only shown if processing >500ms)
  *
  * @example
  * ```tsx
  * <ImagePreview
  *   originalImage={uploadedImage}
  *   processedImage={processedImage}
+ *   isLoading={shouldShowLoading}
  * />
  * ```
  */
-export function ImagePreview({ originalImage, processedImage }: ImagePreviewProps) {
+export function ImagePreview({
+  originalImage,
+  processedImage,
+  isLoading = false,
+}: ImagePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [canvasDimensions, setCanvasDimensions] = useState({ width: 800, height: 600 });
   const [zoom, setZoom] = useState(1);
@@ -282,7 +290,7 @@ export function ImagePreview({ originalImage, processedImage }: ImagePreviewProp
       </div>
 
       {/* Dual Canvas Preview */}
-      <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-4 relative">
         {/* Original Image Canvas */}
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-2">Original</h3>
@@ -304,19 +312,36 @@ export function ImagePreview({ originalImage, processedImage }: ImagePreviewProp
         {/* Processed Image Canvas */}
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-2">Processed</h3>
-          <CanvasWrapper
-            image={processedImage}
-            alt="Processed image preview"
-            width={canvasDimensions.width}
-            height={canvasDimensions.height}
-            zoom={zoom}
-            panOffset={panOffset}
-            isDragging={isDragging}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onKeyDown={handleKeyDown}
-          />
+          <div className="relative">
+            <CanvasWrapper
+              image={processedImage}
+              alt="Processed image preview"
+              width={canvasDimensions.width}
+              height={canvasDimensions.height}
+              zoom={zoom}
+              panOffset={panOffset}
+              isDragging={isDragging}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onKeyDown={handleKeyDown}
+            />
+
+            {/* Loading Overlay - Only shown if processing >500ms */}
+            {isLoading && (
+              <div
+                className="absolute inset-0 bg-black/50 flex items-center justify-center rounded"
+                role="status"
+                aria-live="polite"
+                aria-label="Processing image"
+              >
+                <div className="text-white text-center">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-2"></div>
+                  <p className="text-lg font-medium">Processing...</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

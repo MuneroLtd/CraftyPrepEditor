@@ -9,6 +9,7 @@ import { RefinementControls } from './components/RefinementControls';
 import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
+import { useDelayedLoading } from './hooks/useDelayedLoading';
 
 function App() {
   // File upload state (managed by useFileUpload hook - single source of truth)
@@ -48,6 +49,9 @@ function App() {
   const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(false);
   const [backgroundRemovalSensitivity, setBackgroundRemovalSensitivity] = useState(128);
   const debouncedBgSensitivity = useDebounce(backgroundRemovalSensitivity, 100);
+
+  // Delayed loading indicator (only show if processing >500ms)
+  const shouldShowLoading = useDelayedLoading(isProcessing, 500);
 
   /**
    * State flow documentation:
@@ -176,7 +180,11 @@ function App() {
           {/* Image Preview (shown after upload or processing) */}
           {uploadedImage && (
             <div className="w-full max-w-6xl mx-auto px-4">
-              <ImagePreview originalImage={uploadedImage} processedImage={processedImage} />
+              <ImagePreview
+                originalImage={uploadedImage}
+                processedImage={processedImage}
+                isLoading={shouldShowLoading}
+              />
             </div>
           )}
 
