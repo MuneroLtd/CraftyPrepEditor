@@ -4,9 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     container_name: craftyprep-dev
+    expose:
+      - "5173" # Vite dev server (exposed to Traefik)
     ports:
-      - "5173:5173" # Vite dev server
-      - "9229:9229" # Node.js debugger
+      - "9229:9229" # Node.js debugger (direct access)
     volumes:
       # Mount source code for hot-reload
       - .:/app
@@ -18,11 +19,19 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - dev-network
+      - traefik_demosrv
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.craftyprep-dev.rule=Host(`craftyprep.demosrv.uk`)"
+      - "traefik.http.routers.craftyprep-dev.entrypoints=websecure"
+      - "traefik.http.routers.craftyprep-dev.tls=true"
+      - "traefik.http.routers.craftyprep-dev.tls.certresolver=letsencrypt"
+      - "traefik.http.services.craftyprep-dev.loadbalancer.server.port=5173"
+      - "traefik.docker.network=traefik_demosrv"
 
 volumes:
   node_modules:
 
 networks:
-  dev-network:
-    driver: bridge
+  traefik_demosrv:
+    external: true

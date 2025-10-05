@@ -13,6 +13,7 @@ export default defineConfig({
   server: {
     port: 5173,
     host: process.env.VITE_HOST || 'localhost',
+    allowedHosts: ['craftyprep.demosrv.uk', 'localhost', '.demosrv.uk'],
     watch: {
       usePolling: true, // Required for Docker volume mounts
     },
