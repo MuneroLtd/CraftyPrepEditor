@@ -2,15 +2,25 @@ import { useState, useCallback } from 'react';
 import { sanitizeFilename } from '@/lib/utils/sanitizeFilename';
 
 /**
+ * Supported export formats for processed images
+ */
+export type ExportFormat = 'png' | 'jpeg';
+
+/**
  * Return type for useImageDownload hook
  */
 interface UseImageDownloadReturn {
   /**
-   * Function to download image from canvas as PNG
+   * Function to download image from canvas as PNG or JPG
    * @param canvas - Canvas element containing the image to download
    * @param originalFilename - Original filename from uploaded file (used to generate download filename)
+   * @param format - Export format ('png' or 'jpeg'), defaults to 'png'
    */
-  downloadImage: (canvas: HTMLCanvasElement | null, originalFilename: string) => Promise<void>;
+  downloadImage: (
+    canvas: HTMLCanvasElement | null,
+    originalFilename: string,
+    format?: ExportFormat
+  ) => Promise<void>;
   /**
    * Whether download is currently in progress
    */
@@ -21,13 +31,34 @@ interface UseImageDownloadReturn {
   error: string | null;
 }
 
+// MIME type mapping
+const MIME_TYPES = {
+  png: 'image/png',
+  jpeg: 'image/jpeg',
+} as const;
+
+// Quality settings (undefined for lossless formats)
+const QUALITY = {
+  png: undefined,
+  jpeg: 0.95,
+} as const;
+
+// File extension mapping
+const EXTENSIONS = {
+  png: 'png',
+  jpeg: 'jpg', // Use .jpg not .jpeg for file extension
+} as const;
+
 /**
- * Hook for downloading processed images as PNG files.
+ * Hook for downloading processed images in PNG or JPG format.
  *
- * Converts a canvas element to a PNG blob and triggers browser download
- * with a sanitized filename following the pattern: {original}_laserprep.png
+ * Converts a canvas element to a blob and triggers browser download
+ * with a sanitized filename following the pattern: {original}_laserprep.{ext}
  *
  * Features:
+ * - Multi-format support (PNG, JPG)
+ * - PNG: Lossless, larger files
+ * - JPG: 95% quality, smaller files
  * - Automatic filename generation from original upload name
  * - Special character sanitization in filenames
  * - Proper resource cleanup (blob URL revocation)
@@ -40,9 +71,13 @@ interface UseImageDownloadReturn {
  * ```tsx
  * const { downloadImage, isDownloading, error } = useImageDownload();
  *
- * // Trigger download
- * await downloadImage(canvasElement, 'my-photo.jpg');
- * // Downloads as: my-photo_laserprep.png
+ * // Download as PNG (default)
+ * await downloadImage(canvasElement, 'photo.jpg');
+ * // Downloads as: photo_laserprep.png
+ *
+ * // Download as JPG
+ * await downloadImage(canvasElement, 'photo.png', 'jpeg');
+ * // Downloads as: photo_laserprep.jpg
  * ```
  */
 export function useImageDownload(): UseImageDownloadReturn {
@@ -50,7 +85,11 @@ export function useImageDownload(): UseImageDownloadReturn {
   const [error, setError] = useState<string | null>(null);
 
   const downloadImage = useCallback(
-    async (canvas: HTMLCanvasElement | null, originalFilename: string) => {
+    async (
+      canvas: HTMLCanvasElement | null,
+      originalFilename: string,
+      format: ExportFormat = 'png'
+    ) => {
       // Validate canvas exists
       if (!canvas) {
         setError('No image to download');
@@ -61,17 +100,19 @@ export function useImageDownload(): UseImageDownloadReturn {
         setIsDownloading(true);
         setError(null);
 
-        // Generate filename: {basename}_laserprep.png
-        // Remove extension from original filename
-        const baseName = originalFilename.replace(/\.[^/.]+$/, '');
-        // Sanitize special characters
-        const sanitizedBaseName = sanitizeFilename(baseName);
-        // Add suffix and PNG extension
-        const filename = `${sanitizedBaseName}_laserprep.png`;
+        // Get format-specific settings
+        const mimeType = MIME_TYPES[format];
+        const quality = QUALITY[format];
+        const extension = EXTENSIONS[format];
 
-        // Convert canvas to PNG blob (asynchronous)
+        // Generate filename: {basename}_laserprep.{ext}
+        const baseName = originalFilename.replace(/\.[^/.]+$/, '');
+        const sanitizedBaseName = sanitizeFilename(baseName);
+        const filename = `${sanitizedBaseName}_laserprep.${extension}`;
+
+        // Convert canvas to blob (format-specific)
         const blob = await new Promise<Blob | null>((resolve) => {
-          canvas.toBlob(resolve, 'image/png');
+          canvas.toBlob(resolve, mimeType, quality);
         });
 
         // Check if blob creation succeeded

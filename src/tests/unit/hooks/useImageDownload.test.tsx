@@ -50,7 +50,7 @@ describe('useImageDownload', () => {
         await result.current.downloadImage(mockCanvas, 'test-photo.jpg');
       });
 
-      expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/png');
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/png', undefined);
     });
 
     it('generates correct filename with _laserprep.png suffix', async () => {
@@ -312,6 +312,80 @@ describe('useImageDownload', () => {
 
       await waitFor(() => {
         expect(result.current.error).toBe('Failed to create image blob');
+      });
+    });
+  });
+
+  describe('format parameter', () => {
+    it('defaults to PNG format when format not specified', async () => {
+      const { result } = renderHook(() => useImageDownload());
+      await act(async () => {
+        await result.current.downloadImage(mockCanvas, 'test.jpg');
+      });
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
+        expect.any(Function),
+        'image/png',
+        undefined
+      );
+    });
+
+    it('exports as PNG when format is "png"', async () => {
+      const { result } = renderHook(() => useImageDownload());
+      await act(async () => {
+        await result.current.downloadImage(mockCanvas, 'test.jpg', 'png');
+      });
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
+        expect.any(Function),
+        'image/png',
+        undefined
+      );
+    });
+
+    it('exports as JPEG when format is "jpeg"', async () => {
+      const { result } = renderHook(() => useImageDownload());
+      await act(async () => {
+        await result.current.downloadImage(mockCanvas, 'test.jpg', 'jpeg');
+      });
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
+        expect.any(Function),
+        'image/jpeg',
+        0.95
+      );
+    });
+
+    it('generates .png extension for PNG format', async () => {
+      const { result } = renderHook(() => useImageDownload());
+      let capturedAnchor: HTMLAnchorElement | null = null;
+
+      appendChildSpy.mockImplementation((node: Node) => {
+        if (node instanceof HTMLAnchorElement) capturedAnchor = node;
+        return node;
+      });
+
+      await act(async () => {
+        await result.current.downloadImage(mockCanvas, 'photo.jpg', 'png');
+      });
+
+      await waitFor(() => {
+        expect(capturedAnchor?.download).toBe('photo_laserprep.png');
+      });
+    });
+
+    it('generates .jpg extension for JPEG format', async () => {
+      const { result } = renderHook(() => useImageDownload());
+      let capturedAnchor: HTMLAnchorElement | null = null;
+
+      appendChildSpy.mockImplementation((node: Node) => {
+        if (node instanceof HTMLAnchorElement) capturedAnchor = node;
+        return node;
+      });
+
+      await act(async () => {
+        await result.current.downloadImage(mockCanvas, 'photo.png', 'jpeg');
+      });
+
+      await waitFor(() => {
+        expect(capturedAnchor?.download).toBe('photo_laserprep.jpg');
       });
     });
   });

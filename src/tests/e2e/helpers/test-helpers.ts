@@ -1,6 +1,10 @@
 import { expect, type Page } from '@playwright/test';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import AxeBuilder from '@axe-core/playwright';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Uploads the test image to the application

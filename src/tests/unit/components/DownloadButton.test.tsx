@@ -105,7 +105,7 @@ describe('DownloadButton', () => {
       const button = screen.getByRole('button', { name: /download processed image/i });
       fireEvent.click(button);
 
-      expect(mockDownloadImage).toHaveBeenCalledWith(mockCanvas, 'test.jpg');
+      expect(mockDownloadImage).toHaveBeenCalledWith(mockCanvas, 'test.jpg', 'png');
     });
 
     it('does not call downloadImage when disabled', () => {
@@ -245,6 +245,83 @@ describe('DownloadButton', () => {
       // Find SVG element within button (icon)
       const svg = button.querySelector('svg');
       expect(svg).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  describe('format selector', () => {
+    it('renders format selector with PNG and JPG options', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      expect(screen.getByLabelText(/PNG \(Lossless, larger file\)/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i)).toBeInTheDocument();
+    });
+
+    it('defaults to PNG format selected', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const pngRadio = screen.getByLabelText(/PNG \(Lossless, larger file\)/i) as HTMLInputElement;
+      expect(pngRadio.checked).toBe(true);
+    });
+
+    it('changes format when JPG selected', async () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i) as HTMLInputElement;
+      fireEvent.click(jpgRadio);
+
+      expect(jpgRadio.checked).toBe(true);
+    });
+
+    it('updates button text to "Download PNG" when PNG selected', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const button = screen.getByRole('button', { name: /download/i });
+      expect(button).toHaveTextContent('Download PNG');
+    });
+
+    it('updates button text to "Download JPG" when JPG selected', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i);
+      fireEvent.click(jpgRadio);
+
+      const button = screen.getByRole('button', { name: /download/i });
+      expect(button).toHaveTextContent('Download JPG');
+    });
+
+    it('passes selected format to download hook', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i);
+      fireEvent.click(jpgRadio);
+
+      const button = screen.getByRole('button', { name: /download/i });
+      fireEvent.click(button);
+
+      expect(mockDownloadImage).toHaveBeenCalledWith(mockCanvas, 'test.jpg', 'jpeg');
+    });
+  });
+
+  describe('format selector accessibility', () => {
+    it('has accessible fieldset and legend', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const group = screen.getByRole('group', { name: /export format/i });
+      expect(group).toBeInTheDocument();
+    });
+
+    it('can navigate between format options via tab', () => {
+      render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+
+      const pngRadio = screen.getByLabelText(/PNG \(Lossless, larger file\)/i) as HTMLInputElement;
+      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i) as HTMLInputElement;
+
+      // Verify both radio buttons are focusable
+      pngRadio.focus();
+      expect(pngRadio).toHaveFocus();
+
+      jpgRadio.focus();
+      expect(jpgRadio).toHaveFocus();
     });
   });
 });

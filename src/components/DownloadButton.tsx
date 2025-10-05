@@ -1,5 +1,14 @@
+import { useState, useCallback } from 'react';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import { useImageDownload } from '@/hooks/useImageDownload';
+import { useImageDownload, type ExportFormat } from '@/hooks/useImageDownload';
+
+/**
+ * Format labels for UI display
+ */
+const FORMAT_LABELS: Record<ExportFormat, string> = {
+  png: 'PNG',
+  jpeg: 'JPG',
+};
 
 /**
  * Props for DownloadButton component
@@ -20,16 +29,18 @@ interface DownloadButtonProps {
 }
 
 /**
- * DownloadButton - Triggers download of processed image as PNG
+ * DownloadButton - Triggers download of processed image as PNG or JPG
  *
- * Exports the processed canvas as a PNG blob and downloads it with
- * a sanitized filename following the pattern: {original}_laserprep.png
+ * Exports the processed canvas as a PNG or JPG blob and downloads it with
+ * a sanitized filename following the pattern: {original}_laserprep.{ext}
  *
  * Features:
+ * - Multi-format support (PNG or JPG)
+ * - Format selector with keyboard navigation
  * - Automatic filename generation from original upload
  * - Loading state during download
  * - Error handling with user-friendly messages
- * - Keyboard accessible (Tab, Enter, Space)
+ * - Keyboard accessible (Tab, Enter, Space, Arrow keys)
  * - Screen reader support (ARIA labels, live regions)
  *
  * @param canvas - Processed image canvas (from useImageProcessing hook)
@@ -42,7 +53,7 @@ interface DownloadButtonProps {
  *   canvas={processedImage}
  *   originalFilename="photo.jpg"
  * />
- * // Downloads as: photo_laserprep.png
+ * // Downloads as: photo_laserprep.png (default) or photo_laserprep.jpg (if JPG selected)
  * ```
  */
 export function DownloadButton({
@@ -51,10 +62,11 @@ export function DownloadButton({
   disabled = false,
 }: DownloadButtonProps) {
   const { downloadImage, isDownloading, error } = useImageDownload();
+  const [format, setFormat] = useState<ExportFormat>('png');
 
-  const handleClick = () => {
-    downloadImage(canvas, originalFilename);
-  };
+  const handleClick = useCallback(() => {
+    downloadImage(canvas, originalFilename, format);
+  }, [downloadImage, canvas, originalFilename, format]);
 
   // Button is disabled if:
   // - Explicitly disabled via prop
@@ -63,11 +75,45 @@ export function DownloadButton({
   const isDisabled = disabled || !canvas || isDownloading;
 
   return (
-    <div className="flex flex-col items-center space-y-2">
+    <div className="flex flex-col items-center space-y-4">
+      {/* Format Selector */}
+      <fieldset className="border border-gray-300 rounded-lg p-4">
+        <legend className="text-sm font-medium px-2">Export Format</legend>
+
+        <div className="flex space-x-4" role="radiogroup" aria-label="Export format">
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="format"
+              value="png"
+              checked={format === 'png'}
+              onChange={() => setFormat('png')}
+              className="w-4 h-4 focus:ring-3 focus:ring-blue-500"
+              aria-label="PNG (Lossless, larger file)"
+            />
+            <span className="text-sm">PNG (Lossless)</span>
+          </label>
+
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="format"
+              value="jpeg"
+              checked={format === 'jpeg'}
+              onChange={() => setFormat('jpeg')}
+              className="w-4 h-4 focus:ring-3 focus:ring-blue-500"
+              aria-label="JPG (Smaller file, 95% quality)"
+            />
+            <span className="text-sm">JPG (Smaller)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      {/* Download Button */}
       <button
         onClick={handleClick}
         disabled={isDisabled}
-        aria-label="Download processed image as PNG"
+        aria-label={`Download processed image as ${FORMAT_LABELS[format]}`}
         aria-disabled={isDisabled}
         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700
                    disabled:bg-gray-300 disabled:cursor-not-allowed
@@ -103,7 +149,7 @@ export function DownloadButton({
         ) : (
           <>
             <ArrowDownTrayIcon className="w-5 h-5" aria-hidden="true" />
-            <span>Download PNG</span>
+            <span>Download {FORMAT_LABELS[format]}</span>
           </>
         )}
       </button>
