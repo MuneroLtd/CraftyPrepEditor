@@ -30,7 +30,7 @@ describe('AutoPrepButton Component', () => {
     });
 
     it('applies primary button styling', () => {
-      const { container } = render(
+      render(
         <AutoPrepButton disabled={false} loading={false} onClick={vi.fn()} />
       );
 

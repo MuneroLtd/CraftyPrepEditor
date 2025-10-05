@@ -5,7 +5,7 @@
 **Sprint Goal**: Deliver working image upload and basic auto-prep functionality with MVP feature set
 **Duration**: Week 1-2
 **Status**: ACTIVE
-**Progress**: 7/10 complete
+**Progress**: 9/10 complete
 **Last Updated**: 2025-10-05
 
 ---
@@ -212,8 +212,9 @@ Wire up the Auto-Prep button to execute the complete processing pipeline (graysc
 
 **ID**: task-009
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 4 hours
+**Actual Effort**: 3 hours
 
 **Description**:
 Implement PNG export from the processed canvas and trigger browser download with properly generated filename (original_laserprep.png).

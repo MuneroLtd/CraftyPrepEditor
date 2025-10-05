@@ -99,11 +99,8 @@ export function useImageProcessing(): UseImageProcessingReturn {
       // Step 3: Apply histogram equalization (contrast enhancement)
       imageData = applyHistogramEqualization(imageData);
 
-      // Step 4: Calculate optimal threshold using Otsu's method
-      const threshold = calculateOptimalThreshold(imageData);
-
-      // Step 5: Apply threshold (binarization)
-      imageData = applyOtsuThreshold(imageData, threshold);
+      // Step 4: Apply Otsu's method (calculates optimal threshold and applies binarization)
+      imageData = applyOtsuThreshold(imageData);
 
       // Step 6: Convert ImageData back to HTMLImageElement
       // Put processed data back on canvas

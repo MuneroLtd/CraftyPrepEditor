@@ -3,12 +3,13 @@ import Layout from './components/Layout';
 import { FileUploadComponent } from './components/FileUploadComponent';
 import { AutoPrepButton } from './components/AutoPrepButton';
 import { ImagePreview } from './components/ImagePreview';
+import { DownloadButton } from './components/DownloadButton';
 import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 
 function App() {
   // File upload state (managed by useFileUpload hook)
-  const { uploadedImage } = useFileUpload();
+  const { uploadedImage, selectedFile } = useFileUpload();
 
   // Image processing state (managed by useImageProcessing hook)
   const { processedImage, isProcessing, error: processingError, runAutoPrepAsync } = useImageProcessing();
@@ -63,6 +64,17 @@ function App() {
           {uploadedImage && (
             <div className="w-full max-w-6xl mx-auto px-4">
               <ImagePreview originalImage={uploadedImage} processedImage={processedImage} />
+            </div>
+          )}
+
+          {/* Download Button (shown after processing) */}
+          {processedImage && selectedFile && (
+            <div className="w-full max-w-2xl mx-auto px-4">
+              <DownloadButton
+                canvas={processedImage}
+                originalFilename={selectedFile.name}
+                disabled={!processedImage}
+              />
             </div>
           )}
         </div>
