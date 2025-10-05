@@ -6,7 +6,7 @@
 **Duration**: Week 3-4
 **Status**: ACTIVE
 **Progress**: 6/11 complete
-**Last Updated**: 2025-10-05 (task-016 COMPLETE)
+**Last Updated**: 2025-10-05 (task-016 COMMITTED)
 
 ---
 
@@ -19,52 +19,6 @@
 ---
 
 ## 📋 Sprint Tasks (Max 12)
-
-### Task 2.6: Debounced Preview Updates
-
-**ID**: task-016
-**Priority**: MEDIUM
-**Status**: COMPLETE
-**Estimated Effort**: 1.5 hours (reduced from 4h - 6/8 criteria already complete)
-
-**Description**:
-Implement debounced preview updates and optimize rendering performance for slider adjustments.
-
-**Required Reading**:
-- .autoflow/docs/ARCHITECTURE.md#performance-considerations - Optimization techniques
-- .autoflow/docs/FUNCTIONAL.md#preview-updates - Performance requirements
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Performance optimization
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Preview update specs
-
-**Acceptance Criteria** (8/8 complete):
-- [x] Custom useDebounce hook created ✅
-- [x] 100ms debounce on slider input ✅
-- [x] Preview updates only after drag stops ✅
-- [x] Loading indicator if update >500ms ✅
-- [x] Canvas operations optimized ✅
-- [x] React.memo for expensive components ✅
-- [x] Performance <100ms for adjustments (verified with tests) ✅
-- [x] No UI blocking during processing ✅
-
-**Task Plan**: [.autoflow/tasks/task-016/TASK_PLAN.md](.autoflow/tasks/task-016/TASK_PLAN.md)
-
-**Implementation Summary**:
-1. ✅ Added delayed loading indicator (useDelayedLoading hook + overlay)
-2. ✅ Created performance tests (<500ms test environment, <100ms in browser)
-
-**Definition of Done**:
-- [x] Debouncing working correctly ✅
-- [x] Loading indicator implemented (delayed 500ms) ✅
-- [x] Performance tests created and passing ✅
-- [x] All tests passing ✅
-
-**Dependencies**: Tasks 2.2, 2.3, 2.4, 2.5 (all COMPLETE ✅)
-
-**Blockers**: None
-
----
 
 ### Task 2.7: Reset Button and State Management
 
