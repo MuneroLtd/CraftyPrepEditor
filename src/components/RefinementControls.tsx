@@ -3,6 +3,7 @@ import { BrightnessSlider } from '@/components/BrightnessSlider';
 import { ContrastSlider } from '@/components/ContrastSlider';
 import { ThresholdSlider } from '@/components/ThresholdSlider';
 import { BackgroundRemovalControl } from '@/components/BackgroundRemovalControl';
+import { ResetButton } from '@/components/ResetButton';
 import { cn } from '@/lib/utils';
 
 /**
@@ -29,6 +30,10 @@ export interface RefinementControlsProps {
   onBackgroundRemovalToggle?: (enabled: boolean) => void;
   /** Callback fired when background removal sensitivity changes */
   onBackgroundRemovalSensitivityChange?: (value: number) => void;
+  /** Callback fired when reset button clicked */
+  onReset?: () => void;
+  /** Whether reset is in progress */
+  isResetting?: boolean;
   /** Whether the controls are disabled */
   disabled?: boolean;
   /** Additional CSS classes */
@@ -72,6 +77,8 @@ export const RefinementControls = memo(function RefinementControls({
   onThresholdChange,
   onBackgroundRemovalToggle,
   onBackgroundRemovalSensitivityChange,
+  onReset,
+  isResetting = false,
   disabled = false,
   className = '',
 }: RefinementControlsProps): React.JSX.Element {
@@ -97,6 +104,9 @@ export const RefinementControls = memo(function RefinementControls({
       <ContrastSlider value={contrast} onChange={onContrastChange} disabled={disabled} />
 
       <ThresholdSlider value={threshold} onChange={onThresholdChange} disabled={disabled} />
+
+      {/* Reset Button (at the bottom) */}
+      {onReset && <ResetButton onReset={onReset} disabled={disabled} loading={isResetting} />}
     </section>
   );
 });

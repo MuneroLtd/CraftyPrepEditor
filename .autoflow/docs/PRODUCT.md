@@ -2,17 +2,23 @@
 
 ## Executive Summary
 
-**CraftyPrep** is a web-based image preparation tool designed specifically for laser engraving enthusiasts and professionals. It solves the tedious problem of manually processing images for laser engraving by providing a simple, one-click "Auto-Prep" solution with intuitive refinement controls.
+**CraftyPrep** is a comprehensive web-based image editor designed specifically for laser engraving, cutting, and crafting enthusiasts. It transforms complex image preparation into a streamlined workflow with professional editing tools, material-specific presets, and multi-format export capabilities.
 
-**Problem Statement**: Preparing images for laser engraving requires specific processing (high contrast, edge detection, proper thresholding) that typically demands expensive software or technical expertise. Most makers waste significant time trying to achieve optimal results through trial and error.
+**Problem Statement**: Preparing images for laser engraving, Cricut cutting, or other crafting tools requires expensive software (like Imag-R) or technical expertise. Users waste time with trial-and-error, incompatible formats, and manual adjustments for different materials.
 
-**Solution**: A free, browser-based tool that automatically optimizes images for laser engraving with a single click, while offering fine-tuning controls for users who want to refine the results for specific materials.
+**Solution**: A free, browser-based editor that rivals Imag-R with:
+- **6-step workflow**: Upload → Crop → Resize → Material Preset → Text Overlay → Export
+- **Advanced editing**: Precision crop, dimension control (mm/inches), DPI configuration
+- **Material presets**: Wood, Acrylic, Leather, Tile, Glass, Metal, Cork, Fabric
+- **Dithering algorithms**: Floyd-Steinberg, Atkinson, Stucki, Sierra, Burkes
+- **Multi-format export**: PNG, JPG, BMP, SVG with tool-specific presets (Cricut, Glowforge, LaserGRBL)
 
 **Business Value**:
-- Democratizes laser engraving by removing technical barriers
-- Saves users time (from hours to minutes for image preparation)
-- No installation required - works directly in browser
-- Free to use - builds community goodwill and brand recognition
+- **Competitive Alternative**: Feature parity with Imag-R at zero cost
+- **Universal Compatibility**: Export for ANY laser/cutting tool
+- **Professional Results**: Material-specific algorithms ensure optimal output
+- **Privacy-First**: Client-side processing (no server uploads)
+- **Accessibility**: WCAG 2.2 AAA compliant (better than competitors)
 
 ## Target Users
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { FileUploadComponent } from './components/FileUploadComponent';
@@ -10,6 +10,12 @@ import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
 import { useDelayedLoading } from './hooks/useDelayedLoading';
+import {
+  DEFAULT_BRIGHTNESS,
+  DEFAULT_CONTRAST,
+  DEFAULT_BACKGROUND_REMOVAL_ENABLED,
+  DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY,
+} from './lib/constants';
 
 function App() {
   // File upload state (managed by useFileUpload hook - single source of truth)
@@ -37,17 +43,21 @@ function App() {
     applyAdjustments,
   } = useImageProcessing();
 
-  // Adjustment states
-  const [brightness, setBrightness] = useState(0);
-  const [contrast, setContrast] = useState(0);
-  const [threshold, setThreshold] = useState(128);
+  // Adjustment states (use constants for initial values)
+  const [brightness, setBrightness] = useState(DEFAULT_BRIGHTNESS);
+  const [contrast, setContrast] = useState(DEFAULT_CONTRAST);
+  const [threshold, setThreshold] = useState(128); // Will be updated to Otsu value
   const debouncedBrightness = useDebounce(brightness, 100);
   const debouncedContrast = useDebounce(contrast, 100);
   const debouncedThreshold = useDebounce(threshold, 100);
 
-  // Background removal state
-  const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(false);
-  const [backgroundRemovalSensitivity, setBackgroundRemovalSensitivity] = useState(128);
+  // Background removal state (use constants for initial values)
+  const [backgroundRemovalEnabled, setBackgroundRemovalEnabled] = useState(
+    DEFAULT_BACKGROUND_REMOVAL_ENABLED
+  );
+  const [backgroundRemovalSensitivity, setBackgroundRemovalSensitivity] = useState(
+    DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY
+  );
   const debouncedBgSensitivity = useDebounce(backgroundRemovalSensitivity, 100);
 
   // Delayed loading indicator (only show if processing >500ms)
@@ -103,10 +113,40 @@ function App() {
         bgSensitivity: backgroundRemovalSensitivity,
       });
       // Reset adjustments when running auto-prep
-      setBrightness(0);
-      setContrast(0);
+      setBrightness(DEFAULT_BRIGHTNESS);
+      setContrast(DEFAULT_CONTRAST);
     }
   };
+
+  /**
+   * Handle reset button click
+   *
+   * Resets all refinement controls to their default values and re-runs
+   * the auto-prep algorithm from scratch, discarding all manual adjustments.
+   *
+   * State flow:
+   * 1. Reset brightness, contrast, threshold to defaults
+   * 2. Disable background removal
+   * 3. Reset background removal sensitivity
+   * 4. Re-run auto-prep algorithm with default settings
+   * 5. Threshold will be updated to new Otsu value via useEffect
+   */
+  const handleReset = useCallback(() => {
+    if (uploadedImage && otsuThreshold !== null) {
+      // Reset all adjustment values to defaults
+      setBrightness(DEFAULT_BRIGHTNESS);
+      setContrast(DEFAULT_CONTRAST);
+      setThreshold(otsuThreshold); // Reset to Otsu value
+      setBackgroundRemovalEnabled(DEFAULT_BACKGROUND_REMOVAL_ENABLED);
+      setBackgroundRemovalSensitivity(DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY);
+
+      // Re-run auto-prep with default settings
+      runAutoPrepAsync(uploadedImage, {
+        removeBackground: DEFAULT_BACKGROUND_REMOVAL_ENABLED,
+        bgSensitivity: DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY,
+      });
+    }
+  }, [uploadedImage, otsuThreshold, runAutoPrepAsync]);
 
   return (
     <ErrorBoundary>
@@ -172,6 +212,8 @@ function App() {
                 onThresholdChange={setThreshold}
                 onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
                 onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
+                onReset={handleReset}
+                isResetting={isProcessing}
                 disabled={isProcessing}
               />
             </div>

@@ -242,11 +242,11 @@ describe('AutoPrepButton Component', () => {
       render(<AutoPrepButton disabled={false} loading={false} onClick={vi.fn()} />);
 
       const button = screen.getByRole('button');
-      const rect = button.getBoundingClientRect();
 
+      // Verify CSS classes that ensure proper sizing (jsdom doesn't calculate layout)
       // h-11 = 44px height, min-w-[140px] = 140px width
-      expect(rect.height).toBeGreaterThanOrEqual(44);
-      expect(rect.width).toBeGreaterThanOrEqual(140);
+      expect(button.className).toContain('h-11');
+      expect(button.className).toMatch(/min-w-\[140px\]/);
     });
   });
 

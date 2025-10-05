@@ -5,8 +5,8 @@
 **Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 6/11 complete
-**Last Updated**: 2025-10-05 (task-016 COMMITTED)
+**Progress**: 7/11 complete (4 tasks remaining)
+**Last Updated**: 2025-10-05 (task-017 committed)
 
 ---
 
@@ -19,48 +19,6 @@
 ---
 
 ## 📋 Sprint Tasks (Max 12)
-
-### Task 2.7: Reset Button and State Management
-
-**ID**: task-017
-**Priority**: MEDIUM
-**Status**: PENDING
-**Estimated Effort**: 3 hours
-
-**Description**:
-Implement reset functionality to restore auto-prep defaults and manage application state.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#reset-functionality - Reset requirements
-- .autoflow/docs/ARCHITECTURE.md#state-management - State structure
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Reset functionality
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - State management
-
-**Acceptance Criteria**:
-- [ ] Reset button component created
-- [ ] Returns all sliders to default (0, 0, auto)
-- [ ] Re-applies auto-prep algorithm
-- [ ] Discards manual adjustments
-- [ ] State managed via Context API or hooks
-- [ ] Unit tests for state reset
-- [ ] Keyboard accessible
-- [ ] Visual feedback on reset
-
-**Definition of Done**:
-- [ ] Reset functionality working
-- [ ] State management clean
-- [ ] Tests passing
-- [ ] Accessibility verified
-
-**Dependencies**: Tasks 2.2, 2.3, 2.4 (all adjustments)
-
-**Task Plan**: (Will be created by `/plan`)
-
-**Blockers**: None
-
----
 
 ### Task 2.8: JPG Export Option
 
@@ -295,15 +253,16 @@ PENDING → PLANNED → REVIEW → TEST → COMPLETE
 
 ## 📝 Notes
 
-- **Sprint 1 Complete**: Foundation complete, CI/CD pipeline operational
-- **Max 10 tasks** per sprint for focused execution and predictable velocity
+- **Sprint 1 Complete**: All 10 tasks complete and archived to COMPLETED_TASKS.md
+- **Sprint 2 Progress**: 7/11 complete (task-011 through task-017 archived)
+- **Remaining**: 4 tasks (task-018 through task-021)
 - **TDD approach**: Write tests first, then implement features
 - **Quality gates**: Automated `/code-review` ensures standards (no skipping)
 - **Documentation-driven**: All tasks reference specific design doc sections
 - **Task plans**: `/plan` command creates detailed plans in `.autoflow/tasks/task-XXX/`
-- **Completed tasks**: Moved to COMPLETED_TASKS.md and removed from TASK.md
+- **Completed tasks**: Archived to COMPLETED_TASKS.md and marked [COMMITTED] in SPRINTS.md
 - **Sprint auto-load**: When Sprint 2 completes, Sprint 3 tasks auto-populate from SPRINTS.md
 
 ---
 
-**Ready to start?** Run `/plan` to create a detailed plan for Task 2.1 (Refinement Slider Components).
+**Ready to continue?** Run `/plan` to create a detailed plan for Task 2.7 (Reset Button and State Management).

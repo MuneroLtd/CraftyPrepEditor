@@ -25,3 +25,25 @@ export const FILE_UPLOAD = {
   /** Maximum allowed total image pixels (100 megapixels) */
   MAX_MEGAPIXELS: 100_000_000,
 } as const;
+
+/**
+ * Default values for image adjustment controls
+ *
+ * These constants define the default/initial values for all refinement controls.
+ * Used both for initial state and when resetting to defaults.
+ */
+
+/** Default brightness value (0 = no adjustment) */
+export const DEFAULT_BRIGHTNESS = 0;
+
+/** Default contrast value (0 = no adjustment) */
+export const DEFAULT_CONTRAST = 0;
+
+/** Default threshold value (used as fallback before Otsu calculation) */
+export const DEFAULT_THRESHOLD = 128;
+
+/** Default background removal enabled state */
+export const DEFAULT_BACKGROUND_REMOVAL_ENABLED = false;
+
+/** Default background removal sensitivity (0-255) */
+export const DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY = 128;

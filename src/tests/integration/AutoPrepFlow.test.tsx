@@ -30,10 +30,10 @@ describe('Auto-Prep Flow Integration', () => {
 
   describe('Complete Workflow', () => {
     it('executes full pipeline: upload → auto-prep → display result', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Step 1: Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       // Wait for upload to complete
@@ -66,10 +66,10 @@ describe('Auto-Prep Flow Integration', () => {
     }, 15000); // 15s timeout for full pipeline
 
     it('displays original and processed images side-by-side', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -109,9 +109,9 @@ describe('Auto-Prep Flow Integration', () => {
     });
 
     it('enables button after successful upload', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -121,10 +121,10 @@ describe('Auto-Prep Flow Integration', () => {
     });
 
     it('disables button during processing', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -145,10 +145,10 @@ describe('Auto-Prep Flow Integration', () => {
 
   describe('Processing Performance', () => {
     it('completes processing within 5 seconds for small image', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -174,10 +174,10 @@ describe('Auto-Prep Flow Integration', () => {
     }, 10000);
 
     it('updates UI smoothly without freezing', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -216,10 +216,10 @@ describe('Auto-Prep Flow Integration', () => {
 
   describe('Multiple Processing Runs', () => {
     it('handles multiple auto-prep clicks correctly', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -256,10 +256,10 @@ describe('Auto-Prep Flow Integration', () => {
 
   describe('Accessibility', () => {
     it('announces processing status to screen readers', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
@@ -278,10 +278,10 @@ describe('Auto-Prep Flow Integration', () => {
     }, 10000);
 
     it('maintains keyboard accessibility throughout workflow', async () => {
-      render(<App />);
+      const { container } = render(<App />);
 
       // Upload image via keyboard
-      const fileInput = screen.getByLabelText(/drag image here or click to browse/i);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
       await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
