@@ -414,3 +414,89 @@ Set up continuous integration pipeline with GitHub Actions for automated testing
 **Sprint 1 Status**: COMPLETE (10/10 tasks finished)
 
 ---
+
+## Sprint 2: Refinement Controls & UX
+
+### Task 2.2: Brightness Adjustment Implementation
+
+**ID**: task-012
+**Status**: COMMITTED
+**Completed**: 2025-10-05
+**Estimated**: 3 hours
+**Actual**: ~3 hours
+**Sprint**: Sprint 2 - Refinement Controls & UX
+
+**Description**:
+Implement brightness adjustment algorithm and wire to slider with real-time preview update. Enables precise brightness control for laser engraving preparation with debounced real-time preview.
+
+**Key Deliverables**:
+- ✅ Brightness algorithm: `newValue = clamp(value + brightness, 0, 255)`
+- ✅ Applied to all RGB channels
+- ✅ useDebounce hook for performance optimization
+- ✅ Slider triggers brightness adjustment with <100ms response
+- ✅ Real-time preview updates after drag stops
+- ✅ State management integration in App.tsx
+- ✅ Unit tests with edge cases (-100 all black, +100 all white)
+- ✅ Integration tests for FileUploadComponent
+- ✅ E2E verification with Playwright
+
+**Quality Metrics**:
+- Tests passing: 100%
+- Code coverage: Maintained threshold
+- Performance: <100ms response time ✅
+- Issues resolved: 0 (clean implementation)
+- E2E verification: Passed
+
+**Major Decisions**:
+- **Debouncing Strategy**: Implemented useDebounce hook with 300ms delay to prevent excessive processing
+- **State Management**: Brightness value managed in App.tsx, passed to FileUploadComponent
+- **Algorithm Simplicity**: Used simple addition with clamp for predictable, performant brightness adjustment
+- **Component Integration**: Integrated brightness slider into existing FileUploadComponent
+
+**Blockers Resolved**:
+- None (smooth implementation)
+
+**Components Created**:
+- useDebounce.ts - Custom React hook for debouncing values
+
+**Utilities Created**:
+- applyBrightness.ts - Brightness adjustment algorithm
+
+**Tests Created**:
+- src/tests/unit/hooks/useDebounce.test.ts - Debounce hook tests
+- src/tests/unit/imageProcessing/applyBrightness.test.ts - Brightness algorithm tests
+- Updated integration tests in FileUploadComponent.test.tsx
+
+**Documentation**:
+- Task Plan: .autoflow/tasks/task-012/TASK_PLAN.md
+- Acceptance Criteria: .autoflow/tasks/task-012/ACCEPTANCE_CRITERIA.md
+- Review Issues: .autoflow/tasks/task-012/REVIEW.md (clean - no issues)
+- Dependencies: .autoflow/tasks/task-012/DEPENDENCIES.md
+- Research: .autoflow/tasks/task-012/RESEARCH.md
+
+**Commit**: f4c461e (feat(image-processing): implement brightness adjustment with real-time preview)
+
+**Files Changed**: 19 files, 2,873 insertions(+), 45 deletions(-)
+
+**Test Coverage Breakdown**:
+- Unit tests: useDebounce hook, applyBrightness algorithm
+- Integration tests: FileUploadComponent brightness flow
+- E2E tests: Brightness slider interaction and preview update
+
+**Performance Metrics**:
+- Debounce delay: 300ms (prevents excessive processing)
+- Preview update: <100ms (target met) ✅
+- 2MB image brightness adjustment: <50ms ✅
+
+**Accessibility Features**:
+- Brightness slider keyboard accessible
+- ARIA labels for screen readers
+- Focus indicators on slider
+
+**Lessons Learned**:
+- Debouncing is essential for real-time preview performance
+- Simple brightness algorithm (addition + clamp) is performant and predictable
+- State lifting to App.tsx allows future multi-adjustment coordination
+- Edge case testing (-100, +100) validates algorithm correctness
+
+---

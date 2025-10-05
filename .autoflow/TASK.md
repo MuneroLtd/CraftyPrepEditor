@@ -5,7 +5,7 @@
 **Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 1/10 complete
+**Progress**: 2/10 complete
 **Last Updated**: 2025-10-05
 
 ---
@@ -19,47 +19,6 @@
 ---
 
 ## 📋 Sprint Tasks (Max 10)
-
-### Task 2.2: Brightness Adjustment Implementation
-
-**ID**: task-012
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 3 hours
-
-**Description**:
-Implement brightness adjustment algorithm and wire to slider with real-time preview update.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#brightness-adjustment - Algorithm spec
-- .autoflow/docs/ARCHITECTURE.md#processing-patterns - Adjustment pipeline
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Brightness algorithm
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Processing patterns
-
-**Acceptance Criteria**:
-- [ ] Brightness function: `newValue = clamp(value + brightness, 0, 255)`
-- [ ] Applied to all RGB channels
-- [ ] Slider triggers brightness adjustment
-- [ ] Preview updates in <100ms after drag stops
-- [ ] Debounced to prevent excessive processing
-- [ ] Unit tests with known brightness values
-- [ ] Edge cases: -100 (all black), +100 (all white)
-
-**Definition of Done**:
-- [ ] Brightness algorithm working
-- [ ] Real-time preview updates
-- [ ] Performance <100ms
-- [ ] Tests passing
-
-**Dependencies**: Task 2.1 (slider component) ✅
-
-**Task Plan**: [.autoflow/tasks/task-012/TASK_PLAN.md](.autoflow/tasks/task-012/TASK_PLAN.md)
-
-**Blockers**: None
-
----
 
 ### Task 2.3: Contrast Adjustment Implementation
 
