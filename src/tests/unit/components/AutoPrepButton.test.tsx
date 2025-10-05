@@ -30,9 +30,7 @@ describe('AutoPrepButton Component', () => {
     });
 
     it('applies primary button styling', () => {
-      render(
-        <AutoPrepButton disabled={false} loading={false} onClick={vi.fn()} />
-      );
+      render(<AutoPrepButton disabled={false} loading={false} onClick={vi.fn()} />);
 
       const button = screen.getByRole('button');
       // Should have variant="default" (primary styling from shadcn/ui)
@@ -128,7 +126,7 @@ describe('AutoPrepButton Component', () => {
       );
 
       // Icon visible when not loading
-      let button = screen.getByRole('button');
+      const button = screen.getByRole('button');
       expect(button.querySelector('svg')).toBeInTheDocument();
 
       // Rerender with loading=true
@@ -276,7 +274,7 @@ describe('AutoPrepButton Component', () => {
       );
 
       // Start enabled
-      let button = screen.getByRole('button');
+      const button = screen.getByRole('button');
       expect(button).not.toBeDisabled();
       expect(screen.getByText(/auto-prep/i)).toBeInTheDocument();
 

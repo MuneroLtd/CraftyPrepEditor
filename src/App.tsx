@@ -12,7 +12,13 @@ function App() {
   const { uploadedImage, selectedFile } = useFileUpload();
 
   // Image processing state (managed by useImageProcessing hook)
-  const { processedImage, isProcessing, error: processingError, runAutoPrepAsync } = useImageProcessing();
+  const {
+    processedImage,
+    processedCanvas,
+    isProcessing,
+    error: processingError,
+    runAutoPrepAsync,
+  } = useImageProcessing();
 
   // Handle Auto-Prep button click
   const handleAutoPrepClick = () => {
@@ -71,9 +77,9 @@ function App() {
           {processedImage && selectedFile && (
             <div className="w-full max-w-2xl mx-auto px-4">
               <DownloadButton
-                canvas={processedImage}
+                canvas={processedCanvas}
                 originalFilename={selectedFile.name}
-                disabled={!processedImage}
+                disabled={!processedCanvas}
               />
             </div>
           )}

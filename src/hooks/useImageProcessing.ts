@@ -22,13 +22,14 @@ import { useState, useCallback } from 'react';
 import {
   convertToGrayscale,
   applyHistogramEqualization,
-  calculateOptimalThreshold,
   applyOtsuThreshold,
 } from '../lib/imageProcessing';
 
 export interface UseImageProcessingReturn {
   /** Processed image result (null until processing completes) */
   processedImage: HTMLImageElement | null;
+  /** Processed image canvas (null until processing completes) - needed for download */
+  processedCanvas: HTMLCanvasElement | null;
   /** Whether processing is currently in progress */
   isProcessing: boolean;
   /** User-friendly error message (null if no error) */
@@ -55,6 +56,7 @@ export interface UseImageProcessingReturn {
  */
 export function useImageProcessing(): UseImageProcessingReturn {
   const [processedImage, setProcessedImage] = useState<HTMLImageElement | null>(null);
+  const [processedCanvas, setProcessedCanvas] = useState<HTMLCanvasElement | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -121,8 +123,9 @@ export function useImageProcessing(): UseImageProcessingReturn {
         resultImage.src = dataUrl;
       });
 
-      // Update state with processed image
+      // Update state with processed image and canvas
       setProcessedImage(resultImage);
+      setProcessedCanvas(canvas);
       setIsProcessing(false);
     } catch (err) {
       // Log technical error to console for debugging
@@ -134,11 +137,13 @@ export function useImageProcessing(): UseImageProcessingReturn {
       );
       setIsProcessing(false);
       setProcessedImage(null);
+      setProcessedCanvas(null);
     }
   }, []);
 
   return {
     processedImage,
+    processedCanvas,
     isProcessing,
     error,
     runAutoPrepAsync,

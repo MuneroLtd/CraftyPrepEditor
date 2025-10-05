@@ -127,9 +127,7 @@ describe('useImageProcessing Hook', () => {
 
       await waitFor(() => {
         expect(imageProcessing.convertToGrayscale).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.convertToGrayscale).toHaveBeenCalledWith(
-          expect.any(ImageData)
-        );
+        expect(imageProcessing.convertToGrayscale).toHaveBeenCalledWith(expect.any(ImageData));
       });
     });
 
@@ -142,26 +140,20 @@ describe('useImageProcessing Hook', () => {
 
       await waitFor(() => {
         expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledWith(
-          mockGrayscaleData
-        );
+        expect(imageProcessing.applyHistogramEqualization).toHaveBeenCalledWith(mockGrayscaleData);
       });
     });
 
     it('calls calculateOptimalThreshold with equalized result', async () => {
       const { result } = renderHook(() => useImageProcessing());
       const mockEqualizedData = new ImageData(100, 100);
-      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(
-        mockEqualizedData
-      );
+      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockEqualizedData);
 
       await result.current.runAutoPrepAsync(mockImage);
 
       await waitFor(() => {
         expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledTimes(1);
-        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledWith(
-          mockEqualizedData
-        );
+        expect(imageProcessing.calculateOptimalThreshold).toHaveBeenCalledWith(mockEqualizedData);
       });
     });
 
@@ -170,9 +162,7 @@ describe('useImageProcessing Hook', () => {
       const mockEqualizedData = new ImageData(100, 100);
       const mockThreshold = 150;
 
-      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(
-        mockEqualizedData
-      );
+      vi.mocked(imageProcessing.applyHistogramEqualization).mockReturnValue(mockEqualizedData);
       vi.mocked(imageProcessing.calculateOptimalThreshold).mockReturnValue(mockThreshold);
 
       await result.current.runAutoPrepAsync(mockImage);
@@ -285,10 +275,7 @@ describe('useImageProcessing Hook', () => {
       await result.current.runAutoPrepAsync(mockImage);
 
       await waitFor(() => {
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          'Image processing failed:',
-          technicalError
-        );
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Image processing failed:', technicalError);
       });
 
       consoleErrorSpy.mockRestore();

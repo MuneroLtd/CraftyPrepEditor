@@ -8,6 +8,7 @@ export default mergeConfig(
       globals: true,
       environment: 'happy-dom',
       setupFiles: './tests/setup.ts',
+      testTimeout: 15000, // 15 seconds for image processing tests
       exclude: [
         '**/node_modules/**',
         '**/dist/**',

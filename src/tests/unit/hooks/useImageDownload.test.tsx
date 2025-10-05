@@ -7,11 +7,15 @@ describe('useImageDownload', () => {
   let mockCanvas: HTMLCanvasElement;
   let mockBlob: Blob;
 
-  // Mock DOM methods
-  let createObjectURLSpy: ReturnType<typeof vi.fn>;
-  let revokeObjectURLSpy: ReturnType<typeof vi.fn>;
-  let appendChildSpy: ReturnType<typeof vi.fn>;
-  let removeChildSpy: ReturnType<typeof vi.fn>;
+  // Mock DOM methods - using any to avoid complex Vitest type issues
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let createObjectURLSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let revokeObjectURLSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let appendChildSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let removeChildSpy: any;
 
   beforeEach(() => {
     // Create mock blob
@@ -54,7 +58,7 @@ describe('useImageDownload', () => {
       let capturedAnchor: HTMLAnchorElement | null = null;
 
       // Capture the anchor element when it's appended
-      appendChildSpy.mockImplementation((node) => {
+      appendChildSpy.mockImplementation((node: Node) => {
         if (node instanceof HTMLAnchorElement) {
           capturedAnchor = node;
         }
@@ -75,7 +79,7 @@ describe('useImageDownload', () => {
       const { result } = renderHook(() => useImageDownload());
       let capturedAnchor: HTMLAnchorElement | null = null;
 
-      appendChildSpy.mockImplementation((node) => {
+      appendChildSpy.mockImplementation((node: Node) => {
         if (node instanceof HTMLAnchorElement) {
           capturedAnchor = node;
         }
@@ -96,7 +100,7 @@ describe('useImageDownload', () => {
       const { result } = renderHook(() => useImageDownload());
       let capturedAnchor: HTMLAnchorElement | null = null;
 
-      appendChildSpy.mockImplementation((node) => {
+      appendChildSpy.mockImplementation((node: Node) => {
         if (node instanceof HTMLAnchorElement) {
           capturedAnchor = node;
         }
@@ -117,7 +121,7 @@ describe('useImageDownload', () => {
       const { result } = renderHook(() => useImageDownload());
       let capturedAnchor: HTMLAnchorElement | null = null;
 
-      appendChildSpy.mockImplementation((node) => {
+      appendChildSpy.mockImplementation((node: Node) => {
         if (node instanceof HTMLAnchorElement) {
           capturedAnchor = node;
         }
@@ -139,7 +143,7 @@ describe('useImageDownload', () => {
 
       // Mock click method
       const clickSpy = vi.fn();
-      appendChildSpy.mockImplementation((node) => {
+      appendChildSpy.mockImplementation((node: Node) => {
         if (node instanceof HTMLAnchorElement) {
           node.click = clickSpy;
         }

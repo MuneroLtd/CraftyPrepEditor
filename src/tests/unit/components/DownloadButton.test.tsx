@@ -214,7 +214,9 @@ describe('DownloadButton', () => {
     });
 
     it('shows different text when downloading vs idle', () => {
-      const { rerender } = render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
+      const { rerender } = render(
+        <DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />
+      );
 
       // Initially shows "Download PNG"
       expect(screen.getByText('Download PNG')).toBeInTheDocument();

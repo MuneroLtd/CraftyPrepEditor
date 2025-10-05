@@ -45,7 +45,11 @@ interface DownloadButtonProps {
  * // Downloads as: photo_laserprep.png
  * ```
  */
-export function DownloadButton({ canvas, originalFilename, disabled = false }: DownloadButtonProps) {
+export function DownloadButton({
+  canvas,
+  originalFilename,
+  disabled = false,
+}: DownloadButtonProps) {
   const { downloadImage, isDownloading, error } = useImageDownload();
 
   const handleClick = () => {
@@ -106,11 +110,7 @@ export function DownloadButton({ canvas, originalFilename, disabled = false }: D
 
       {/* Error message (if download failed) */}
       {error && (
-        <div
-          className="text-sm text-red-600"
-          role="alert"
-          aria-live="assertive"
-        >
+        <div className="text-sm text-red-600" role="alert" aria-live="assertive">
           {error}
         </div>
       )}

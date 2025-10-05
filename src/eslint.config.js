@@ -8,7 +8,7 @@ import prettierConfig from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 export default [
-  { ignores: ['dist', 'node_modules', '.husky'] },
+  { ignores: ['dist', 'node_modules', '.husky', 'tests/fixtures/**/*.cjs', 'tests/fixtures/**/*.js'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

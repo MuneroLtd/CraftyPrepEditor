@@ -68,11 +68,7 @@ export function AutoPrepButton({ disabled, loading, onClick }: AutoPrepButtonPro
     >
       {/* Loading spinner (shown during processing) */}
       {loading && (
-        <Loader2
-          className="animate-spin"
-          data-testid="loading-spinner"
-          aria-hidden="true"
-        />
+        <Loader2 className="animate-spin" data-testid="loading-spinner" aria-hidden="true" />
       )}
 
       {/* Sparkles icon (shown when not loading) */}
