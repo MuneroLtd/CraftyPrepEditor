@@ -4,7 +4,9 @@ import { ContrastSlider } from '@/components/ContrastSlider';
 import { ThresholdSlider } from '@/components/ThresholdSlider';
 import { BackgroundRemovalControl } from '@/components/BackgroundRemovalControl';
 import { ResetButton } from '@/components/ResetButton';
+import { MaterialPresetSelector } from '@/components/MaterialPresetSelector';
 import { cn } from '@/lib/utils';
+import type { MaterialPresetName } from '@/lib/types/presets';
 
 /**
  * Props for the RefinementControls component
@@ -16,6 +18,10 @@ export interface RefinementControlsProps {
   contrast: number;
   /** Current threshold value (0 to 255) */
   threshold: number;
+  /** Currently selected material preset */
+  selectedPreset?: MaterialPresetName;
+  /** Callback fired when preset selection changes */
+  onPresetChange?: (preset: MaterialPresetName) => void;
   /** Whether background removal is enabled */
   backgroundRemovalEnabled?: boolean;
   /** Background removal sensitivity (0-255) */
@@ -70,6 +76,8 @@ export const RefinementControls = memo(function RefinementControls({
   brightness,
   contrast,
   threshold,
+  selectedPreset,
+  onPresetChange,
   backgroundRemovalEnabled = false,
   backgroundRemovalSensitivity = 128,
   onBrightnessChange,
@@ -87,6 +95,15 @@ export const RefinementControls = memo(function RefinementControls({
       <h2 id="refinement-heading" className="text-lg font-semibold">
         Refinement Controls
       </h2>
+
+      {/* Material Preset Selector (above all other controls) */}
+      {selectedPreset && onPresetChange && (
+        <MaterialPresetSelector
+          value={selectedPreset}
+          onChange={onPresetChange}
+          disabled={disabled}
+        />
+      )}
 
       {/* Background Removal (before other adjustments in pipeline) */}
       {onBackgroundRemovalToggle && onBackgroundRemovalSensitivityChange && (

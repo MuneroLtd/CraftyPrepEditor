@@ -24,7 +24,7 @@
 
 **ID**: task-020
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 6 hours
 
 **Description**:
@@ -58,7 +58,7 @@ Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass
 
 **Dependencies**: Sprint 2 complete (all sliders functional)
 
-**Task Plan**: (Will be created by `/plan`)
+**Task Plan**: [.autoflow/tasks/task-020/TASK_PLAN.md](.autoflow/tasks/task-020/TASK_PLAN.md)
 
 **Blockers**: None
 

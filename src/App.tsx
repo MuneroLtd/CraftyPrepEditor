@@ -10,12 +10,16 @@ import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
 import { useDelayedLoading } from './hooks/useDelayedLoading';
+import { useCustomPresetPersistence, clearCustomPreset } from './hooks/useCustomPresetPersistence';
 import {
   DEFAULT_BRIGHTNESS,
   DEFAULT_CONTRAST,
   DEFAULT_BACKGROUND_REMOVAL_ENABLED,
   DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY,
 } from './lib/constants';
+import { getPreset } from './lib/presets/presetConfigurations';
+import { loadCustomPreset } from './lib/utils/presetValidation';
+import type { MaterialPresetName } from './lib/types/presets';
 
 function App() {
   // File upload state (managed by useFileUpload hook - single source of truth)
@@ -43,6 +47,9 @@ function App() {
     applyAdjustments,
   } = useImageProcessing();
 
+  // Preset state
+  const [selectedPreset, setSelectedPreset] = useState<MaterialPresetName>('auto');
+
   // Adjustment states (use constants for initial values)
   const [brightness, setBrightness] = useState(DEFAULT_BRIGHTNESS);
   const [contrast, setContrast] = useState(DEFAULT_CONTRAST);
@@ -62,6 +69,9 @@ function App() {
 
   // Delayed loading indicator (only show if processing >500ms)
   const shouldShowLoading = useDelayedLoading(isProcessing, 500);
+
+  // Custom preset persistence (auto-saves to localStorage with debouncing)
+  useCustomPresetPersistence(selectedPreset, brightness, contrast, threshold, otsuThreshold);
 
   /**
    * State flow documentation:
@@ -94,6 +104,29 @@ function App() {
     }
   }, [otsuThreshold]);
 
+  /**
+   * Restore custom preset from localStorage after auto-prep completes
+   *
+   * When Otsu threshold is calculated (after auto-prep), check if there's a
+   * saved custom preset in localStorage. If found, restore it automatically.
+   *
+   * This ensures user's custom adjustments persist across page reloads.
+   *
+   * Timing: Runs after otsuThreshold is set (after auto-prep completes)
+   * Condition: Only runs once when preset is 'auto' (initial state)
+   */
+  useEffect(() => {
+    if (otsuThreshold !== null && selectedPreset === 'auto') {
+      const customPreset = loadCustomPreset();
+      if (customPreset) {
+        setBrightness(customPreset.brightness);
+        setContrast(customPreset.contrast);
+        setThreshold(otsuThreshold + customPreset.threshold);
+        setSelectedPreset('custom');
+      }
+    }
+  }, [otsuThreshold, selectedPreset]);
+
   // Re-run auto-prep when background removal settings change
   // Note: runAutoPrepAsync sets isProcessing=true, showing loading indicator
   useEffect(() => {
@@ -105,6 +138,77 @@ function App() {
     }
   }, [uploadedImage, backgroundRemovalEnabled, debouncedBgSensitivity, runAutoPrepAsync]);
 
+  /**
+   * Handle preset selection change
+   *
+   * Applies the selected preset's adjustments to the sliders.
+   * For Custom preset, loads saved values from localStorage with validation.
+   */
+  const handlePresetChange = useCallback(
+    (preset: MaterialPresetName) => {
+      const presetConfig = getPreset(preset);
+
+      if (preset === 'custom') {
+        // Load custom preset from localStorage with validation
+        const customValues = loadCustomPreset();
+        if (customValues) {
+          setBrightness(customValues.brightness);
+          setContrast(customValues.contrast);
+          if (otsuThreshold !== null) {
+            setThreshold(otsuThreshold + customValues.threshold);
+          }
+        }
+      } else {
+        // Apply preset adjustments
+        setBrightness(presetConfig.adjustments.brightness);
+        setContrast(presetConfig.adjustments.contrast);
+        if (otsuThreshold !== null) {
+          setThreshold(otsuThreshold + presetConfig.adjustments.threshold);
+        }
+      }
+
+      setSelectedPreset(preset);
+    },
+    [otsuThreshold]
+  );
+
+  /**
+   * Handle slider changes with auto-switch to Custom preset
+   *
+   * When user manually adjusts sliders, automatically switch to Custom preset.
+   * The useCustomPresetPersistence hook handles saving to localStorage automatically
+   * with debouncing, validation, and error handling.
+   */
+  const handleBrightnessChange = useCallback(
+    (value: number) => {
+      setBrightness(value);
+      if (selectedPreset !== 'custom') {
+        setSelectedPreset('custom');
+      }
+    },
+    [selectedPreset]
+  );
+
+  const handleContrastChange = useCallback(
+    (value: number) => {
+      setContrast(value);
+      if (selectedPreset !== 'custom') {
+        setSelectedPreset('custom');
+      }
+    },
+    [selectedPreset]
+  );
+
+  const handleThresholdChange = useCallback(
+    (value: number) => {
+      setThreshold(value);
+      if (selectedPreset !== 'custom') {
+        setSelectedPreset('custom');
+      }
+    },
+    [selectedPreset]
+  );
+
   // Handle Auto-Prep button click
   const handleAutoPrepClick = () => {
     if (uploadedImage) {
@@ -115,6 +219,7 @@ function App() {
       // Reset adjustments when running auto-prep
       setBrightness(DEFAULT_BRIGHTNESS);
       setContrast(DEFAULT_CONTRAST);
+      setSelectedPreset('auto');
     }
   };
 
@@ -139,6 +244,10 @@ function App() {
       setThreshold(otsuThreshold); // Reset to Otsu value
       setBackgroundRemovalEnabled(DEFAULT_BACKGROUND_REMOVAL_ENABLED);
       setBackgroundRemovalSensitivity(DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY);
+      setSelectedPreset('auto'); // Reset preset to Auto
+
+      // Clear custom preset from localStorage with error handling
+      clearCustomPreset();
 
       // Re-run auto-prep with default settings
       runAutoPrepAsync(uploadedImage, {
@@ -205,11 +314,13 @@ function App() {
                 brightness={brightness}
                 contrast={contrast}
                 threshold={threshold}
+                selectedPreset={selectedPreset}
+                onPresetChange={handlePresetChange}
                 backgroundRemovalEnabled={backgroundRemovalEnabled}
                 backgroundRemovalSensitivity={backgroundRemovalSensitivity}
-                onBrightnessChange={setBrightness}
-                onContrastChange={setContrast}
-                onThresholdChange={setThreshold}
+                onBrightnessChange={handleBrightnessChange}
+                onContrastChange={handleContrastChange}
+                onThresholdChange={handleThresholdChange}
                 onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
                 onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
                 onReset={handleReset}

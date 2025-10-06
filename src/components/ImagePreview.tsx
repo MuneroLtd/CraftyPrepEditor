@@ -56,7 +56,7 @@ function CanvasWrapper({
 }: CanvasWrapperProps) {
   // Determine testid based on alt text
   const testId = alt.includes('Original') ? 'original-canvas' : 'processed-canvas';
-  
+
   return (
     <div
       data-testid={testId}
