@@ -121,7 +121,8 @@
 ## Sprint 3: Material Presets & Settings
 
 **Duration**: Week 5-6
-**Status**: PENDING
+**Status**: ACTIVE
+**Progress**: 1/3 complete
 **Dependencies**: Sprint 2 complete
 
 **Sprint Goal**: Add material-specific presets, undo/redo history, and settings persistence for enhanced user workflow.
@@ -134,27 +135,31 @@
 
 ### Tasks (3/3)
 
+**Note**: Tasks marked [COMMITTED] are archived in COMPLETED_TASKS.md with full details.
+
 #### Task 3.1: Material Preset System
 
-**ID**: task-020
-**Priority**: MEDIUM
+**ID**: task-020 [COMMITTED]
+**Priority**: HIGH
 **Estimated Effort**: 6 hours
+**Completed**: 2025-10-06
 
 **Description**:
-Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass, Metal).
+Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass, Metal) using Strategy Pattern.
 
 **Required Reading**:
 - FUNCTIONAL.md#material-presets - Preset specifications
 - ARCHITECTURE.md#strategy-pattern - Preset architecture
 
-**Acceptance Criteria**:
-- [ ] Preset dropdown component created
-- [ ] 5 presets configured with optimized values
-- [ ] Selecting preset applies values to sliders
-- [ ] Manual adjustment switches to "Custom"
-- [ ] Presets stored as configurations
-- [ ] Unit tests for preset application
-- [ ] Visual feedback for active preset
+**Acceptance Criteria** (ALL MET):
+- [x] Preset dropdown component created
+- [x] 5 presets configured with optimized values
+- [x] Selecting preset applies values to sliders
+- [x] Manual adjustment switches to "Custom"
+- [x] Presets stored as configurations
+- [x] Unit tests for preset application
+- [x] Visual feedback for active preset
+- [x] WCAG 2.2 AAA accessibility compliance
 
 ---
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { FileUploadComponent } from './components/FileUploadComponent';
@@ -6,11 +6,13 @@ import { AutoPrepButton } from './components/AutoPrepButton';
 import { ImagePreview } from './components/ImagePreview';
 import { DownloadButton } from './components/DownloadButton';
 import { RefinementControls } from './components/RefinementControls';
+import { UndoRedoButtons } from './components/UndoRedoButtons';
 import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
 import { useDelayedLoading } from './hooks/useDelayedLoading';
 import { useCustomPresetPersistence, clearCustomPreset } from './hooks/useCustomPresetPersistence';
+import { useHistory } from './hooks/useHistory';
 import {
   DEFAULT_BRIGHTNESS,
   DEFAULT_CONTRAST,
@@ -19,6 +21,7 @@ import {
 } from './lib/constants';
 import { getPreset } from './lib/presets/presetConfigurations';
 import { loadCustomPreset } from './lib/utils/presetValidation';
+import { isMacPlatform } from './lib/utils/platform';
 import type { MaterialPresetName } from './lib/types/presets';
 
 function App() {
@@ -73,6 +76,17 @@ function App() {
   // Custom preset persistence (auto-saves to localStorage with debouncing)
   useCustomPresetPersistence(selectedPreset, brightness, contrast, threshold, otsuThreshold);
 
+  // Undo/Redo history management
+  const {
+    canUndo,
+    canRedo,
+    push: pushToHistory,
+    undo,
+    redo,
+    clear: clearHistory,
+    currentState: historyCurrentState,
+  } = useHistory();
+
   /**
    * State flow documentation:
    * 1. Background removal changes → runs auto-prep → sets baselineImageData
@@ -88,6 +102,34 @@ function App() {
   useEffect(() => {
     if (baselineImageData) {
       applyAdjustments(debouncedBrightness, debouncedContrast, debouncedThreshold);
+
+      // Only push to history if values differ from defaults (avoid pushing initial state after auto-prep)
+      // Also skip history push when preset is 'auto' (auto-prep state)
+      const hasNonDefaultAdjustments =
+        debouncedBrightness !== DEFAULT_BRIGHTNESS ||
+        debouncedContrast !== DEFAULT_CONTRAST ||
+        (otsuThreshold !== null && debouncedThreshold !== otsuThreshold);
+
+      const shouldPushToHistory = hasNonDefaultAdjustments && selectedPreset !== 'auto';
+
+      // Check if state has actually changed from current history state to prevent duplicate pushes
+      // This prevents re-pushing during undo/redo operations
+      const stateHasChanged =
+        !historyCurrentState ||
+        historyCurrentState.brightness !== debouncedBrightness ||
+        historyCurrentState.contrast !== debouncedContrast ||
+        historyCurrentState.threshold !== debouncedThreshold ||
+        historyCurrentState.preset !== selectedPreset;
+
+      if (shouldPushToHistory && stateHasChanged) {
+        // Push to history after applying adjustments (debounced)
+        pushToHistory({
+          brightness: debouncedBrightness,
+          contrast: debouncedContrast,
+          threshold: debouncedThreshold,
+          preset: selectedPreset,
+        });
+      }
     }
   }, [
     debouncedBrightness,
@@ -95,6 +137,10 @@ function App() {
     debouncedThreshold,
     baselineImageData,
     applyAdjustments,
+    pushToHistory,
+    selectedPreset,
+    otsuThreshold,
+    historyCurrentState,
   ]);
 
   // Update threshold slider when Otsu value is calculated
@@ -115,8 +161,12 @@ function App() {
    * Timing: Runs after otsuThreshold is set (after auto-prep completes)
    * Condition: Only runs once when preset is 'auto' (initial state)
    */
+  const isInitialLoadRef = useRef(true);
+
   useEffect(() => {
-    if (otsuThreshold !== null && selectedPreset === 'auto') {
+    // Only restore on initial load, not after every auto-prep
+    if (otsuThreshold !== null && selectedPreset === 'auto' && isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
       const customPreset = loadCustomPreset();
       if (customPreset) {
         setBrightness(customPreset.brightness);
@@ -220,6 +270,10 @@ function App() {
       setBrightness(DEFAULT_BRIGHTNESS);
       setContrast(DEFAULT_CONTRAST);
       setSelectedPreset('auto');
+      // Clear undo/redo history
+      clearHistory();
+      // Prevent custom preset restoration after manual auto-prep
+      isInitialLoadRef.current = false;
     }
   };
 
@@ -235,6 +289,7 @@ function App() {
    * 3. Reset background removal sensitivity
    * 4. Re-run auto-prep algorithm with default settings
    * 5. Threshold will be updated to new Otsu value via useEffect
+   * 6. Clear undo/redo history
    */
   const handleReset = useCallback(() => {
     if (uploadedImage && otsuThreshold !== null) {
@@ -249,13 +304,140 @@ function App() {
       // Clear custom preset from localStorage with error handling
       clearCustomPreset();
 
+      // Clear undo/redo history
+      clearHistory();
+
       // Re-run auto-prep with default settings
       runAutoPrepAsync(uploadedImage, {
         removeBackground: DEFAULT_BACKGROUND_REMOVAL_ENABLED,
         bgSensitivity: DEFAULT_BACKGROUND_REMOVAL_SENSITIVITY,
       });
     }
-  }, [uploadedImage, otsuThreshold, runAutoPrepAsync]);
+  }, [uploadedImage, otsuThreshold, runAutoPrepAsync, clearHistory]);
+
+  /**
+   * Apply a history state to the current UI
+   *
+   * Shared logic for undo/redo operations to maintain DRY principle.
+   * The history push effect will compare the new state with current history state
+   * and skip pushing if they're the same, preventing duplicate pushes during undo/redo.
+   */
+  const applyHistoryState = useCallback(
+    (state: {
+      brightness: number;
+      contrast: number;
+      threshold: number;
+      preset?: MaterialPresetName;
+    }) => {
+      setBrightness(state.brightness);
+      setContrast(state.contrast);
+      setThreshold(state.threshold);
+      if (state.preset) {
+        setSelectedPreset(state.preset);
+      }
+      applyAdjustments(state.brightness, state.contrast, state.threshold);
+    },
+    [applyAdjustments]
+  );
+
+  /**
+   * Handle undo operation
+   *
+   * Restores previous state from history and re-applies adjustments.
+   * If undoing to before first adjustment (no previous state), restore auto-prep defaults.
+   */
+  const handleUndo = useCallback(() => {
+    const previousState = undo();
+    if (baselineImageData) {
+      if (previousState) {
+        // Apply the previous state from history
+        applyHistoryState(previousState);
+      } else {
+        // No previous state means we've undone to before first adjustment
+        // Restore to auto-prep defaults (brightness=0, contrast=0, threshold=otsuThreshold)
+        if (otsuThreshold !== null) {
+          const defaultState = {
+            brightness: DEFAULT_BRIGHTNESS,
+            contrast: DEFAULT_CONTRAST,
+            threshold: otsuThreshold,
+            preset: 'auto' as MaterialPresetName,
+          };
+          applyHistoryState(defaultState);
+        }
+      }
+    }
+  }, [undo, baselineImageData, applyHistoryState, otsuThreshold]);
+
+  /**
+   * Handle redo operation
+   *
+   * Restores next state from history and re-applies adjustments
+   */
+  const handleRedo = useCallback(() => {
+    const nextState = redo();
+    if (nextState && baselineImageData) {
+      applyHistoryState(nextState);
+    }
+  }, [redo, baselineImageData, applyHistoryState]);
+
+  /**
+   * Keyboard shortcuts for undo/redo
+   *
+   * Ctrl+Z / Cmd+Z - Undo
+   * Ctrl+Y / Cmd+Y - Redo
+   *
+   * Does not trigger when typing in text inputs to avoid conflicts
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in text-like inputs
+      const target = event.target as HTMLElement;
+
+      // Block for text areas and contenteditable elements
+      if (target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return;
+      }
+
+      // For input elements, only block text-like types
+      if (target.tagName === 'INPUT') {
+        const inputElement = target as HTMLInputElement;
+        const textInputTypes = ['text', 'email', 'password', 'search', 'tel', 'url'];
+        if (textInputTypes.includes(inputElement.type)) {
+          return;
+        }
+        // Allow shortcuts for range, checkbox, radio, etc.
+      }
+
+      const isMac = isMacPlatform();
+      const ctrlOrCmd = isMac ? event.metaKey : event.ctrlKey;
+
+      if (ctrlOrCmd && event.key === 'z' && !event.shiftKey) {
+        event.preventDefault();
+        if (canUndo) {
+          handleUndo();
+        }
+      } else if (ctrlOrCmd && event.key === 'y') {
+        event.preventDefault();
+        if (canRedo) {
+          handleRedo();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [canUndo, canRedo, handleUndo, handleRedo]);
+
+  /**
+   * Clear undo/redo history when new image is uploaded
+   */
+  useEffect(() => {
+    if (uploadedImage) {
+      clearHistory();
+    }
+  }, [uploadedImage, clearHistory]);
 
   return (
     <ErrorBoundary>
@@ -327,6 +509,16 @@ function App() {
                 isResetting={isProcessing}
                 disabled={isProcessing}
               />
+
+              {/* Undo/Redo Buttons */}
+              <div className="flex justify-center">
+                <UndoRedoButtons
+                  canUndo={canUndo}
+                  canRedo={canRedo}
+                  onUndo={handleUndo}
+                  onRedo={handleRedo}
+                />
+              </div>
             </div>
           )}
 

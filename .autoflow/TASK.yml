@@ -1,0 +1,55 @@
+{
+  "sprint": {
+    "id": 3,
+    "goal": "Add material-specific presets, undo/redo history, and settings persistence for enhanced user workflow",
+    "duration": "Week 5-6",
+    "status": "ACTIVE",
+    "progress": {
+      "completed": 2,
+      "total": 3
+    },
+    "last_updated": "2025-10-06T18:18:00.213173Z"
+  },
+  "tasks": [
+    {
+      "id": "task-022",
+      "title": "Settings Persistence (localStorage)",
+      "priority": "LOW",
+      "status": "PENDING",
+      "estimated": "3 hours",
+      "description": "Persist user settings (custom preset, slider values) in browser localStorage for improved user experience across sessions.",
+      "acceptance_criteria": [
+        {
+          "criterion": "Custom preset saved to localStorage",
+          "completed": false
+        },
+        {
+          "criterion": "Settings restored on page load",
+          "completed": false
+        },
+        {
+          "criterion": "Clear/reset localStorage option",
+          "completed": false
+        },
+        {
+          "criterion": "No sensitive data stored (privacy-focused)",
+          "completed": false
+        },
+        {
+          "criterion": "Privacy disclosure in UI (optional)",
+          "completed": false
+        },
+        {
+          "criterion": "Unit tests for storage/retrieval",
+          "completed": false
+        },
+        {
+          "criterion": "Error handling for localStorage unavailable",
+          "completed": false
+        }
+      ],
+      "blockers": null,
+      "documentation": []
+    }
+  ]
+}

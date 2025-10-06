@@ -1,0 +1,195 @@
+project:
+  name: CraftyPrep - Laser Engraving Image Prep Tool
+  total_sprints: 7
+  current_sprint: 2
+  last_updated: '2025-10-06'
+sprints:
+- id: 1
+  goal: Foundation & Core Processing
+  status: COMPLETE
+  duration: Week 1-2
+  progress:
+    completed: 10
+    total: 10
+  deliverables:
+  - Project initialized with Vite + React + TypeScript + Tailwind
+  - Image upload working (drag-drop and file picker)
+  - Auto-prep processing algorithm implemented (grayscale, histogram equalization,
+    Otsu threshold)
+  - Side-by-side preview (original vs. processed)
+  - PNG export/download functional
+  - Basic responsive UI
+  - Input validation and error handling
+  - Unit tests for image processing
+  - E2E test for happy path
+  - CI pipeline setup
+  tasks:
+  - id: task-001
+    status: COMMITTED
+    title: Project Setup and Configuration
+  - id: task-002
+    status: COMMITTED
+    title: Basic UI Layout and Routing
+  - id: task-003
+    status: COMMITTED
+    title: File Upload Component
+  - id: task-004
+    status: COMMITTED
+    title: Image Canvas and Preview Display
+  - id: task-005
+    status: COMMITTED
+    title: Grayscale Conversion Algorithm (see COMPLETED_TASKS.md)
+  - id: task-006
+    status: COMMITTED
+    title: Histogram Equalization Algorithm (see COMPLETED_TASKS.md)
+  - id: task-007
+    status: COMMITTED
+    title: Otsu's Threshold Algorithm (see COMPLETED_TASKS.md)
+  - id: task-008
+    status: COMMITTED
+    title: Auto-Prep Button and Processing Flow (see COMPLETED_TASKS.md)
+  - id: task-009
+    status: COMMITTED
+    title: PNG Export and Download (see COMPLETED_TASKS.md)
+  - id: task-010
+    status: COMMITTED
+    title: CI/CD Pipeline and Testing Infrastructure
+  completed: '2025-10-04'
+- id: 2
+  goal: Refinement Controls & UX
+  status: ACTIVE
+  duration: Week 3-4
+  progress:
+    completed: 9
+    total: 9
+  deliverables:
+  - Brightness/Contrast/Threshold sliders functional
+  - Background removal with sensitivity control
+  - Real-time preview updates (debounced)
+  - Reset button returns to auto-prep defaults
+  - JPG export option added
+  - Loading states and error handling polished
+  - Performance optimization (debouncing, memoization)
+  - Full accessibility audit and fixes (WCAG 2.2 AAA)
+  - Comprehensive E2E test coverage
+  tasks:
+  - id: task-011
+    status: COMMITTED
+    title: Refinement Slider Components
+  - id: task-012
+    status: COMMITTED
+    title: Brightness Adjustment Implementation
+  - id: task-013
+    status: COMMITTED
+    title: Background Removal Integration
+  - id: task-014
+    status: COMMITTED
+    title: Contrast Adjustment Implementation
+  - id: task-015
+    status: COMMITTED
+    title: Threshold Adjustment Implementation
+  - id: task-016
+    status: COMMITTED
+    title: Debounced Preview Updates
+  - id: task-017
+    status: COMMITTED
+    title: Reset Button and State Management
+  - id: task-018
+    status: COMMITTED
+    title: JPG Export Option
+  - id: task-019
+    status: COMMITTED
+    title: Accessibility Audit and Fixes
+- id: 3
+  goal: Material Presets & Settings
+  status: ACTIVE
+  duration: Week 5-6
+  progress:
+    completed: 2
+    total: 3
+  deliverables:
+  - Material presets (Wood, Leather, Acrylic, Glass, Metal)
+  - Undo/redo functionality with keyboard shortcuts
+  - Settings persistence (localStorage)
+  tasks:
+  - id: task-021
+    status: COMMITTED
+    title: Undo/Redo History System
+    commit: a9aa62e
+- id: 4
+  goal: Advanced Editing (Crop & Resize)
+  status: PENDING
+  duration: Week 7-8
+  progress:
+    completed: 0
+    total: 10
+  deliverables:
+  - Interactive crop tool with drag handles
+  - Aspect ratio presets and custom ratios
+  - Resize with dimension input (mm, inches, pixels)
+  - DPI configuration (150, 300, 600 DPI presets)
+  - Maintain aspect ratio toggle
+  - Canvas zoom for precise cropping
+  - Crop preview overlay
+  - Unit conversion utilities
+  - Image quality preservation during resize
+  - Integration with existing processing pipeline
+  tasks: []
+- id: 5
+  goal: Text Overlay & Material Presets
+  status: PENDING
+  duration: Week 9-10
+  progress:
+    completed: 0
+    total: 10
+  deliverables:
+  - Text overlay tool with font selection
+  - 'Configurable text: size, color, stroke, spacing'
+  - Text positioning and rotation
+  - Material presets (Wood, Acrylic, Leather, Tile, etc.)
+  - Algorithm selection (Stucki, Floyd-Steinberg, Atkinson, etc.)
+  - Material-specific preview rendering
+  - Custom preset creation and saving
+  - Text layer management
+  - Material algorithm documentation
+  - Integration with export pipeline
+  tasks: []
+- id: 6
+  goal: Export Formats & Dithering
+  status: PENDING
+  duration: Week 11-12
+  progress:
+    completed: 0
+    total: 10
+  deliverables:
+  - BMP export format support
+  - Dithered PNG/BMP export
+  - Grayscale export options
+  - SVG trace export (optional)
+  - Format-specific optimizations
+  - Multi-format batch export
+  - Export presets (Cricut, Glowforge, etc.)
+  - Color palette reduction
+  - Export quality settings
+  - Final documentation and polish
+  tasks: []
+- id: 7
+  goal: Testing, Deployment & Production
+  status: PENDING
+  duration: Week 13-14
+  progress:
+    completed: 0
+    total: 11
+  deliverables:
+  - Cross-browser compatibility verified (Chrome, Firefox, Safari, Edge)
+  - Performance optimization and code review
+  - Docker production configuration
+  - nginx with security headers
+  - Traefik integration for HTTPS
+  - Production deployment to craftyprep.demosrv.uk
+  - Monitoring and logging infrastructure
+  - Complete documentation and user guide
+  - Final security and performance audit
+  - All quality gates passed
+  - Production-ready application
+  tasks: []

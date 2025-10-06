@@ -4,9 +4,9 @@
 **Current Sprint**: Sprint 3 - Material Presets & Settings
 **Sprint Goal**: Add material-specific presets, undo/redo history, and settings persistence for enhanced user workflow
 **Duration**: Week 5-6
-**Status**: PENDING
-**Progress**: 0/3 complete
-**Last Updated**: 2025-10-06 (Sprint restructured - deployment moved to Sprint 7)
+**Status**: ACTIVE
+**Progress**: 1/3 complete
+**Last Updated**: 2025-10-06
 
 ---
 
@@ -18,57 +18,13 @@
 
 ---
 
-## 📋 Sprint Tasks (3 tasks)
-
-### Task 3.1: Material Preset System
-
-**ID**: task-020
-**Priority**: HIGH
-**Status**: COMPLETE
-**Estimated Effort**: 6 hours
-
-**Description**:
-Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass, Metal) that apply optimized brightness/contrast/threshold values for each material type.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#material-presets - Preset specifications
-- .autoflow/docs/ARCHITECTURE.md#strategy-pattern - Preset architecture
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Material preset requirements
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Strategy pattern implementation
-
-**Acceptance Criteria**:
-- [ ] Preset dropdown component created
-- [ ] 5 presets configured with optimized values (Wood, Leather, Acrylic, Glass, Metal)
-- [ ] Selecting preset applies values to sliders
-- [ ] Manual adjustment switches to "Custom" preset
-- [ ] Presets stored as configurations (not hardcoded)
-- [ ] Unit tests for preset application
-- [ ] Visual feedback for active preset
-- [ ] WCAG 2.2 AAA accessibility compliance
-
-**Definition of Done**:
-- [ ] All acceptance criteria met
-- [ ] Unit tests passing (≥80% coverage)
-- [ ] Integration tests passing
-- [ ] E2E verification passed
-- [ ] Code review passed
-- [ ] Accessibility verified
-
-**Dependencies**: Sprint 2 complete (all sliders functional)
-
-**Task Plan**: [.autoflow/tasks/task-020/TASK_PLAN.md](.autoflow/tasks/task-020/TASK_PLAN.md)
-
-**Blockers**: None
-
----
+## 📋 Sprint Tasks (2 tasks remaining)
 
 ### Task 3.2: Undo/Redo History System
 
 **ID**: task-021
 **Priority**: MEDIUM
-**Status**: PENDING
+**Status**: REVIEWFIX
 **Estimated Effort**: 5 hours
 
 **Description**:
@@ -102,7 +58,7 @@ Implement undo/redo functionality with history stack (max 10 states) and keyboar
 
 **Dependencies**: Sprint 2 complete (all adjustments functional)
 
-**Task Plan**: (Will be created by `/plan`)
+**Task Plan**: [.autoflow/tasks/task-021/TASK_PLAN.md](.autoflow/tasks/task-021/TASK_PLAN.md)
 
 **Blockers**: None
 
