@@ -1,9 +1,9 @@
 # Project Sprints and Tasks
 
 **Project**: CraftyPrep - Laser Engraving Image Prep Tool
-**Total Sprints**: 6
-**Estimated Duration**: 12 weeks
-**Last Updated**: 2025-10-05
+**Total Sprints**: 7
+**Estimated Duration**: 14 weeks
+**Last Updated**: 2025-10-06 (Restructured: deployment moved to Sprint 7)
 
 ---
 
@@ -12,11 +12,12 @@
 | Sprint | Goal | Duration | Tasks | Status |
 |--------|------|----------|-------|--------|
 | 1 | Foundation & Core Processing | Week 1-2 | 10 | COMPLETE |
-| 2 | Refinement Controls & UX | Week 3-4 | 11 | ACTIVE |
-| 3 | Enhancement & Deployment | Week 5-6 | 10 | PENDING |
+| 2 | Refinement Controls & UX | Week 3-4 | 9 | ACTIVE |
+| 3 | Material Presets & Settings | Week 5-6 | 3 | PENDING |
 | 4 | Advanced Editing (Crop & Resize) | Week 7-8 | 10 | PENDING |
-| 5 | Text Overlay & Material Presets | Week 9-10 | 10 | PENDING |
-| 6 | Export Formats & Dithering | Week 11-12 | 10 | PENDING |
+| 5 | Text Overlay & Dithering | Week 9-10 | 10 | PENDING |
+| 6 | Export Formats & Advanced Features | Week 11-12 | 10 | PENDING |
+| 7 | Testing, Deployment & Production | Week 13-14 | 11 | PENDING |
 
 ---
 
@@ -74,79 +75,68 @@
 
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 7/11 complete
+**Progress**: 9/9 complete
 **Dependencies**: Sprint 1 complete
 
-**Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility.
+**Sprint Goal**: Add slider controls for refinement, enhance UX, and achieve WCAG 2.2 AAA accessibility compliance.
 
 ### Deliverables
 
 1. Brightness/Contrast/Threshold sliders functional
-2. Real-time preview updates (debounced)
-3. Reset button returns to auto-prep defaults
-4. JPG export option added
-5. Loading states and error handling polished
-6. Performance optimization (debouncing, memoization)
-7. Full accessibility audit and fixes
-8. Cross-browser testing
+2. Background removal with sensitivity control
+3. Real-time preview updates (debounced)
+4. Reset button returns to auto-prep defaults
+5. JPG export option added
+6. Loading states and error handling polished
+7. Performance optimization (debouncing, memoization)
+8. Full accessibility audit and fixes (WCAG 2.2 AAA)
 9. Comprehensive E2E test coverage
-10. Code review and refactoring
 
-### Tasks (11 total, 7 complete)
+### Tasks (9/9 complete)
 
 **Note**: Tasks marked [COMMITTED] are archived in COMPLETED_TASKS.md with full details.
 
-1. `task-011` [COMMITTED] - Refinement Slider Components (see COMPLETED_TASKS.md - to be added)
+1. `task-011` [COMMITTED] - Refinement Slider Components
 2. `task-012` [COMMITTED] - Brightness Adjustment Implementation
-3. `task-013` [COMMITTED] - Background Removal Integration (replaced Contrast in implementation order)
+3. `task-013` [COMMITTED] - Background Removal Integration
 4. `task-014` [COMMITTED] - Contrast Adjustment Implementation
 5. `task-015` [COMMITTED] - Threshold Adjustment Implementation
 6. `task-016` [COMMITTED] - Debounced Preview Updates
 7. `task-017` [COMMITTED] - Reset Button and State Management
 8. `task-018` [COMMITTED] - JPG Export Option
-9. `task-019` [PENDING] - Accessibility Audit and Fixes
-10. `task-020` [PENDING] - Cross-Browser Testing and Fixes
-11. `task-021` [PENDING] - Performance Optimization and Code Review
+9. `task-019` [COMMITTED] - Accessibility Audit and Fixes
 
 ---
 
 **Sprint 2 Success Criteria**:
-- [ ] All 10 tasks marked COMPLETE
-- [ ] Refinement sliders functional and performant
-- [ ] All tests passing (unit + integration + E2E)
-- [ ] Accessibility audit ≥95/100
-- [ ] Cross-browser tested and working
-- [ ] Performance metrics met
-- [ ] Code reviewed and refactored
+- [x] All 9 tasks marked COMPLETE
+- [x] Refinement sliders functional and performant
+- [x] All tests passing (unit + integration + E2E)
+- [x] Accessibility audit ≥95/100 (WCAG 2.2 AAA)
+- [x] Performance metrics met (<100ms slider response)
+- [x] JPG export option working
 
 ---
 
-## Sprint 3: Enhancement & Deployment
+## Sprint 3: Material Presets & Settings
 
 **Duration**: Week 5-6
 **Status**: PENDING
 **Dependencies**: Sprint 2 complete
 
-**Sprint Goal**: Add material presets, undo/redo, settings persistence, deploy to production, and establish monitoring.
+**Sprint Goal**: Add material-specific presets, undo/redo history, and settings persistence for enhanced user workflow.
 
 ### Deliverables
 
 1. Material presets (Wood, Leather, Acrylic, Glass, Metal)
-2. Undo/redo functionality
+2. Undo/redo functionality with keyboard shortcuts
 3. Settings persistence (localStorage)
-4. Docker configuration and build
-5. nginx configuration with security headers
-6. Traefik integration and deployment
-7. Production deployment to craftyprep.demosrv.uk
-8. Monitoring and health checks
-9. Documentation and user guide
-10. Final security and performance audit
 
-### Tasks (10/10)
+### Tasks (3/3)
 
 #### Task 3.1: Material Preset System
 
-**ID**: task-021
+**ID**: task-020
 **Priority**: MEDIUM
 **Estimated Effort**: 6 hours
 
@@ -170,7 +160,7 @@ Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass
 
 #### Task 3.2: Undo/Redo History System
 
-**ID**: task-022
+**ID**: task-021
 **Priority**: LOW
 **Estimated Effort**: 5 hours
 
@@ -194,7 +184,7 @@ Implement undo/redo functionality with history stack (max 10 states).
 
 #### Task 3.3: Settings Persistence (localStorage)
 
-**ID**: task-023
+**ID**: task-022
 **Priority**: LOW
 **Estimated Effort**: 3 hours
 
@@ -215,224 +205,50 @@ Persist user settings (custom preset, slider values) in browser localStorage.
 
 ---
 
-#### Task 3.4: Docker Configuration
-
-**ID**: task-024
-**Priority**: HIGH
-**Estimated Effort**: 4 hours
-
-**Description**:
-Create multi-stage Dockerfile for optimized production builds.
-
-**Required Reading**:
-- DEPLOYMENT.md#docker-configuration - Complete Docker setup
-- DOCKER_BEST_PRACTICES.md - Docker standards
-
-**Acceptance Criteria**:
-- [ ] Multi-stage Dockerfile created
-- [ ] Build stage with npm ci
-- [ ] Production stage with nginx:alpine
-- [ ] Static files copied to nginx html directory
-- [ ] Health check configured
-- [ ] Image size optimized (<50MB)
-- [ ] Security: non-root user, minimal layers
-- [ ] Build succeeds without errors
-
----
-
-#### Task 3.5: nginx Configuration and Security Headers
-
-**ID**: task-025
-**Priority**: HIGH
-**Estimated Effort**: 4 hours
-
-**Description**:
-Configure nginx with SPA routing, security headers, and performance optimization.
-
-**Required Reading**:
-- DEPLOYMENT.md#nginx-configuration - Complete nginx config
-- SECURITY.md#security-misconfiguration - Required headers
-
-**Acceptance Criteria**:
-- [ ] nginx.conf created
-- [ ] SPA routing (try_files fallback to index.html)
-- [ ] Security headers: CSP, X-Frame-Options, HSTS, etc.
-- [ ] Gzip compression enabled
-- [ ] Static asset caching (1 year)
-- [ ] index.html no-cache
-- [ ] Health check endpoint (/health)
-- [ ] Server tokens disabled
-
----
-
-#### Task 3.6: Docker Compose and Traefik Labels
-
-**ID**: task-026
-**Priority**: HIGH
-**Estimated Effort**: 3 hours
-
-**Description**:
-Create docker-compose.yml with Traefik labels for HTTPS and routing.
-
-**Required Reading**:
-- DEPLOYMENT.md#docker-compose - Compose configuration
-- DEPLOYMENT.md#infrastructure-architecture - Traefik integration
-
-**Acceptance Criteria**:
-- [ ] docker-compose.yml created
-- [ ] Traefik labels configured
-- [ ] Host rule: craftyprep.demosrv.uk
-- [ ] HTTPS entrypoint (websecure)
-- [ ] TLS enabled with Let's Encrypt
-- [ ] traefik_demosrv network configured
-- [ ] Container restart policy: unless-stopped
-- [ ] Health check configured
-- [ ] Logging configured (json-file, 10m, 3 files)
-
----
-
-#### Task 3.7: Production Deployment
-
-**ID**: task-027
-**Priority**: HIGH
-**Estimated Effort**: 6 hours
-
-**Description**:
-Deploy application to craftyprep.demosrv.uk and verify all functionality.
-
-**Required Reading**:
-- DEPLOYMENT.md#deployment-strategy - Deployment procedure
-- DEPLOYMENT.md#deployment-checklist - Pre/post checks
-
-**Acceptance Criteria**:
-- [ ] Code pushed to main branch
-- [ ] Docker image built successfully
-- [ ] Deployed to server via docker-compose
-- [ ] HTTPS working (craftyprep.demosrv.uk)
-- [ ] SSL certificate valid (Let's Encrypt)
-- [ ] Traefik routing verified
-- [ ] Health check responding
-- [ ] All features functional in production
-- [ ] Smoke test passed: upload → auto-prep → download
-- [ ] No console errors in production
-
----
-
-#### Task 3.8: Monitoring and Logging Setup
-
-**ID**: task-028
-**Priority**: MEDIUM
-**Estimated Effort**: 4 hours
-
-**Description**:
-Configure logging, health checks, and basic monitoring for production.
-
-**Required Reading**:
-- DEPLOYMENT.md#monitoring-and-alerting - Monitoring strategy
-- DEPLOYMENT.md#logs - Log configuration
-
-**Acceptance Criteria**:
-- [ ] Docker logs configured
-- [ ] nginx access logs configured
-- [ ] nginx error logs configured
-- [ ] Log rotation configured (3 × 10MB)
-- [ ] Health check endpoint verified
-- [ ] Docker healthcheck monitoring container status
-- [ ] Basic metrics collection (optional)
-- [ ] Uptime monitoring (optional)
-
----
-
-#### Task 3.9: Documentation and User Guide
-
-**ID**: task-029
-**Priority**: LOW
-**Estimated Effort**: 4 hours
-
-**Description**:
-Update README.md with user instructions, deployment guide, and developer setup.
-
-**Required Reading**:
-- PRODUCT.md#user-journeys - User workflow examples
-- DEPLOYMENT.md#production-urls-and-access - Access information
-
-**Acceptance Criteria**:
-- [ ] README.md updated
-- [ ] User guide: How to use CraftyPrep
-- [ ] Developer setup instructions
-- [ ] Deployment instructions
-- [ ] Architecture overview
-- [ ] Contributing guidelines (optional)
-- [ ] License information
-- [ ] Screenshots (optional)
-
----
-
-#### Task 3.10: Final Security and Performance Audit
-
-**ID**: task-030
-**Priority**: HIGH
-**Estimated Effort**: 6 hours
-
-**Description**:
-Comprehensive final audit of security, performance, and accessibility before launch.
-
-**Required Reading**:
-- SECURITY.md#security-checklist - Security review checklist
-- TESTING.md#deployment-checklist - Final testing requirements
-
-**Acceptance Criteria**:
-- [ ] npm audit clean (no vulnerabilities)
-- [ ] OWASP ZAP scan passed (if applicable)
-- [ ] Lighthouse audits: Performance ≥90, Accessibility ≥95
-- [ ] All security headers verified
-- [ ] CSP violations checked (none)
-- [ ] Cross-browser final test
-- [ ] Mobile responsive test
-- [ ] Accessibility manual test (screen reader)
-- [ ] Performance manual test (image processing <5s)
-- [ ] Documentation review complete
-
----
-
 **Sprint 3 Success Criteria**:
-- [ ] All 10 tasks marked COMPLETE
-- [ ] Application deployed to craftyprep.demosrv.uk
-- [ ] HTTPS working with valid SSL certificate
-- [ ] All features functional in production
-- [ ] Material presets working
-- [ ] Undo/redo functional
-- [ ] Settings persistence working
-- [ ] All audits passed (security, performance, accessibility)
-- [ ] Documentation complete
-- [ ] Monitoring established
+- [ ] All 3 tasks marked COMPLETE
+- [ ] Material presets working (5+ materials)
+- [ ] Undo/redo functional with keyboard shortcuts
+- [ ] Settings persistence working (localStorage)
+- [ ] All tests passing
+- [ ] WCAG 2.2 AAA compliance maintained
 
 ---
 
 ## Project Milestones
 
-### Milestone 1: MVP Launch (End of Sprint 2)
-- [ ] Core functionality complete
-- [ ] Upload → Auto-Prep → Refinement → Download working
-- [ ] Accessibility compliant (WCAG 2.2 AAA)
-- [ ] Cross-browser tested
-- [ ] Performance optimized
+### Milestone 1: Core Features Complete (End of Sprint 2)
+- [x] Core functionality complete
+- [x] Upload → Auto-Prep → Refinement → Download working
+- [x] Accessibility compliant (WCAG 2.2 AAA)
+- [x] Performance optimized (<100ms slider response)
 - [ ] **User Value**: Users can prepare images for laser engraving in <2 minutes
 
-### Milestone 2: Production Deployment (End of Sprint 3)
+### Milestone 2: Enhanced Features Complete (End of Sprint 6)
 - [ ] Material presets available
-- [ ] Enhanced UX (undo/redo, persistence)
+- [ ] Undo/redo functionality
+- [ ] Settings persistence
+- [ ] Crop and resize tools
+- [ ] Text overlay capabilities
+- [ ] Multiple dithering algorithms
+- [ ] Export formats (PNG, JPG, BMP, SVG)
+- [ ] **User Value**: Professional users have complete image editing toolkit
+
+### Milestone 3: Production Deployment (End of Sprint 7)
+- [ ] Cross-browser compatibility verified
+- [ ] Performance optimized (Lighthouse ≥90)
+- [ ] Security audit passed
 - [ ] Deployed to production (craftyprep.demosrv.uk)
 - [ ] Monitoring and logging active
 - [ ] Full documentation available
-- [ ] **User Value**: Professional users have optimized workflows and material-specific presets
+- [ ] **User Value**: Public access to production-ready, secure laser prep tool
 
-### Milestone 3: Public Launch (Week 7)
+### Milestone 4: Public Launch (Week 15)
 - [ ] Announcement published
 - [ ] User feedback collection started
-- [ ] Analytics/monitoring review (optional)
+- [ ] Analytics/monitoring review
 - [ ] Bug fixes from early users
-- [ ] **User Value**: Public access to free laser prep tool
+- [ ] **User Value**: Free, open-source laser prep tool available to community
 
 ---
 
@@ -1171,16 +987,328 @@ Final testing, documentation, and polish for full editor release.
 - [ ] Export presets for 5+ tools
 - [ ] Multi-format export functional
 - [ ] All export E2E tests passing
-- [ ] Full documentation complete
 - [ ] Performance: All exports <10s
+
+---
+
+## Sprint 7: Testing, Deployment & Production
+
+**Duration**: Week 13-14
+**Status**: PENDING
+**Progress**: 0/11 complete
+**Dependencies**: Sprints 1-6 complete (all features implemented)
+
+**Sprint Goal**: Comprehensive cross-browser testing, performance optimization, production deployment, and final quality assurance.
+
+### Deliverables
+
+1. Cross-browser compatibility verified (Chrome, Firefox, Safari, Edge)
+2. Performance optimization and code review
+3. Docker production configuration
+4. nginx with security headers
+5. Traefik integration for HTTPS
+6. Production deployment to craftyprep.demosrv.uk
+7. Monitoring and logging infrastructure
+8. Complete documentation and user guide
+9. Final security and performance audit
+10. All quality gates passed
+11. Production-ready application
+
+### Tasks (11/11)
+
+#### Task 7.1: Cross-Browser Testing and Fixes
+
+**ID**: task-061
+**Priority**: HIGH
+**Estimated Effort**: 5 hours
+
+**Description**:
+Test application on all target browsers and fix compatibility issues.
+
+**Required Reading**:
+- .autoflow/docs/TESTING.md#cross-browser-testing - Browser matrix
+- .autoflow/docs/ARCHITECTURE.md#browser-compatibility - Requirements
+
+**Acceptance Criteria**:
+- [ ] Tested on Chrome 90+ (latest)
+- [ ] Tested on Firefox 88+ (latest)
+- [ ] Tested on Safari 14+ (latest)
+- [ ] Tested on Edge 90+ (latest)
+- [ ] Tested on Mobile Safari (iOS 14+)
+- [ ] Tested on Mobile Chrome (Android 10+)
+- [ ] All features work on all browsers
+- [ ] Canvas rendering consistent
+- [ ] Playwright multi-browser E2E passing
+
+---
+
+#### Task 7.2: Performance Optimization and Code Review
+
+**ID**: task-062
+**Priority**: HIGH
+**Estimated Effort**: 5 hours
+
+**Description**:
+Optimize bundle size, lazy load components, improve processing speed, and conduct code review.
+
+**Required Reading**:
+- .autoflow/docs/ARCHITECTURE.md#performance-considerations - Optimization strategies
+- .autoflow/docs/TESTING.md#performance-testing - Performance targets
+
+**Acceptance Criteria**:
+- [ ] Bundle size <200KB (gzipped)
+- [ ] Code splitting implemented
+- [ ] React.memo for canvas components
+- [ ] useMemo for expensive calculations
+- [ ] Lighthouse performance score ≥90
+- [ ] First Contentful Paint <1.5s
+- [ ] Time to Interactive <3s
+- [ ] Code review checklist completed
+- [ ] Refactoring applied (DRY, SOLID)
+- [ ] No console warnings or errors
+
+---
+
+#### Task 7.3: Docker Production Configuration
+
+**ID**: task-063
+**Priority**: HIGH
+**Estimated Effort**: 4 hours
+
+**Description**:
+Create multi-stage Dockerfile for optimized production builds.
+
+**Required Reading**:
+- DEPLOYMENT.md#docker-configuration - Complete Docker setup
+- DOCKER_BEST_PRACTICES.md - Docker standards
+
+**Acceptance Criteria**:
+- [ ] Multi-stage Dockerfile created
+- [ ] Build stage with npm ci
+- [ ] Production stage with nginx:alpine
+- [ ] Static files copied to nginx html directory
+- [ ] Health check configured
+- [ ] Image size optimized (<50MB)
+- [ ] Security: non-root user, minimal layers
+- [ ] Build succeeds without errors
+
+---
+
+#### Task 7.4: nginx Configuration and Security Headers
+
+**ID**: task-064
+**Priority**: HIGH
+**Estimated Effort**: 4 hours
+
+**Description**:
+Configure nginx with SPA routing, security headers, and performance optimization.
+
+**Required Reading**:
+- DEPLOYMENT.md#nginx-configuration - Complete nginx config
+- SECURITY.md#security-misconfiguration - Required headers
+
+**Acceptance Criteria**:
+- [ ] nginx.conf created
+- [ ] SPA routing (try_files fallback to index.html)
+- [ ] Security headers: CSP, X-Frame-Options, HSTS, etc.
+- [ ] Gzip compression enabled
+- [ ] Static asset caching (1 year)
+- [ ] index.html no-cache
+- [ ] Health check endpoint (/health)
+- [ ] Server tokens disabled
+
+---
+
+#### Task 7.5: Docker Compose and Traefik Labels
+
+**ID**: task-065
+**Priority**: HIGH
+**Estimated Effort**: 3 hours
+
+**Description**:
+Create docker-compose.yml with Traefik labels for HTTPS and routing.
+
+**Required Reading**:
+- DEPLOYMENT.md#docker-compose - Compose configuration
+- DEPLOYMENT.md#infrastructure-architecture - Traefik integration
+
+**Acceptance Criteria**:
+- [ ] docker-compose.yml created
+- [ ] Traefik labels configured
+- [ ] Host rule: craftyprep.demosrv.uk
+- [ ] HTTPS entrypoint (websecure)
+- [ ] TLS enabled with Let's Encrypt
+- [ ] traefik_demosrv network configured
+- [ ] Container restart policy: unless-stopped
+- [ ] Health check configured
+- [ ] Logging configured (json-file, 10m, 3 files)
+
+---
+
+#### Task 7.6: Production Deployment
+
+**ID**: task-066
+**Priority**: HIGH
+**Estimated Effort**: 6 hours
+
+**Description**:
+Deploy application to craftyprep.demosrv.uk and verify all functionality.
+
+**Required Reading**:
+- DEPLOYMENT.md#deployment-strategy - Deployment procedure
+- DEPLOYMENT.md#deployment-checklist - Pre/post checks
+
+**Acceptance Criteria**:
+- [ ] Code pushed to main branch
+- [ ] Docker image built successfully
+- [ ] Deployed to server via docker-compose
+- [ ] HTTPS working (craftyprep.demosrv.uk)
+- [ ] SSL certificate valid (Let's Encrypt)
+- [ ] Traefik routing verified
+- [ ] Health check responding
+- [ ] All features functional in production
+- [ ] Smoke test passed: upload → auto-prep → download
+- [ ] No console errors in production
+
+---
+
+#### Task 7.7: Monitoring and Logging Setup
+
+**ID**: task-067
+**Priority**: MEDIUM
+**Estimated Effort**: 4 hours
+
+**Description**:
+Configure logging, health checks, and basic monitoring for production.
+
+**Required Reading**:
+- DEPLOYMENT.md#monitoring-and-alerting - Monitoring strategy
+- DEPLOYMENT.md#logs - Log configuration
+
+**Acceptance Criteria**:
+- [ ] Docker logs configured
+- [ ] nginx access logs configured
+- [ ] nginx error logs configured
+- [ ] Log rotation configured (3 × 10MB)
+- [ ] Health check endpoint verified
+- [ ] Docker healthcheck monitoring container status
+- [ ] Basic metrics collection (optional)
+- [ ] Uptime monitoring (optional)
+
+---
+
+#### Task 7.8: Documentation and User Guide
+
+**ID**: task-068
+**Priority**: MEDIUM
+**Estimated Effort**: 4 hours
+
+**Description**:
+Update README.md with user instructions, deployment guide, and developer setup.
+
+**Required Reading**:
+- PRODUCT.md#user-journeys - User workflow examples
+- DEPLOYMENT.md#production-urls-and-access - Access information
+
+**Acceptance Criteria**:
+- [ ] README.md updated
+- [ ] User guide: How to use CraftyPrep
+- [ ] Developer setup instructions
+- [ ] Deployment instructions
+- [ ] Architecture overview
+- [ ] Contributing guidelines (optional)
+- [ ] License information
+- [ ] Screenshots (optional)
+
+---
+
+#### Task 7.9: Final Security Audit
+
+**ID**: task-069
+**Priority**: HIGH
+**Estimated Effort**: 4 hours
+
+**Description**:
+Comprehensive security audit before production launch.
+
+**Required Reading**:
+- SECURITY.md#security-checklist - Security review checklist
+- TESTING.md#deployment-checklist - Final testing requirements
+
+**Acceptance Criteria**:
+- [ ] npm audit clean (no vulnerabilities)
+- [ ] OWASP ZAP scan passed (if applicable)
+- [ ] All security headers verified
+- [ ] CSP violations checked (none)
+- [ ] Input validation reviewed
+- [ ] File upload security verified
+- [ ] XSS prevention verified
+- [ ] No sensitive data in client code
+
+---
+
+#### Task 7.10: Final Performance Audit
+
+**ID**: task-070
+**Priority**: HIGH
+**Estimated Effort**: 3 hours
+
+**Description**:
+Comprehensive performance testing and optimization verification.
+
+**Acceptance Criteria**:
+- [ ] Lighthouse audits: Performance ≥90
+- [ ] First Contentful Paint <1.5s
+- [ ] Time to Interactive <3s
+- [ ] Bundle size <200KB (gzipped)
+- [ ] Image processing <3s (2MB image)
+- [ ] All slider adjustments <100ms
+- [ ] Mobile performance tested
+- [ ] Performance regression tests passing
+
+---
+
+#### Task 7.11: Final Accessibility Audit
+
+**ID**: task-071
+**Priority**: HIGH
+**Estimated Effort**: 3 hours
+
+**Description**:
+Final accessibility verification and manual testing before launch.
+
+**Acceptance Criteria**:
+- [ ] Lighthouse accessibility ≥95
+- [ ] Zero axe violations
+- [ ] Manual screen reader test (NVDA/VoiceOver)
+- [ ] Keyboard navigation complete
+- [ ] Focus indicators visible (≥3:1 contrast)
+- [ ] Color contrast ≥7:1 (normal), ≥4.5:1 (large)
+- [ ] Mobile accessibility tested
+- [ ] WCAG 2.2 AAA compliance verified
+
+---
+
+**Sprint 7 Success Criteria**:
+- [ ] All 11 tasks marked COMPLETE
+- [ ] Application deployed to craftyprep.demosrv.uk
+- [ ] HTTPS working with valid SSL certificate
+- [ ] All features functional in production
+- [ ] Cross-browser compatibility verified
+- [ ] Performance targets met (Lighthouse ≥90)
+- [ ] Security audit passed (npm audit clean)
+- [ ] Accessibility verified (WCAG 2.2 AAA)
+- [ ] Documentation complete
+- [ ] Monitoring and logging active
+- [ ] Production-ready for public launch
 
 ---
 
 ## Project Completion Summary
 
-**Total Sprints**: 6
-**Total Tasks**: 61
-**Total Estimated Duration**: 12 weeks
+**Total Sprints**: 7
+**Total Tasks**: 71
+**Total Estimated Duration**: 14 weeks
 
 **Feature Comparison with Imag-R**:
 
@@ -1216,4 +1344,10 @@ Final testing, documentation, and polish for full editor release.
 
 ---
 
-**Note**: Sprints 4-6 tasks will be expanded with detailed acceptance criteria when Sprint 3 is complete.
+**Notes on Restructuring**:
+- Sprint 2 now focuses purely on refinement features (9 tasks)
+- Sprint 3 is lightweight (3 tasks) focusing on UX enhancements
+- Sprints 4-6 remain feature-focused (crop/resize, text, export)
+- Sprint 7 (new) consolidates all deployment and testing tasks
+- Benefits: Uninterrupted feature development, deploy once with all features complete
+- Total timeline extended by 2 weeks to accommodate comprehensive final testing

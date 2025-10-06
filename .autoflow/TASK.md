@@ -1,105 +1,62 @@
 # Current Sprint Tasks
 
 **Project**: CraftyPrep - Laser Engraving Image Prep Tool
-**Current Sprint**: Sprint 2 - Refinement Controls & UX
-**Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
-**Duration**: Week 3-4
-**Status**: ACTIVE
-**Progress**: 8/11 complete (3 tasks remaining)
-**Last Updated**: 2025-10-05 (task-018 committed)
+**Current Sprint**: Sprint 3 - Material Presets & Settings
+**Sprint Goal**: Add material-specific presets, undo/redo history, and settings persistence for enhanced user workflow
+**Duration**: Week 5-6
+**Status**: PENDING
+**Progress**: 0/3 complete
+**Last Updated**: 2025-10-06 (Sprint restructured - deployment moved to Sprint 7)
 
 ---
 
 ## 🎯 Sprint Focus
 
-**This sprint will deliver**: Refinement controls (brightness/contrast/threshold sliders), performance optimizations, comprehensive accessibility compliance, and cross-browser compatibility.
+**This sprint will deliver**: Material-specific presets for common laser engraving materials, undo/redo functionality, and settings persistence.
 
-**Why it matters**: Users can fine-tune the auto-prep results to match their specific material and engraving needs, making the tool more versatile and professional.
+**Why it matters**: Professional users can save time with material presets optimized for Wood, Leather, Acrylic, etc., and maintain their preferred settings across sessions.
 
 ---
 
-## 📋 Sprint Tasks (Max 12)
+## 📋 Sprint Tasks (3 tasks)
 
-### Task 2.9: Accessibility Audit and Fixes
+### Task 3.1: Material Preset System
 
-**ID**: task-019
+**ID**: task-020
 **Priority**: HIGH
-**Status**: COMPLETE
+**Status**: PENDING
 **Estimated Effort**: 6 hours
 
 **Description**:
-Comprehensive accessibility audit using axe and manual testing, fix all issues to WCAG 2.2 AAA.
+Implement material-specific preset configurations (Wood, Leather, Acrylic, Glass, Metal) that apply optimized brightness/contrast/threshold values for each material type.
 
 **Required Reading**:
-- .autoflow/docs/ACCESSIBILITY.md - Complete WCAG 2.2 AAA requirements
-- .autoflow/docs/TESTING.md#accessibility-testing - Testing procedures
+- .autoflow/docs/FUNCTIONAL.md#material-presets - Preset specifications
+- .autoflow/docs/ARCHITECTURE.md#strategy-pattern - Preset architecture
 
 **Design References** (full docs):
-- 📘 [.autoflow/docs/ACCESSIBILITY.md](.autoflow/docs/ACCESSIBILITY.md) - WCAG 2.2 AAA standards
-- 📘 [.autoflow/docs/TESTING.md](.autoflow/docs/TESTING.md) - Accessibility testing
+- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Material preset requirements
+- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Strategy pattern implementation
 
 **Acceptance Criteria**:
-- [ ] Lighthouse accessibility score ≥95
-- [ ] Zero axe violations
-- [ ] Keyboard navigation complete (Tab, Enter, Arrows, Escape)
-- [ ] Screen reader tested (NVDA or VoiceOver)
-- [ ] Focus indicators visible (≥3px, ≥3:1 contrast)
-- [ ] Color contrast ≥7:1 (normal text), ≥4.5:1 (large)
-- [ ] ARIA labels on all interactive elements
-- [ ] Status announcements (aria-live regions)
-- [ ] No keyboard traps
-- [ ] E2E accessibility tests passing
+- [ ] Preset dropdown component created
+- [ ] 5 presets configured with optimized values (Wood, Leather, Acrylic, Glass, Metal)
+- [ ] Selecting preset applies values to sliders
+- [ ] Manual adjustment switches to "Custom" preset
+- [ ] Presets stored as configurations (not hardcoded)
+- [ ] Unit tests for preset application
+- [ ] Visual feedback for active preset
+- [ ] WCAG 2.2 AAA accessibility compliance
 
 **Definition of Done**:
-- [ ] All accessibility issues resolved
-- [ ] Lighthouse score ≥95
-- [ ] Screen reader tested
-- [ ] Tests passing
-
-**Dependencies**: All previous Sprint 2 tasks
-
-**Task Plan**: [.autoflow/tasks/task-019/TASK_PLAN.md](.autoflow/tasks/task-019/TASK_PLAN.md)
-
-**Blockers**: None
-
----
-
-### Task 2.10: Cross-Browser Testing and Fixes
-
-**ID**: task-020
-**Priority**: MEDIUM
-**Status**: PENDING
-**Estimated Effort**: 5 hours
-
-**Description**:
-Test application on all target browsers and fix compatibility issues.
-
-**Required Reading**:
-- .autoflow/docs/TESTING.md#cross-browser-testing - Browser matrix
-- .autoflow/docs/ARCHITECTURE.md#browser-compatibility - Requirements
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/TESTING.md](.autoflow/docs/TESTING.md) - Testing strategy
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Browser compatibility
-
-**Acceptance Criteria**:
-- [ ] Tested on Chrome 90+ (latest)
-- [ ] Tested on Firefox 88+ (latest)
-- [ ] Tested on Safari 14+ (latest)
-- [ ] Tested on Edge 90+ (latest)
-- [ ] Tested on Mobile Safari (iOS 14+)
-- [ ] Tested on Mobile Chrome (Android 10+)
-- [ ] All features work on all browsers
-- [ ] Canvas rendering consistent
-- [ ] Playwright multi-browser E2E passing
-
-**Definition of Done**:
-- [ ] All browsers tested and working
-- [ ] Compatibility issues resolved
-- [ ] E2E tests passing on all browsers
+- [ ] All acceptance criteria met
+- [ ] Unit tests passing (≥80% coverage)
+- [ ] Integration tests passing
+- [ ] E2E verification passed
 - [ ] Code review passed
+- [ ] Accessibility verified
 
-**Dependencies**: All previous Sprint 2 tasks
+**Dependencies**: Sprint 2 complete (all sliders functional)
 
 **Task Plan**: (Will be created by `/plan`)
 
@@ -107,7 +64,7 @@ Test application on all target browsers and fix compatibility issues.
 
 ---
 
-### Task 2.11: Performance Optimization and Code Review
+### Task 3.2: Undo/Redo History System
 
 **ID**: task-021
 **Priority**: MEDIUM
@@ -115,35 +72,78 @@ Test application on all target browsers and fix compatibility issues.
 **Estimated Effort**: 5 hours
 
 **Description**:
-Optimize bundle size, lazy load components, improve processing speed, and conduct code review.
+Implement undo/redo functionality with history stack (max 10 states) and keyboard shortcuts for iterative refinement workflow.
 
 **Required Reading**:
-- .autoflow/docs/ARCHITECTURE.md#performance-considerations - Optimization strategies
-- .autoflow/docs/TESTING.md#performance-testing - Performance targets
+- .autoflow/docs/FUNCTIONAL.md#undo-redo-functionality - Requirements
+- .autoflow/docs/ARCHITECTURE.md#command-pattern - History implementation
 
 **Design References** (full docs):
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Performance optimization
-- 📘 [.autoflow/docs/TESTING.md](.autoflow/docs/TESTING.md) - Performance testing
+- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Undo/redo requirements
+- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Command pattern
 
 **Acceptance Criteria**:
-- [ ] Bundle size <200KB (gzipped)
-- [ ] Code splitting implemented
-- [ ] React.memo for canvas components
-- [ ] useMemo for expensive calculations
-- [ ] Lighthouse performance score ≥90
-- [ ] First Contentful Paint <1.5s
-- [ ] Time to Interactive <3s
-- [ ] Code review checklist completed
-- [ ] Refactoring applied (DRY, SOLID)
-- [ ] No console warnings or errors
+- [ ] History stack implemented (max 10 states)
+- [ ] Undo button reverts to previous state
+- [ ] Redo button re-applies undone state
+- [ ] Keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y (redo)
+- [ ] New adjustment clears redo stack
+- [ ] Buttons disabled when no undo/redo available
+- [ ] Unit tests for history operations
+- [ ] WCAG 2.2 AAA accessibility compliance
 
 **Definition of Done**:
-- [ ] Performance targets met
-- [ ] Bundle size optimized
+- [ ] All acceptance criteria met
+- [ ] Unit tests passing (≥80% coverage)
+- [ ] Integration tests passing
+- [ ] E2E verification passed
 - [ ] Code review passed
-- [ ] All metrics green
+- [ ] Keyboard shortcuts working
 
-**Dependencies**: All previous Sprint 2 tasks
+**Dependencies**: Sprint 2 complete (all adjustments functional)
+
+**Task Plan**: (Will be created by `/plan`)
+
+**Blockers**: None
+
+---
+
+### Task 3.3: Settings Persistence (localStorage)
+
+**ID**: task-022
+**Priority**: LOW
+**Status**: PENDING
+**Estimated Effort**: 3 hours
+
+**Description**:
+Persist user settings (custom preset, slider values) in browser localStorage for improved user experience across sessions.
+
+**Required Reading**:
+- .autoflow/docs/FUNCTIONAL.md#settings-persistence - Storage requirements
+- .autoflow/docs/SECURITY.md#data-storage - Privacy considerations
+
+**Design References** (full docs):
+- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Settings persistence requirements
+- 📘 [.autoflow/docs/SECURITY.md](.autoflow/docs/SECURITY.md) - Privacy and storage security
+
+**Acceptance Criteria**:
+- [ ] Custom preset saved to localStorage
+- [ ] Settings restored on page load
+- [ ] Clear/reset localStorage option
+- [ ] No sensitive data stored (privacy-focused)
+- [ ] Privacy disclosure in UI (optional)
+- [ ] Unit tests for storage/retrieval
+- [ ] Error handling for localStorage unavailable
+
+**Definition of Done**:
+- [ ] All acceptance criteria met
+- [ ] Unit tests passing (≥80% coverage)
+- [ ] Integration tests passing
+- [ ] E2E verification passed
+- [ ] Code review passed
+- [ ] Privacy compliance verified
+
+**Dependencies**: task-020 (Material Preset System) complete
 
 **Task Plan**: (Will be created by `/plan`)
 
@@ -194,34 +194,32 @@ PENDING → PLANNED → REVIEW → TEST → COMPLETE
 
 ## ✅ Sprint Completion Criteria
 
-**Sprint 2 is complete when**:
-- [ ] All 10 tasks marked COMPLETE
-- [ ] Refinement sliders functional and performant
+**Sprint 3 is complete when**:
+- [ ] All 3 tasks marked COMPLETE
+- [ ] Material presets working (5+ materials: Wood, Leather, Acrylic, Glass, Metal)
+- [ ] Undo/redo functional with keyboard shortcuts (Ctrl+Z, Ctrl+Y)
+- [ ] Settings persistence working (localStorage)
 - [ ] All tests passing (unit + integration + E2E)
-- [ ] Accessibility audit ≥95/100 (WCAG 2.2 AAA)
-- [ ] Cross-browser tested and working (Chrome, Firefox, Safari, Edge)
-- [ ] Performance metrics met (Lighthouse ≥90)
-- [ ] Code reviewed and refactored
-- [ ] Bundle size <200KB (gzipped)
-- [ ] First Contentful Paint <1.5s
-- [ ] Time to Interactive <3s
+- [ ] WCAG 2.2 AAA compliance maintained
+- [ ] No console warnings or errors
 
-**Next Sprint**: Sprint 3 (Enhancement & Deployment) tasks will populate this file after Sprint 2 completes
+**Next Sprint**: Sprint 4 (Advanced Editing - Crop & Resize) tasks will populate this file after Sprint 3 completes
 
 ---
 
 ## 📝 Notes
 
-- **Sprint 1 Complete**: All 10 tasks complete and archived to COMPLETED_TASKS.md
-- **Sprint 2 Progress**: 7/11 complete (task-011 through task-017 archived)
-- **Remaining**: 4 tasks (task-018 through task-021)
+- **Sprint 1 Complete**: All 10 tasks complete (archived to COMPLETED_TASKS.md)
+- **Sprint 2 Complete**: All 9 tasks complete (task-011 through task-019 archived)
+- **Sprint 3 Status**: Ready to begin (3 focused tasks)
+- **Restructuring**: Deployment/testing tasks moved to Sprint 7 (Week 13-14)
+- **Benefits**: Uninterrupted feature development through Sprint 6
 - **TDD approach**: Write tests first, then implement features
 - **Quality gates**: Automated `/code-review` ensures standards (no skipping)
 - **Documentation-driven**: All tasks reference specific design doc sections
 - **Task plans**: `/plan` command creates detailed plans in `.autoflow/tasks/task-XXX/`
 - **Completed tasks**: Archived to COMPLETED_TASKS.md and marked [COMMITTED] in SPRINTS.md
-- **Sprint auto-load**: When Sprint 2 completes, Sprint 3 tasks auto-populate from SPRINTS.md
 
 ---
 
-**Ready to continue?** Run `/plan` to create a detailed plan for Task 2.7 (Reset Button and State Management).
+**Ready to begin Sprint 3?** Run `/plan` to create a detailed plan for Task 3.1 (Material Preset System).
