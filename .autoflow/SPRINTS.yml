@@ -1,7 +1,7 @@
 project:
   name: CraftyPrep - Laser Engraving Image Prep Tool
   total_sprints: 7
-  current_sprint: 2
+  current_sprint: 3
   last_updated: '2025-10-06'
 sprints:
 - id: 1
@@ -102,20 +102,29 @@ sprints:
     title: Accessibility Audit and Fixes
 - id: 3
   goal: Material Presets & Settings
-  status: ACTIVE
+  status: COMPLETE
   duration: Week 5-6
   progress:
-    completed: 2
+    completed: 3
     total: 3
   deliverables:
   - Material presets (Wood, Leather, Acrylic, Glass, Metal)
   - Undo/redo functionality with keyboard shortcuts
   - Settings persistence (localStorage)
   tasks:
+  - id: task-020
+    status: COMMITTED
+    title: Material Preset System
+    commit: 51369fa
   - id: task-021
     status: COMMITTED
     title: Undo/Redo History System
-    commit: a9aa62e
+    commit: 240e8f9
+  - id: task-022
+    status: COMMITTED
+    title: Settings Persistence (localStorage)
+    commit: 1ad0616
+  completed: '2025-10-06'
 - id: 4
   goal: Advanced Editing (Crop & Resize)
   status: PENDING

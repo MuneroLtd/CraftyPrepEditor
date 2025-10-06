@@ -469,3 +469,38 @@ tasks:
   quality_metrics:
     tests_passing: 100%
     code_coverage: ≥80%
+- id: task-022
+  title: Settings Persistence (localStorage)
+  status: COMMITTED
+  completed: '2025-10-06'
+  estimated: 3 hours
+  actual: ~3 hours
+  sprint: Sprint 3 - Material Presets & Settings
+  description: Persist user settings (custom preset, slider values) in browser localStorage
+    for improved user experience across sessions. Enables users to return to their
+    last used settings without re-configuring the interface.
+  deliverables:
+  - settingsStorage utility with type-safe localStorage operations
+  - useSettingsPersistence hook with auto-save (500ms debounce)
+  - useInitialSettings hook for settings restoration on mount
+  - ClearSettingsButton component with confirmation dialog
+  - PrivacyDisclosure component informing users about local storage
+  - Integration with Footer and Layout components
+  - VALID_PRESET_NAMES exported from presetConfigurations
+  - Settings auto-save on preset/slider changes
+  - Settings auto-restore on page load
+  - Clear settings functionality with confirmation
+  - Error handling for localStorage unavailable/quota exceeded
+  - Privacy-focused design (no sensitive data stored)
+  - WCAG 2.2 AAA accessibility compliance
+  - 60 comprehensive unit tests (100% passing)
+  commit: 1ad0616
+  quality_metrics:
+    tests_passing: 60/60 (100%)
+    code_coverage: ≥80%
+    test_files:
+    - tests/unit/lib/utils/settingsStorage.test.ts
+    - tests/unit/hooks/useSettingsPersistence.test.ts
+    - tests/unit/hooks/useInitialSettings.test.ts
+    - tests/unit/components/ClearSettingsButton.test.tsx
+    - tests/unit/components/PrivacyDisclosure.test.tsx
