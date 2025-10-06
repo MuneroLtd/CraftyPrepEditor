@@ -307,8 +307,12 @@ test.describe('task-017: Reset Button E2E Tests', () => {
 
       // The src should be similar to initial (not identical due to timestamp, but similar data)
       // We verify by checking that sliders are at defaults and image has been reprocessed
-      const brightnessValue = await page.getByRole('slider', { name: /adjust image brightness/i }).getAttribute('aria-valuenow');
-      const contrastValue = await page.getByRole('slider', { name: /adjust image contrast/i }).getAttribute('aria-valuenow');
+      const brightnessValue = await page
+        .getByRole('slider', { name: /adjust image brightness/i })
+        .getAttribute('aria-valuenow');
+      const contrastValue = await page
+        .getByRole('slider', { name: /adjust image contrast/i })
+        .getAttribute('aria-valuenow');
 
       expect(brightnessValue).toBe('0');
       expect(contrastValue).toBe('0');
@@ -394,9 +398,10 @@ test.describe('task-017: Reset Button E2E Tests', () => {
       let attempts = 0;
       while (attempts < 30) {
         await page.keyboard.press('Tab');
-        const focused = await page.evaluate(() =>
-          document.activeElement?.getAttribute('aria-label') ||
-          document.activeElement?.textContent
+        const focused = await page.evaluate(
+          () =>
+            document.activeElement?.getAttribute('aria-label') ||
+            document.activeElement?.textContent
         );
         if (focused?.includes('Reset') || focused?.includes('reset')) {
           break;
@@ -405,9 +410,7 @@ test.describe('task-017: Reset Button E2E Tests', () => {
       }
 
       // Should have focused the reset button
-      const focusedElement = await page.evaluate(() =>
-        document.activeElement?.textContent
-      );
+      const focusedElement = await page.evaluate(() => document.activeElement?.textContent);
       expect(focusedElement).toMatch(/reset/i);
     });
 
@@ -596,7 +599,9 @@ test.describe('task-017: Reset Button E2E Tests', () => {
   });
 
   test.describe('IR-1: Integration - Complete Reset Workflow', () => {
-    test('should execute full reset workflow: upload → auto-prep → adjust → reset', async ({ page }) => {
+    test('should execute full reset workflow: upload → auto-prep → adjust → reset', async ({
+      page,
+    }) => {
       // Already uploaded and auto-prepped in beforeEach
 
       // Adjust all sliders
@@ -614,7 +619,7 @@ test.describe('task-017: Reset Button E2E Tests', () => {
 
       let brightnessValue = parseInt((await brightnessSlider.getAttribute('aria-valuenow')) || '0');
       let contrastValue = parseInt((await contrastSlider.getAttribute('aria-valuenow')) || '0');
-      let thresholdValue = parseInt((await thresholdSlider.getAttribute('aria-valuenow')) || '0');
+      const thresholdValue = parseInt((await thresholdSlider.getAttribute('aria-valuenow')) || '0');
 
       expect(brightnessValue).toBeGreaterThan(15);
       expect(contrastValue).toBeGreaterThan(25);

@@ -54,8 +54,12 @@ function CanvasWrapper({
   onMouseUp,
   onKeyDown,
 }: CanvasWrapperProps) {
+  // Determine testid based on alt text
+  const testId = alt.includes('Original') ? 'original-canvas' : 'processed-canvas';
+  
   return (
     <div
+      data-testid={testId}
       tabIndex={zoom > 1 ? 0 : -1}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
@@ -292,7 +296,7 @@ export function ImagePreview({
       {/* Dual Canvas Preview */}
       <div className="flex flex-col lg:flex-row gap-4 relative">
         {/* Original Image Canvas */}
-        <div className="flex-1">
+        <div className="flex-1" data-testid="original-preview">
           <h3 className="text-lg font-semibold mb-2">Original</h3>
           <CanvasWrapper
             image={originalImage}
@@ -310,7 +314,7 @@ export function ImagePreview({
         </div>
 
         {/* Processed Image Canvas */}
-        <div className="flex-1">
+        <div className="flex-1" data-testid="processed-preview">
           <h3 className="text-lg font-semibold mb-2">Processed</h3>
           <div className="relative">
             <CanvasWrapper

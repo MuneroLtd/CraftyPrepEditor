@@ -115,7 +115,7 @@ export function DownloadButton({
         disabled={isDisabled}
         aria-label={`Download processed image as ${FORMAT_LABELS[format]}`}
         aria-disabled={isDisabled}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700
+        className="px-6 py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800
                    disabled:bg-gray-300 disabled:cursor-not-allowed
                    transition-colors flex items-center space-x-2
                    focus:outline-none focus:ring-3 focus:ring-blue-500 focus:ring-offset-2"

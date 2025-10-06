@@ -11,24 +11,20 @@ import { useImageDownload } from '@/hooks/useImageDownload';
 describe('JPG Export Integration', () => {
   let mockCanvas: HTMLCanvasElement;
   let mockBlob: Blob;
-  let createObjectURLSpy: ReturnType<typeof vi.spyOn>;
-  let revokeObjectURLSpy: ReturnType<typeof vi.spyOn>;
-  let appendChildSpy: ReturnType<typeof vi.spyOn>;
-  let removeChildSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     mockBlob = new Blob(['fake image'], { type: 'image/jpeg' });
     mockCanvas = {
-      toBlob: vi.fn((callback, type, quality) => {
+      toBlob: vi.fn((callback) => {
         setTimeout(() => callback(mockBlob), 0);
       }),
     } as unknown as HTMLCanvasElement;
 
     // Setup spies
-    createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock');
-    revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
-    appendChildSpy = vi.spyOn(document.body, 'appendChild').mockImplementation((node) => node);
-    removeChildSpy = vi.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    vi.spyOn(document.body, 'appendChild').mockImplementation((node) => node);
+    vi.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
   });
 
   afterEach(() => {
@@ -42,17 +38,13 @@ describe('JPG Export Integration', () => {
       await result.current.downloadImage(mockCanvas, 'photo.png', 'jpeg');
     });
 
-    expect(mockCanvas.toBlob).toHaveBeenCalledWith(
-      expect.any(Function),
-      'image/jpeg',
-      0.95
-    );
+    expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/jpeg', 0.95);
   });
 
   it('generates correct JPG filename from original PNG filename', async () => {
     let capturedAnchor: HTMLAnchorElement | null = null;
 
-    appendChildSpy.mockImplementation((node) => {
+    vi.spyOn(document.body, 'appendChild').mockImplementation((node: Node) => {
       if (node instanceof HTMLAnchorElement) {
         capturedAnchor = node;
       }

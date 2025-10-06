@@ -103,7 +103,7 @@ export function FileDropzone({ onFileSelect, isLoading, error }: FileDropzonePro
           <p className="text-lg font-medium text-gray-700">
             {isLoading ? 'Loading image...' : 'Drag image here or click to browse'}
           </p>
-          <p className="mt-2 text-sm text-gray-500">JPG, PNG, GIF, or BMP • Max 10MB</p>
+          <p className="mt-2 text-sm text-gray-700">JPG, PNG, GIF, or BMP • Max 10MB</p>
         </div>
       </div>
 

@@ -155,7 +155,7 @@ function App() {
           {/* Welcome Section */}
           <div className="text-center space-y-4">
             <h2 className="text-3xl font-bold">Welcome to CraftyPrep</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-700 max-w-2xl mx-auto">
               Transform your images for laser engraving with our powerful image preparation tool.
             </p>
           </div>

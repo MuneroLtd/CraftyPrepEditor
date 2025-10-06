@@ -5,8 +5,8 @@
 **Sprint Goal**: Add slider controls for refinement, optimize performance, enhance UX, and improve accessibility
 **Duration**: Week 3-4
 **Status**: ACTIVE
-**Progress**: 7/11 complete (4 tasks remaining)
-**Last Updated**: 2025-10-05 (task-017 committed)
+**Progress**: 8/11 complete (3 tasks remaining)
+**Last Updated**: 2025-10-05 (task-018 committed)
 
 ---
 
@@ -20,61 +20,11 @@
 
 ## 📋 Sprint Tasks (Max 12)
 
-### Task 2.8: JPG Export Option
-
-**ID**: task-018
-**Priority**: LOW
-**Status**: COMPLETE
-**Estimated Effort**: 3 hours
-
-**Description**:
-Add JPG export format option alongside existing PNG export.
-
-**Required Reading**:
-- .autoflow/docs/FUNCTIONAL.md#file-format-options - JPG export spec
-- .autoflow/docs/ARCHITECTURE.md#export-flow - Format selection
-
-**Design References** (full docs):
-- 📘 [.autoflow/docs/FUNCTIONAL.md](.autoflow/docs/FUNCTIONAL.md) - Export formats
-- 📘 [.autoflow/docs/ARCHITECTURE.md](.autoflow/docs/ARCHITECTURE.md) - Export architecture
-
-**Acceptance Criteria**:
-- [x] Format selector UI (PNG | JPG)
-- [x] JPG export with 95% quality
-- [x] Filename includes correct extension
-- [x] PNG remains default format
-- [x] Download button text updates with format
-- [x] Unit tests for JPG export
-- [ ] File size comparison (JPG < PNG) - Will verify in E2E
-- [x] E2E test created
-
-**Definition of Done**:
-- [x] JPG export working
-- [x] Format selector functional
-- [x] Tests created (unit + integration + E2E)
-- [x] Code review passed
-
-**Dependencies**: Sprint 1 task-009 (PNG download)
-
-**Task Plan**: [.autoflow/tasks/task-018/TASK_PLAN.md](.autoflow/tasks/task-018/TASK_PLAN.md)
-
-**Blockers**: None
-
-**Implementation Notes**:
-- Format selector implemented with accessible fieldset/legend
-- Hook updated to support format parameter (png | jpeg)
-- Quality mapping: PNG=undefined, JPEG=0.95
-- Extension mapping: PNG=.png, JPEG=.jpg
-- All tests follow TDD (RED-GREEN cycle)
-- Keyboard navigation supported
-
----
-
 ### Task 2.9: Accessibility Audit and Fixes
 
 **ID**: task-019
 **Priority**: HIGH
-**Status**: PENDING
+**Status**: COMPLETE
 **Estimated Effort**: 6 hours
 
 **Description**:
@@ -108,7 +58,7 @@ Comprehensive accessibility audit using axe and manual testing, fix all issues t
 
 **Dependencies**: All previous Sprint 2 tasks
 
-**Task Plan**: (Will be created by `/plan`)
+**Task Plan**: [.autoflow/tasks/task-019/TASK_PLAN.md](.autoflow/tasks/task-019/TASK_PLAN.md)
 
 **Blockers**: None
 

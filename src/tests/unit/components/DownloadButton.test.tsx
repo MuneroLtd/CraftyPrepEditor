@@ -266,7 +266,9 @@ describe('DownloadButton', () => {
     it('changes format when JPG selected', async () => {
       render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
 
-      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i) as HTMLInputElement;
+      const jpgRadio = screen.getByLabelText(
+        /JPG \(Smaller file, 95% quality\)/i
+      ) as HTMLInputElement;
       fireEvent.click(jpgRadio);
 
       expect(jpgRadio.checked).toBe(true);
@@ -314,7 +316,9 @@ describe('DownloadButton', () => {
       render(<DownloadButton canvas={mockCanvas} originalFilename="test.jpg" />);
 
       const pngRadio = screen.getByLabelText(/PNG \(Lossless, larger file\)/i) as HTMLInputElement;
-      const jpgRadio = screen.getByLabelText(/JPG \(Smaller file, 95% quality\)/i) as HTMLInputElement;
+      const jpgRadio = screen.getByLabelText(
+        /JPG \(Smaller file, 95% quality\)/i
+      ) as HTMLInputElement;
 
       // Verify both radio buttons are focusable
       pngRadio.focus();

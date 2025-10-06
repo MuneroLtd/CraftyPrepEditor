@@ -103,7 +103,7 @@
 5. `task-015` [COMMITTED] - Threshold Adjustment Implementation
 6. `task-016` [COMMITTED] - Debounced Preview Updates
 7. `task-017` [COMMITTED] - Reset Button and State Management
-8. `task-018` [PENDING] - JPG Export Option
+8. `task-018` [COMMITTED] - JPG Export Option
 9. `task-019` [PENDING] - Accessibility Audit and Fixes
 10. `task-020` [PENDING] - Cross-Browser Testing and Fixes
 11. `task-021` [PENDING] - Performance Optimization and Code Review

@@ -67,7 +67,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <div className="min-h-screen flex items-center justify-center bg-background px-4">
           <div className="max-w-md w-full text-center space-y-4">
             <h1 className="text-4xl font-bold text-destructive">Oops! Something went wrong</h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-slate-700">
               We apologize for the inconvenience. An error has occurred.
             </p>
             {import.meta.env.DEV && this.state.error && (

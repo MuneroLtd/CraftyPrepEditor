@@ -15,7 +15,7 @@ function Footer() {
     >
       <div className="container mx-auto text-center text-sm sm:text-base">
         <p>&copy; {CURRENT_YEAR} CraftyPrep. All rights reserved.</p>
-        <p className="mt-2 text-muted-foreground">Laser engraving image preparation made simple</p>
+        <p className="mt-2 text-slate-700">Laser engraving image preparation made simple</p>
       </div>
     </footer>
   );

@@ -322,11 +322,7 @@ describe('useImageDownload', () => {
       await act(async () => {
         await result.current.downloadImage(mockCanvas, 'test.jpg');
       });
-      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
-        expect.any(Function),
-        'image/png',
-        undefined
-      );
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/png', undefined);
     });
 
     it('exports as PNG when format is "png"', async () => {
@@ -334,11 +330,7 @@ describe('useImageDownload', () => {
       await act(async () => {
         await result.current.downloadImage(mockCanvas, 'test.jpg', 'png');
       });
-      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
-        expect.any(Function),
-        'image/png',
-        undefined
-      );
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/png', undefined);
     });
 
     it('exports as JPEG when format is "jpeg"', async () => {
@@ -346,11 +338,7 @@ describe('useImageDownload', () => {
       await act(async () => {
         await result.current.downloadImage(mockCanvas, 'test.jpg', 'jpeg');
       });
-      expect(mockCanvas.toBlob).toHaveBeenCalledWith(
-        expect.any(Function),
-        'image/jpeg',
-        0.95
-      );
+      expect(mockCanvas.toBlob).toHaveBeenCalledWith(expect.any(Function), 'image/jpeg', 0.95);
     });
 
     it('generates .png extension for PNG format', async () => {
