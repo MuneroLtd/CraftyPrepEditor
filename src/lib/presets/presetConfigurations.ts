@@ -129,3 +129,16 @@ export function getPreset(name: MaterialPresetName): MaterialPreset {
 export function getDefaultPreset(): MaterialPreset {
   return MATERIAL_PRESETS.presets[MATERIAL_PRESETS.default];
 }
+
+/**
+ * Array of all valid preset names
+ *
+ * Derived from the actual preset configuration to maintain single source of truth.
+ * Use this for validation instead of hardcoding preset names.
+ *
+ * @example
+ * ```typescript
+ * const isValid = VALID_PRESET_NAMES.includes(userInput);
+ * ```
+ */
+export const VALID_PRESET_NAMES = Object.keys(MATERIAL_PRESETS.presets) as MaterialPresetName[];

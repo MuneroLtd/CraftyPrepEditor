@@ -5,6 +5,7 @@ import { RESPONSIVE_PADDING } from '@/lib/constants';
 
 interface LayoutProps {
   children: ReactNode;
+  onClearSettings?: () => void;
 }
 
 /**
@@ -12,7 +13,7 @@ interface LayoutProps {
  * Uses semantic HTML5 elements for accessibility
  * Implements WCAG 2.2 AAA compliant layout with ARIA landmarks
  */
-function Layout({ children }: LayoutProps) {
+function Layout({ children, onClearSettings }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Skip link for keyboard navigation - WCAG 2.4.1 (Level A) */}
@@ -30,7 +31,7 @@ function Layout({ children }: LayoutProps) {
       >
         {children}
       </main>
-      <Footer />
+      <Footer onClearSettings={onClearSettings} />
     </div>
   );
 }

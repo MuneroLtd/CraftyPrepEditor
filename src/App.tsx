@@ -13,6 +13,8 @@ import { useDebounce } from './hooks/useDebounce';
 import { useDelayedLoading } from './hooks/useDelayedLoading';
 import { useCustomPresetPersistence, clearCustomPreset } from './hooks/useCustomPresetPersistence';
 import { useHistory } from './hooks/useHistory';
+import { useSettingsPersistence } from './hooks/useSettingsPersistence';
+import { useInitialSettings } from './hooks/useInitialSettings';
 import {
   DEFAULT_BRIGHTNESS,
   DEFAULT_CONTRAST,
@@ -75,6 +77,26 @@ function App() {
 
   // Custom preset persistence (auto-saves to localStorage with debouncing)
   useCustomPresetPersistence(selectedPreset, brightness, contrast, threshold, otsuThreshold);
+
+  // Settings persistence (auto-saves all settings to localStorage)
+  const clearAllSettings = useSettingsPersistence(selectedPreset, brightness, contrast, threshold);
+
+  // Load initial settings from localStorage
+  const initialSettings = useInitialSettings();
+
+  // Track if initial settings have been applied (performance optimization)
+  const initialSettingsAppliedRef = useRef(false);
+
+  // Apply initial settings on mount (runs once)
+  useEffect(() => {
+    if (initialSettings && !uploadedImage && !initialSettingsAppliedRef.current) {
+      setSelectedPreset(initialSettings.selectedPreset);
+      setBrightness(initialSettings.brightness);
+      setContrast(initialSettings.contrast);
+      setThreshold(initialSettings.threshold);
+      initialSettingsAppliedRef.current = true;
+    }
+  }, [initialSettings, uploadedImage]);
 
   // Undo/Redo history management
   const {
@@ -441,7 +463,7 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <Layout>
+      <Layout onClearSettings={clearAllSettings}>
         <div className="flex flex-col items-center justify-center space-y-8">
           {/* Welcome Section */}
           <div className="text-center space-y-4">
