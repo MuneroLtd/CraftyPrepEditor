@@ -1,6 +1,6 @@
 project:
   name: CraftyPrep - Laser Engraving Image Prep Tool
-  last_updated: '2025-10-06T18:18:00.226309Z'
+  last_updated: '2025-10-07T01:30:00Z'
 tasks:
 - id: task-001
   title: Project Setup and Configuration
@@ -546,3 +546,68 @@ tasks:
   - '.autoflow/tasks/task-023/LAYOUT_DESKTOP.md'
   - '.autoflow/tasks/task-023/LAYOUT_TABLET.md'
   - '.autoflow/tasks/task-023/LAYOUT_MOBILE.md'
+- id: task-024
+  title: Modern Image Editor Layout (Toolbar, Canvas, Panels)
+  status: COMMITTED
+  completed: '2025-10-07'
+  estimated: 14 hours
+  actual: ~14 hours
+  sprint: Sprint 4 - Professional UI/UX Redesign
+  description: 'Implement professional image editor layout with distinct functional areas: top toolbar (file ops, undo/redo, zoom), left sidebar (collapsible tool selection), center canvas (main workspace with zoom/pan), right panel (properties and adjustments), bottom status bar (dimensions, zoom level, tips). Responsive layout adapts to tablet/mobile with hamburger menu and floating action button.'
+  deliverables:
+  - 'EditorLayout component with CSS Grid layout'
+  - 'TopToolbar with file operations, undo/redo, and zoom controls'
+  - 'LeftSidebar with collapsible tool selection (vertical orientation)'
+  - 'RightPanel with collapsible property sections and adjustments'
+  - 'CanvasArea with proper sizing, zoom, and pan capabilities'
+  - 'StatusBar showing dimensions, zoom level, and contextual tips'
+  - 'MobileMenu with hamburger navigation for responsive mobile layout'
+  - 'FloatingActionButton for mobile quick actions'
+  - 'ResizeHandle component for draggable panel resizing'
+  - 'CollapsibleSection component for expandable sections'
+  - 'useLayoutPreferences hook (persist panel state to localStorage)'
+  - 'useMediaQuery hook (responsive breakpoints detection)'
+  - 'usePlatform hook (OS detection for keyboard shortcuts)'
+  - 'useResize hook (panel resizing logic with constraints)'
+  - 'useClickOutside hook (modal/dropdown handling)'
+  - 'useFocusTrap hook (accessibility for modals and dialogs)'
+  - '@radix-ui/react-dropdown-menu for toolbar dropdowns'
+  - 'Button component enhanced with iconLarge variant (44px WCAG AAA)'
+  - 'Layout state persists across sessions in localStorage'
+  - 'WCAG 2.2 AAA accessibility compliance (focus management, ARIA labels)'
+  commit: db34f19
+  quality_metrics:
+    tests_passing: 52 unit tests (100%)
+    code_coverage: ≥95% on all new components and hooks
+    accessibility_compliance: WCAG 2.2 Level AAA
+    touch_targets: '≥44px (AAA requirement)'
+    focus_indicators: Visible and high contrast
+    test_files:
+    - tests/unit/components/layout/EditorLayout.test.tsx
+    - tests/unit/components/layout/TopToolbar.test.tsx
+    - tests/unit/components/layout/LeftSidebar.test.tsx
+    - tests/unit/components/layout/RightPanel.test.tsx
+    - tests/unit/components/layout/CanvasArea.test.tsx
+    - tests/unit/components/layout/StatusBar.test.tsx
+    - tests/unit/components/layout/CollapsibleSection.test.tsx
+    - tests/unit/hooks/useLayoutPreferences.test.tsx
+    - tests/unit/hooks/useMediaQuery.test.tsx
+    - tests/unit/hooks/useResize.test.tsx
+    - tests/unit/hooks/useClickOutside.test.tsx
+    - tests/unit/hooks/useFocusTrap.test.tsx
+  implementation_notes:
+  - 'CSS Grid layout for main structure (header/sidebar/main/footer)'
+  - 'Responsive breakpoints: 768px (tablet), 1024px (desktop)'
+  - 'Panel resize constraints: min-width 200px, max-width 400px'
+  - 'Debounced resize handlers (100ms) for performance'
+  - 'Platform-specific keyboard shortcuts (Cmd on macOS, Ctrl on Windows/Linux)'
+  - 'LocalStorage persistence with debounced saves (500ms)'
+  - 'Focus trap ensures keyboard navigation stays within modals'
+  - 'Click-outside detection for closing dropdowns and panels'
+  - 'Proper cleanup of event listeners and resize observers'
+  documentation_refs:
+  - '.autoflow/docs/FUNCTIONAL.md#feature-5'
+  - '.autoflow/docs/ARCHITECTURE.md#component-architecture'
+  - '.autoflow/tasks/task-024/TASK_PLAN.md'
+  - '.autoflow/tasks/task-024/ACCEPTANCE_CRITERIA.md'
+  - '.autoflow/tasks/task-024/DEPENDENCIES.md'
