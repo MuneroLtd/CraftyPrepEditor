@@ -701,7 +701,7 @@ tasks:
     e2e_tests: 100% passing
     accessibility: WCAG 2.2 AAA compliant
     code_coverage: 95%+
-  commit: TBD
+  commit: 07695b6
   completed: '2025-10-07'
   task_files:
   - .autoflow/tasks/task-026/TASK_PLAN.md

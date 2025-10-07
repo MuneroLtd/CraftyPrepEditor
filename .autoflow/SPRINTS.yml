@@ -158,6 +158,7 @@ sprints:
   - id: task-026
     status: COMMITTED
     title: Enhanced Slider and Input Components
+    commit: 07695b6
   - id: task-027
     status: PENDING
     title: Dark/Light Theme System
