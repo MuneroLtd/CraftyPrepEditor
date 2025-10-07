@@ -32,6 +32,7 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
+        iconLarge: 'h-11 w-11', // WCAG 2.2 AAA compliance: 44px minimum touch target
       },
     },
     defaultVariants: {
@@ -45,7 +46,7 @@ const buttonVariants = cva(
  * Button component props
  * @property {boolean} asChild - When true, renders as a Slot component for composition
  * @property {string} variant - Visual style variant (default, destructive, outline, secondary, ghost, link)
- * @property {string} size - Size variant (default, sm, lg, icon)
+ * @property {string} size - Size variant (default, sm, lg, icon, iconLarge)
  */
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
