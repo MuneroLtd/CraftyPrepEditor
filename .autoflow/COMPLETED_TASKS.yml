@@ -504,3 +504,45 @@ tasks:
     - tests/unit/hooks/useInitialSettings.test.ts
     - tests/unit/components/ClearSettingsButton.test.tsx
     - tests/unit/components/PrivacyDisclosure.test.tsx
+- id: task-023
+  title: UI/UX Audit and Design System
+  status: COMMITTED
+  completed: '2025-10-07'
+  estimated: 12 hours
+  actual: ~12 hours
+  sprint: Sprint 4 - Professional UI/UX Redesign
+  description: 'Conduct comprehensive UI/UX audit of current application. Identify pain points, usability issues, and areas for improvement. Create design system with color palette, typography, spacing, and component patterns. Design modern image editor layout inspired by professional tools (Photoshop, Figma, Canva).'
+  deliverables:
+  - 'UI/UX audit document with identified issues (14 issues, 8 critical)'
+  - 'Design system specification with 150+ CSS custom properties'
+  - 'TypeScript design tokens (330+ lines, type-safe)'
+  - 'Component library design (buttons, sliders, panels, layout)'
+  - 'Layout mockups for desktop (1920x1080), tablet (1024x768), mobile (375x667)'
+  - 'Dark/light theme color schemes (WCAG 2.2 AAA compliant)'
+  - 'Accessibility requirements documented (≥7:1 contrast, 44px touch targets)'
+  - 'Comprehensive design documentation (9 files, 2000+ lines)'
+  commit: 2d5060c78e57f17e9a31399b77e8b2ccea8074ad
+  quality_metrics:
+    accessibility_compliance: WCAG 2.2 Level AAA (100%)
+    contrast_ratios: '≥7:1 normal text, ≥4.5:1 large text'
+    touch_targets: '≥44px (AAA requirement)'
+    focus_indicators: '3px, ≥3:1 contrast'
+    tests_passing: E2E accessibility verification (100%)
+    documentation: 9 comprehensive design documents
+  implementation_notes:
+  - 'CSS custom properties as single source of truth'
+  - 'Runtime theme switching support (light/dark)'
+  - 'TypeScript wrappers for type-safe token access'
+  - 'Component composition from base tokens'
+  - 'Reduced motion support (@media prefers-reduced-motion)'
+  - 'All color combinations verified with WebAIM Contrast Checker'
+  documentation_refs:
+  - '.autoflow/docs/FUNCTIONAL.md#feature-5'
+  - '.autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling'
+  - '.autoflow/tasks/task-023/DESIGN_SYSTEM_SPEC.md'
+  - '.autoflow/tasks/task-023/ACCESSIBILITY_REQUIREMENTS.md'
+  - '.autoflow/tasks/task-023/UI_UX_AUDIT.md'
+  - '.autoflow/tasks/task-023/COMPONENT_LIBRARY.md'
+  - '.autoflow/tasks/task-023/LAYOUT_DESKTOP.md'
+  - '.autoflow/tasks/task-023/LAYOUT_TABLET.md'
+  - '.autoflow/tasks/task-023/LAYOUT_MOBILE.md'

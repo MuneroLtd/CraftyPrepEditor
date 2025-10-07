@@ -8,32 +8,6 @@ sprint:
     total: 10
   last_updated: '2025-10-06T23:34:51Z'
 tasks:
-  - id: task-023
-    title: UI/UX Audit and Design System
-    status: COMPLETE
-    priority: HIGH
-    estimated_hours: 12
-    description: 'Conduct comprehensive UI/UX audit of current application.
-
-      Identify pain points, usability issues, and areas for improvement.
-
-      Create design system with color palette, typography, spacing, and component
-      patterns.
-
-      Design modern image editor layout inspired by professional tools (Photoshop,
-      Figma, Canva).
-
-      '
-    docs:
-      - .autoflow/docs/FUNCTIONAL.md#feature-5
-      - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
-    acceptance_criteria:
-      - UI/UX audit document with identified issues
-      - Design system specification (colors, typography, spacing)
-      - Component library design (buttons, inputs, panels, toolbars)
-      - Layout mockups for desktop, tablet, mobile
-      - Dark/light theme color schemes defined
-      - Accessibility requirements documented (WCAG 2.2 AAA)
   - id: task-024
     title: Modern Image Editor Layout (Toolbar, Canvas, Panels)
     status: PENDING
