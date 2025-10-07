@@ -453,7 +453,9 @@ tasks:
   estimated: 5 hours
   actual: ~5 hours
   sprint: Sprint 3 - Material Presets & Settings
-  description: Implement undo/redo functionality with history stack (max 10 states) and keyboard shortcuts for iterative refinement workflow. Enables users to experiment freely with adjustments and revert changes as needed.
+  description: Implement undo/redo functionality with history stack (max 10 states)
+    and keyboard shortcuts for iterative refinement workflow. Enables users to experiment
+    freely with adjustments and revert changes as needed.
   deliverables:
   - UndoRedoButtons component with accessible buttons
   - useHistory custom hook managing state history (max 10 states)
@@ -511,41 +513,44 @@ tasks:
   estimated: 12 hours
   actual: ~12 hours
   sprint: Sprint 4 - Professional UI/UX Redesign
-  description: 'Conduct comprehensive UI/UX audit of current application. Identify pain points, usability issues, and areas for improvement. Create design system with color palette, typography, spacing, and component patterns. Design modern image editor layout inspired by professional tools (Photoshop, Figma, Canva).'
+  description: Conduct comprehensive UI/UX audit of current application. Identify
+    pain points, usability issues, and areas for improvement. Create design system
+    with color palette, typography, spacing, and component patterns. Design modern
+    image editor layout inspired by professional tools (Photoshop, Figma, Canva).
   deliverables:
-  - 'UI/UX audit document with identified issues (14 issues, 8 critical)'
-  - 'Design system specification with 150+ CSS custom properties'
-  - 'TypeScript design tokens (330+ lines, type-safe)'
-  - 'Component library design (buttons, sliders, panels, layout)'
-  - 'Layout mockups for desktop (1920x1080), tablet (1024x768), mobile (375x667)'
-  - 'Dark/light theme color schemes (WCAG 2.2 AAA compliant)'
-  - 'Accessibility requirements documented (≥7:1 contrast, 44px touch targets)'
-  - 'Comprehensive design documentation (9 files, 2000+ lines)'
+  - UI/UX audit document with identified issues (14 issues, 8 critical)
+  - Design system specification with 150+ CSS custom properties
+  - TypeScript design tokens (330+ lines, type-safe)
+  - Component library design (buttons, sliders, panels, layout)
+  - Layout mockups for desktop (1920x1080), tablet (1024x768), mobile (375x667)
+  - Dark/light theme color schemes (WCAG 2.2 AAA compliant)
+  - Accessibility requirements documented (≥7:1 contrast, 44px touch targets)
+  - Comprehensive design documentation (9 files, 2000+ lines)
   commit: 2d5060c78e57f17e9a31399b77e8b2ccea8074ad
   quality_metrics:
     accessibility_compliance: WCAG 2.2 Level AAA (100%)
-    contrast_ratios: '≥7:1 normal text, ≥4.5:1 large text'
-    touch_targets: '≥44px (AAA requirement)'
-    focus_indicators: '3px, ≥3:1 contrast'
+    contrast_ratios: ≥7:1 normal text, ≥4.5:1 large text
+    touch_targets: ≥44px (AAA requirement)
+    focus_indicators: 3px, ≥3:1 contrast
     tests_passing: E2E accessibility verification (100%)
     documentation: 9 comprehensive design documents
   implementation_notes:
-  - 'CSS custom properties as single source of truth'
-  - 'Runtime theme switching support (light/dark)'
-  - 'TypeScript wrappers for type-safe token access'
-  - 'Component composition from base tokens'
-  - 'Reduced motion support (@media prefers-reduced-motion)'
-  - 'All color combinations verified with WebAIM Contrast Checker'
+  - CSS custom properties as single source of truth
+  - Runtime theme switching support (light/dark)
+  - TypeScript wrappers for type-safe token access
+  - Component composition from base tokens
+  - Reduced motion support (@media prefers-reduced-motion)
+  - All color combinations verified with WebAIM Contrast Checker
   documentation_refs:
-  - '.autoflow/docs/FUNCTIONAL.md#feature-5'
-  - '.autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling'
-  - '.autoflow/tasks/task-023/DESIGN_SYSTEM_SPEC.md'
-  - '.autoflow/tasks/task-023/ACCESSIBILITY_REQUIREMENTS.md'
-  - '.autoflow/tasks/task-023/UI_UX_AUDIT.md'
-  - '.autoflow/tasks/task-023/COMPONENT_LIBRARY.md'
-  - '.autoflow/tasks/task-023/LAYOUT_DESKTOP.md'
-  - '.autoflow/tasks/task-023/LAYOUT_TABLET.md'
-  - '.autoflow/tasks/task-023/LAYOUT_MOBILE.md'
+  - .autoflow/docs/FUNCTIONAL.md#feature-5
+  - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+  - .autoflow/tasks/task-023/DESIGN_SYSTEM_SPEC.md
+  - .autoflow/tasks/task-023/ACCESSIBILITY_REQUIREMENTS.md
+  - .autoflow/tasks/task-023/UI_UX_AUDIT.md
+  - .autoflow/tasks/task-023/COMPONENT_LIBRARY.md
+  - .autoflow/tasks/task-023/LAYOUT_DESKTOP.md
+  - .autoflow/tasks/task-023/LAYOUT_TABLET.md
+  - .autoflow/tasks/task-023/LAYOUT_MOBILE.md
 - id: task-024
   title: Modern Image Editor Layout (Toolbar, Canvas, Panels)
   status: COMMITTED
@@ -553,34 +558,38 @@ tasks:
   estimated: 14 hours
   actual: ~14 hours
   sprint: Sprint 4 - Professional UI/UX Redesign
-  description: 'Implement professional image editor layout with distinct functional areas: top toolbar (file ops, undo/redo, zoom), left sidebar (collapsible tool selection), center canvas (main workspace with zoom/pan), right panel (properties and adjustments), bottom status bar (dimensions, zoom level, tips). Responsive layout adapts to tablet/mobile with hamburger menu and floating action button.'
+  description: 'Implement professional image editor layout with distinct functional
+    areas: top toolbar (file ops, undo/redo, zoom), left sidebar (collapsible tool
+    selection), center canvas (main workspace with zoom/pan), right panel (properties
+    and adjustments), bottom status bar (dimensions, zoom level, tips). Responsive
+    layout adapts to tablet/mobile with hamburger menu and floating action button.'
   deliverables:
-  - 'EditorLayout component with CSS Grid layout'
-  - 'TopToolbar with file operations, undo/redo, and zoom controls'
-  - 'LeftSidebar with collapsible tool selection (vertical orientation)'
-  - 'RightPanel with collapsible property sections and adjustments'
-  - 'CanvasArea with proper sizing, zoom, and pan capabilities'
-  - 'StatusBar showing dimensions, zoom level, and contextual tips'
-  - 'MobileMenu with hamburger navigation for responsive mobile layout'
-  - 'FloatingActionButton for mobile quick actions'
-  - 'ResizeHandle component for draggable panel resizing'
-  - 'CollapsibleSection component for expandable sections'
-  - 'useLayoutPreferences hook (persist panel state to localStorage)'
-  - 'useMediaQuery hook (responsive breakpoints detection)'
-  - 'usePlatform hook (OS detection for keyboard shortcuts)'
-  - 'useResize hook (panel resizing logic with constraints)'
-  - 'useClickOutside hook (modal/dropdown handling)'
-  - 'useFocusTrap hook (accessibility for modals and dialogs)'
+  - EditorLayout component with CSS Grid layout
+  - TopToolbar with file operations, undo/redo, and zoom controls
+  - LeftSidebar with collapsible tool selection (vertical orientation)
+  - RightPanel with collapsible property sections and adjustments
+  - CanvasArea with proper sizing, zoom, and pan capabilities
+  - StatusBar showing dimensions, zoom level, and contextual tips
+  - MobileMenu with hamburger navigation for responsive mobile layout
+  - FloatingActionButton for mobile quick actions
+  - ResizeHandle component for draggable panel resizing
+  - CollapsibleSection component for expandable sections
+  - useLayoutPreferences hook (persist panel state to localStorage)
+  - useMediaQuery hook (responsive breakpoints detection)
+  - usePlatform hook (OS detection for keyboard shortcuts)
+  - useResize hook (panel resizing logic with constraints)
+  - useClickOutside hook (modal/dropdown handling)
+  - useFocusTrap hook (accessibility for modals and dialogs)
   - '@radix-ui/react-dropdown-menu for toolbar dropdowns'
-  - 'Button component enhanced with iconLarge variant (44px WCAG AAA)'
-  - 'Layout state persists across sessions in localStorage'
-  - 'WCAG 2.2 AAA accessibility compliance (focus management, ARIA labels)'
+  - Button component enhanced with iconLarge variant (44px WCAG AAA)
+  - Layout state persists across sessions in localStorage
+  - WCAG 2.2 AAA accessibility compliance (focus management, ARIA labels)
   commit: db34f19
   quality_metrics:
     tests_passing: 52 unit tests (100%)
     code_coverage: ≥95% on all new components and hooks
     accessibility_compliance: WCAG 2.2 Level AAA
-    touch_targets: '≥44px (AAA requirement)'
+    touch_targets: ≥44px (AAA requirement)
     focus_indicators: Visible and high contrast
     test_files:
     - tests/unit/components/layout/EditorLayout.test.tsx
@@ -596,18 +605,51 @@ tasks:
     - tests/unit/hooks/useClickOutside.test.tsx
     - tests/unit/hooks/useFocusTrap.test.tsx
   implementation_notes:
-  - 'CSS Grid layout for main structure (header/sidebar/main/footer)'
+  - CSS Grid layout for main structure (header/sidebar/main/footer)
   - 'Responsive breakpoints: 768px (tablet), 1024px (desktop)'
   - 'Panel resize constraints: min-width 200px, max-width 400px'
-  - 'Debounced resize handlers (100ms) for performance'
-  - 'Platform-specific keyboard shortcuts (Cmd on macOS, Ctrl on Windows/Linux)'
-  - 'LocalStorage persistence with debounced saves (500ms)'
-  - 'Focus trap ensures keyboard navigation stays within modals'
-  - 'Click-outside detection for closing dropdowns and panels'
-  - 'Proper cleanup of event listeners and resize observers'
+  - Debounced resize handlers (100ms) for performance
+  - Platform-specific keyboard shortcuts (Cmd on macOS, Ctrl on Windows/Linux)
+  - LocalStorage persistence with debounced saves (500ms)
+  - Focus trap ensures keyboard navigation stays within modals
+  - Click-outside detection for closing dropdowns and panels
+  - Proper cleanup of event listeners and resize observers
   documentation_refs:
-  - '.autoflow/docs/FUNCTIONAL.md#feature-5'
-  - '.autoflow/docs/ARCHITECTURE.md#component-architecture'
-  - '.autoflow/tasks/task-024/TASK_PLAN.md'
-  - '.autoflow/tasks/task-024/ACCEPTANCE_CRITERIA.md'
-  - '.autoflow/tasks/task-024/DEPENDENCIES.md'
+  - .autoflow/docs/FUNCTIONAL.md#feature-5
+  - .autoflow/docs/ARCHITECTURE.md#component-architecture
+  - .autoflow/tasks/task-024/TASK_PLAN.md
+  - .autoflow/tasks/task-024/ACCEPTANCE_CRITERIA.md
+  - .autoflow/tasks/task-024/DEPENDENCIES.md
+- id: task-025
+  title: Professional Control Panel Redesign
+  status: COMMITTED
+  priority: HIGH
+  estimated_hours: 10
+  description: 'Redesign all control panels with professional styling:
+
+    - Grouped controls with section headers
+
+    - Collapsible sections (accordions)
+
+    - Visual hierarchy and spacing
+
+    - Labeled control groups (Adjustments, Filters, Export)
+
+    - Proper alignment and padding
+
+    Replace basic forms with polished panel system.
+
+    '
+  docs:
+  - .autoflow/docs/FUNCTIONAL.md#feature-3
+  - .autoflow/docs/ARCHITECTURE.md#component-patterns
+  acceptance_criteria:
+  - Control panels use card/panel components
+  - Section headers with collapse/expand icons
+  - Proper grouping (Brightness/Contrast/Threshold in one section)
+  - Consistent spacing (8px, 16px, 24px grid)
+  - Visual separators between sections
+  - Smooth collapse/expand animations
+  - Panel state persists across sessions
+  commit: '1401868'
+  completed: '2025-10-07'
