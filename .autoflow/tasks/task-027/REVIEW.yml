@@ -1,0 +1,558 @@
+task:
+  id: task-027
+  title: Dark/Light Theme System
+  status: REVIEWFIX
+  last_updated: '2025-10-07T15:30:00Z'
+  test_phase: VERIFY
+  verifier: '@verifier agent'
+
+test_summary:
+  unit_tests: PASS
+  e2e_tests: FAIL
+  unit_tests_passed: 59/59
+  e2e_tests_passed: 17/29
+  e2e_tests_failed: 12/29
+  overall_status: REVIEWFIX
+
+test_results:
+  unit_tests:
+    status: PASS
+    total_tests: 59
+    passed: 59
+    failed: 0
+    coverage:
+      ThemeToggle: 100%
+      theme_utils: 92.3%
+      ThemeContext: 61.29%
+    execution_time: 6.65s
+
+  e2e_tests:
+    status: FAIL
+    total_tests: 29
+    passed: 17
+    failed: 12
+    execution_time: 2m 24s
+
+issues:
+  - id: TEST-001
+    title: WCAG AAA Contrast Violations in Light Theme
+    discovered_by: /test
+    severity: CRITICAL
+    category: Accessibility
+    status: OPEN
+    test_name: "light theme meets WCAG 2.2 Level AAA"
+    location: Multiple components
+    description: |
+      axe-core accessibility scan found 3 color contrast violations failing WCAG 2.2 Level AAA (7:1 ratio) requirements:
+
+      1. Header subtitle (#e7edfa on #134cc9): 6.15:1 ratio (need 7:1)
+         Element: <p class="text-sm sm:text-base mt-2 opacity-90">Laser Engraving Image Preparation Tool</p>
+
+      2. Footer button (#4b5768 on #f1f5f9): 6.69:1 ratio (need 7:1)
+         Font size: 14px (normal weight)
+         Element: Clear settings button
+
+      3. Footer privacy note (#4b5768 on #f1f5f9): 6.69:1 ratio (need 7:1)
+         Font size: 12px (normal weight)
+         Element: <p class="text-xs text-muted-foreground">Settings are saved locally...</p>
+    expected: |
+      All text elements must meet WCAG 2.2 Level AAA contrast ratio of 7:1 for normal text.
+    fix_required:
+      - text: Increase contrast for header subtitle to meet 7:1 ratio (adjust color or remove/reduce opacity)
+        completed: false
+      - text: Increase contrast for footer text-muted-foreground elements to 7:1 ratio
+        completed: false
+      - text: Update Tailwind design tokens to ensure AAA compliance
+        completed: false
+      - text: Re-run axe-core scan to verify fixes
+        completed: false
+      - text: Document color choices in design-tokens.ts with contrast ratios
+        completed: false
+    references:
+      - "WCAG 2.2 SC 1.4.6 Contrast (Enhanced)"
+      - "https://www.w3.org/WAI/WCAG22/quickref/#contrast-enhanced"
+
+  - id: TEST-002
+    title: WCAG AAA Contrast Violations in Dark Theme
+    discovered_by: /test
+    severity: CRITICAL
+    category: Accessibility
+    status: OPEN
+    test_name: "dark theme meets WCAG 2.2 Level AAA"
+    location: Multiple components in dark mode
+    description: |
+      axe-core accessibility scan found 3 color contrast violations in dark theme failing WCAG 2.2 Level AAA requirements.
+      Same elements as light theme with insufficient contrast ratios.
+    expected: |
+      All text elements must meet WCAG 2.2 Level AAA contrast ratio of 7:1 for normal text in dark theme.
+    fix_required:
+      - text: Increase contrast for header subtitle in dark mode to meet 7:1 ratio
+        completed: false
+      - text: Increase contrast for footer text-muted-foreground elements in dark mode
+        completed: false
+      - text: Update dark mode color tokens in Tailwind config
+        completed: false
+      - text: Verify both themes meet AAA standards
+        completed: false
+      - text: Re-run axe-core scan for both themes
+        completed: false
+    references:
+      - "WCAG 2.2 SC 1.4.6 Contrast (Enhanced)"
+
+  - id: TEST-003
+    title: Keyboard Navigation Not Working
+    discovered_by: /test
+    severity: CRITICAL
+    category: Accessibility
+    status: OPEN
+    test_name: "keyboard navigation works"
+    location: Theme toggle keyboard activation
+    description: |
+      Theme toggle does not respond to Enter key press after being focused via Tab navigation.
+      - Toggle can be focused via keyboard ✅
+      - Enter key press does not trigger theme change ❌
+      - Theme class remains unchanged after Enter press
+
+      Test output:
+      expect(hasDarkClass).not.toBe(hadDarkClass);
+      Expected: not false
+      Received: false
+    expected: |
+      Theme toggle should activate on Enter key press. hadDarkClass should !== hasDarkClass after Enter.
+    fix_required:
+      - text: Verify button element (not div) is used for theme toggle
+        completed: false
+      - text: Ensure no event.preventDefault() blocking default button behavior
+        completed: false
+      - text: Test Enter key handler in ThemeToggle component
+        completed: false
+      - text: Verify Space key also works (WCAG requirement)
+        completed: false
+      - text: Add unit test for Enter/Space key handling
+        completed: false
+    references:
+      - "WCAG 2.2 SC 2.1.1 Keyboard"
+
+  - id: TEST-004
+    title: UI Elements Not Visible in Light Theme
+    discovered_by: /test
+    severity: HIGH
+    category: Functional
+    status: OPEN
+    test_name: "all UI elements visible in light theme"
+    location: Main heading
+    description: |
+      Cannot find expected heading "Welcome to CraftyPrep" in light theme.
+      This suggests either:
+      1. Heading text has changed
+      2. Heading is not rendering
+      3. Theme styling hides the element
+    expected: |
+      page.getByRole('heading', { name: /Welcome to CraftyPrep/i }) should be visible
+    fix_required:
+      - text: Verify heading exists in App.tsx or landing component
+        completed: false
+      - text: Check if heading text matches test expectation
+        completed: false
+      - text: Ensure light theme styles don't hide the heading
+        completed: false
+      - text: Update test if heading intentionally changed
+        completed: false
+      - text: Take screenshots in light theme to verify visibility
+        completed: false
+
+  - id: TEST-005
+    title: UI Elements Not Visible in Dark Theme
+    discovered_by: /test
+    severity: HIGH
+    category: Functional
+    status: OPEN
+    test_name: "all UI elements visible in dark theme"
+    location: Main heading
+    description: |
+      Same issue as light theme - cannot find "Welcome to CraftyPrep" heading in dark theme.
+    expected: |
+      Main application heading should be visible in both themes.
+    fix_required:
+      - text: Same fixes as TEST-004 apply here
+        completed: false
+      - text: Verify dark theme styles don't interfere with heading visibility
+        completed: false
+      - text: Check dark: variant classes are correctly applied
+        completed: false
+
+  - id: TEST-006
+    title: Smooth Transition Timing Exceeded
+    discovered_by: /test
+    severity: MEDIUM
+    category: Performance
+    status: OPEN
+    test_name: "smooth transition between themes"
+    location: Theme toggle transition
+    description: |
+      Theme transition took 381ms, exceeding 300ms threshold.
+
+      Expected: < 300ms
+      Received: 381ms
+
+      CSS transition duration is 200ms.
+      Total including click handler should be <300ms.
+    expected: |
+      Transition should complete in <300ms.
+    fix_required:
+      - text: Reduce transition duration if too long
+        completed: false
+      - text: Optimize theme application logic in ThemeContext
+        completed: false
+      - text: Check for unnecessary re-renders during theme change
+        completed: false
+      - text: Consider using will-change CSS hint for performance
+        completed: false
+      - text: Adjust test threshold if 300ms is too strict (or fix performance)
+        completed: false
+    note: |
+      This may be acceptable given E2E test overhead, but should investigate if consistent.
+
+  - id: TEST-007
+    title: Reduced Motion Not Respected
+    discovered_by: /test
+    severity: HIGH
+    category: Accessibility
+    status: OPEN
+    test_name: "reduced motion respected"
+    location: Theme toggle transitions
+    description: |
+      When prefers-reduced-motion: reduce is set, transitions are not instant (0s) as expected.
+      Test found transition duration is neither 0s nor 0.01ms.
+
+      Expected: transition-duration === '0s' || transition-duration === '0.01ms'
+      Received: false
+    expected: |
+      Transitions should be instant (0s) when user has motion sensitivity.
+    fix_required:
+      - text: Add motion-safe: prefix to transition classes in ThemeToggle
+        completed: false
+      - text: Add motion-reduce: variant to set transition-none
+        completed: false
+      - text: Update global CSS to respect prefers-reduced-motion for theme transitions
+        completed: false
+      - text: Test with browser motion preferences disabled
+        completed: false
+      - text: Verify no animations occur when motion reduced
+        completed: false
+    code_example: |
+      className="motion-safe:transition-colors motion-reduce:transition-none"
+    references:
+      - "WCAG 2.2 SC 2.3.3 Animation from Interactions"
+
+  - id: TEST-008
+    title: Focus Indicator Contrast Insufficient (Light Theme)
+    discovered_by: /test
+    severity: MEDIUM
+    category: Accessibility
+    status: OPEN
+    test_name: "focus indicator has sufficient contrast (≥3:1) in light theme"
+    location: Theme toggle focus ring
+    description: |
+      Test could not definitively verify focus indicator has ≥3:1 contrast ratio in light theme.
+      While focus ring is present, contrast measurement failed.
+    expected: |
+      Focus ring must have ≥3:1 contrast with adjacent colors (WCAG 2.2 SC 2.4.13).
+      Focus ring should be clearly visible in light theme.
+    fix_required:
+      - text: Manually verify focus ring contrast ratio using color picker tool
+        completed: false
+      - text: Ensure focus ring color meets 3:1 contrast with background
+        completed: false
+      - text: Consider increasing focus ring opacity if needed
+        completed: false
+      - text: Review screenshots test-results/focus-contrast-light.png
+        completed: false
+      - text: Update focus ring color if insufficient
+        completed: false
+    references:
+      - "WCAG 2.2 SC 2.4.13 Focus Appearance"
+
+  - id: TEST-009
+    title: Focus Indicator Contrast Insufficient (Dark Theme)
+    discovered_by: /test
+    severity: MEDIUM
+    category: Accessibility
+    status: OPEN
+    test_name: "focus indicator has sufficient contrast (≥3:1) in dark theme"
+    location: Theme toggle focus ring
+    description: |
+      Same issue as light theme - focus indicator contrast could not be verified programmatically in dark theme.
+    expected: |
+      Focus ring must have ≥3:1 contrast in dark theme.
+    fix_required:
+      - text: Same fixes as TEST-008 apply here
+        completed: false
+      - text: Verify dark theme focus ring meets 3:1 contrast
+        completed: false
+      - text: Review screenshots test-results/focus-contrast-dark.png
+        completed: false
+
+  - id: TEST-010
+    title: Theme Changes Not Visually Smooth
+    discovered_by: /test
+    severity: LOW
+    category: User Experience
+    status: OPEN
+    test_name: "theme changes are visually smooth"
+    location: Theme transition visual verification
+    description: |
+      Test failed to complete smooth transition verification. This is related to TEST-006 (transition timing).
+    expected: |
+      Theme transitions should be visually smooth without jarring color flashes.
+    fix_required:
+      - text: Review screenshots test-results/theme-before-transition.png and test-results/theme-after-transition.png
+        completed: false
+      - text: Optimize transition performance
+        completed: false
+      - text: Ensure no jarring color flashes
+        completed: false
+      - text: Verify transition-colors applied correctly
+        completed: false
+
+  - id: TEST-011
+    title: All Interactive Elements Inaccessible (Dark Theme)
+    discovered_by: /test
+    severity: HIGH
+    category: Accessibility
+    status: OPEN
+    test_name: "all interactive elements accessible in dark theme"
+    location: Multiple interactive elements in dark theme
+    description: |
+      axe-core found critical or serious accessibility violations for interactive elements in dark theme.
+      This is likely related to color contrast issues (TEST-002).
+    expected: |
+      All interactive elements should be accessible with no critical/serious violations.
+    fix_required:
+      - text: Run full axe-core report to identify specific violations
+        completed: false
+      - text: Fix all critical/serious violations
+        completed: false
+      - text: Ensure buttons links and form controls are accessible
+        completed: false
+      - text: Verify ARIA labels present and correct
+        completed: false
+      - text: Re-run accessibility scan
+        completed: false
+
+  - id: TEST-012
+    title: ThemeContext Test Coverage Below 80%
+    discovered_by: /test
+    severity: MEDIUM
+    category: Testing
+    status: OPEN
+    location: src/contexts/ThemeContext.tsx
+    description: |
+      ThemeContext coverage is 61.29%, below the 80% target.
+
+      Uncovered lines: 56-60, 82-84, 116-120, 160-164, 176-180
+
+      Current coverage:
+      - ThemeToggle.tsx: 100% ✅
+      - theme.ts: 92.3% ✅
+      - ThemeContext.tsx: 61.29% ⚠️
+    expected: |
+      All theme-related files should have ≥80% test coverage as per acceptance criteria.
+    fix_required:
+      - text: Add test cases for uncovered code paths in ThemeContext
+        completed: false
+      - text: Test error handling branches
+        completed: false
+      - text: Test edge cases in system theme listener
+        completed: false
+      - text: Achieve ≥80% coverage for ThemeContext.tsx
+        completed: false
+      - text: Re-run coverage report to verify
+        completed: false
+
+summary:
+  total_issues: 12
+  critical: 3
+  high: 4
+  medium: 4
+  low: 1
+  open: 12
+  resolved: 0
+
+  by_category:
+    accessibility: 8
+    functional: 2
+    performance: 1
+    testing: 1
+
+  next_action: |
+    Status updated to REVIEWFIX. Run /review-fix to address all test failures.
+
+    Priority Order:
+    1. Fix WCAG AAA contrast violations (TEST-001, TEST-002) - CRITICAL
+    2. Fix keyboard navigation (TEST-003) - CRITICAL
+    3. Fix reduced motion handling (TEST-007) - HIGH
+    4. Verify UI element visibility (TEST-004, TEST-005) - HIGH
+    5. Improve ThemeContext coverage (TEST-012) - MEDIUM
+    6. Optimize transition timing (TEST-006) - MEDIUM
+    7. Verify focus indicators (TEST-008, TEST-009) - MEDIUM
+    8. Fix visual smoothness (TEST-010) - LOW
+
+acceptance_criteria_status:
+  functional_requirements:
+    - criterion: "FR1: Theme Toggle UI"
+      status: PARTIAL
+      issue: "Keyboard navigation broken (TEST-003)"
+    - criterion: "FR2: Theme Application"
+      status: PARTIAL
+      issue: "Contrast violations (TEST-001, TEST-002)"
+    - criterion: "FR3: Theme Persistence"
+      status: PASS
+    - criterion: "FR4: System Theme Detection"
+      status: PASS
+    - criterion: "FR5: FOUC Prevention"
+      status: PASS
+
+  non_functional_requirements:
+    - criterion: "NFR1: Test Coverage"
+      status: FAIL
+      issue: "ThemeContext 61.29% < 80% (TEST-012)"
+    - criterion: "NFR2: Accessibility (WCAG AAA)"
+      status: FAIL
+      issue: "Contrast violations + keyboard issues (TEST-001, TEST-002, TEST-003)"
+    - criterion: "NFR3: Performance"
+      status: PARTIAL
+      issue: "Transition timing 381ms > 300ms (TEST-006)"
+    - criterion: "NFR4: Browser Compatibility"
+      status: PASS
+    - criterion: "NFR5: Error Handling"
+      status: PASS
+    - criterion: "NFR6: Code Quality"
+      status: PASS
+
+  overall: "8/16 criteria fully met, 8/16 require fixes"
+
+test_evidence:
+  unit_tests: "All 59 tests passed ✅"
+  e2e_tests: "12/29 tests failed ❌"
+  screenshots: "Available in test-results/ directory"
+  videos: "Available in test-results/ directory"
+  test_execution_time: "2m 24s (E2E), 6.65s (Unit)"
+  test_date: "2025-10-07T15:15:00Z"
+
+verification_results:
+  status: FAIL
+  verifier: '@verifier agent'
+  timestamp: '2025-10-07T15:30:00Z'
+  url_tested: 'https://craftyprep.demosrv.uk'
+
+  e2e_tests:
+    theme_system:
+      passed: 7/11
+      failed: 4/11
+      critical_failures:
+        - "UI elements visibility tests (2 tests)"
+        - "Keyboard navigation broken"
+        - "Smooth transition timing exceeded"
+
+    theme_accessibility:
+      passed: 11/18
+      failed: 7/18
+      critical_failures:
+        - "WCAG AAA contrast violations (both themes)"
+        - "Keyboard accessibility broken"
+        - "Reduced motion not respected"
+        - "Focus indicator contrast issues"
+
+  overall_verification: FAIL
+  must_fix_before_complete:
+    - "WCAG AAA contrast violations (TEST-001, TEST-002)"
+    - "Keyboard navigation (TEST-003)"
+    - "Reduced motion handling (TEST-007)"
+    - "Fix test selector issues (TEST-004, TEST-005)"
+
+recommendation: |
+  Status remains REVIEWFIX. Critical accessibility issues must be resolved before task can be marked COMPLETE.
+
+  The theme system implementation is functionally working but has significant accessibility compliance issues
+  that must be addressed:
+
+  1. WCAG AAA contrast violations in both themes (CRITICAL)
+  2. Keyboard navigation not working (CRITICAL)
+  3. Reduced motion preferences not respected (HIGH)
+  4. Test coverage below target (MEDIUM)
+
+  After fixes, re-run /test to verify all 29 E2E tests pass, then /verify-implementation for final verification.
+
+previous_review_issues:
+  - id: 1
+    title: Invalid Tailwind Ring Class
+    discovered_by: /code-review
+    severity: CRITICAL
+    category: Code Quality
+    location: src/components/ThemeToggle.tsx:80
+    status: RESOLVED
+    resolution: Changed ring-3 to ring-2
+
+  - id: 2
+    title: Missing Error Boundary for Theme Context
+    discovered_by: /code-review
+    severity: MEDIUM
+    category: Code Quality
+    location: src/contexts/ThemeContext.tsx
+    status: RESOLVED
+    resolution: Added comprehensive error handling
+
+  - id: 3
+    title: CSP Allows 'unsafe-inline'
+    discovered_by: /code-review
+    severity: MEDIUM
+    category: Security
+    location: src/index.html:9
+    status: RESOLVED
+    resolution: Replaced with script hash
+
+  - id: 4
+    title: React Fast Refresh Violation in ThemeContext
+    discovered_by: /code-review
+    severity: CRITICAL
+    category: Code Quality
+    location: src/contexts/ThemeContext.tsx:205
+    status: RESOLVED
+    resolution: Added eslint-disable comment
+
+  - id: 5
+    title: Prettier Formatting Violations in App.tsx
+    discovered_by: /code-review
+    severity: HIGH
+    category: Code Quality
+    location: src/App.tsx:467-553
+    status: RESOLVED
+    resolution: Ran npm run lint:fix
+
+  - id: 6
+    title: TypeScript any Usage in Theme Tests
+    discovered_by: /code-review
+    severity: MEDIUM
+    category: Code Quality
+    location: src/tests/unit/theme.test.ts:15,49
+    status: RESOLVED
+    resolution: Replaced with 'unknown'
+
+  - id: 7
+    title: Inefficient transition-all in ThemeToggle
+    discovered_by: /code-review
+    severity: MEDIUM
+    category: Performance
+    location: src/components/ThemeToggle.tsx:84
+    status: RESOLVED
+    resolution: Changed to transition-[background-color,box-shadow]
+
+  - id: 8
+    title: Incomplete Accessibility Testing
+    discovered_by: /code-review
+    severity: LOW
+    category: Testing
+    location: src/tests/e2e/theme-accessibility.spec.ts
+    status: RESOLVED
+    resolution: Added 6 comprehensive accessibility tests

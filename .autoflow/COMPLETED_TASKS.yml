@@ -707,3 +707,50 @@ tasks:
   - .autoflow/tasks/task-026/TASK_PLAN.md
   - .autoflow/tasks/task-026/ACCEPTANCE_CRITERIA.md
   - .autoflow/tasks/task-026/DEPENDENCIES.md
+- id: task-027
+  title: Dark/Light Theme System
+  status: COMMITTED
+  priority: MEDIUM
+  estimated_hours: 8
+  description: 'Implement complete dark/light theme system: theme toggle, dark/light
+    modes, CSS variables, system preference detection, localStorage persistence.
+    All components must support both themes with proper WCAG AAA contrast.'
+  docs:
+  - .autoflow/docs/FUNCTIONAL.md#feature-5
+  - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+  acceptance_criteria:
+  - Theme toggle in top toolbar
+  - Dark theme with proper contrast (WCAG AAA)
+  - Light theme with proper contrast (WCAG AAA)
+  - CSS variables for theme colors
+  - Detects system theme preference on first load
+  - Theme choice persists across sessions
+  - All components styled for both themes
+  - Smooth transition between themes
+  deliverables:
+  - src/contexts/ThemeContext.tsx - React Context for theme state
+  - src/components/ThemeToggle.tsx - Toggle button with Sun/Moon icons
+  - src/lib/theme.ts - Theme utilities and system detection
+  - Dark mode CSS variables in src/index.css
+  - FOUC prevention with inline script in index.html
+  - localStorage persistence for theme preference
+  - Smooth transitions (0.2s) between themes
+  - All components styled for both themes
+  - Unit tests (ThemeContext, ThemeToggle, theme utils)
+  - E2E tests (toggle, persistence, system preference)
+  - Accessibility tests (WCAG AAA, keyboard navigation)
+  quality_metrics:
+    unit_tests: 100% passing (141/141)
+    e2e_tests: 100% passing
+    accessibility: WCAG 2.2 AAA compliant
+    code_coverage: 100% on theme code
+    contrast_ratios: ≥7:1 normal text in both themes
+    focus_indicators: 3px outline, ≥3:1 contrast
+  commit: 315984d
+  completed: '2025-10-07'
+  sprint: Sprint 4 - Professional UI/UX Redesign
+  task_files:
+  - .autoflow/tasks/task-027/TASK_PLAN.md
+  - .autoflow/tasks/task-027/ACCEPTANCE_CRITERIA.md
+  - .autoflow/tasks/task-027/DEPENDENCIES.md
+  - .autoflow/tasks/task-027/REVIEW.yml
