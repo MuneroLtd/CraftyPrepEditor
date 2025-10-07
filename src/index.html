@@ -6,13 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;"
+      content="default-src 'self'; script-src 'self' 'sha256-mQ5G9PliKxvSiWkBUnhRF68M3ZjueCfOWBQOaVZ1rG0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;"
     />
     <title>CraftyPrep - Laser Engraving Image Prep</title>
     <meta
       name="description"
       content="Prepare images for laser engraving with automatic processing and refinement controls"
     />
+    <!-- FOUC Prevention: Apply theme before React renders -->
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('craftyprep-theme');
+          const theme = stored || 'system';
+
+          if (theme === 'dark' ||
+              (theme === 'system' &&
+               window.matchMedia &&
+               window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {
+          // localStorage not available, continue with default (light)
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

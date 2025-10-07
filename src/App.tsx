@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { FileUploadComponent } from './components/FileUploadComponent';
@@ -460,96 +461,98 @@ function App() {
   }, [uploadedImage, clearHistory]);
 
   return (
-    <ErrorBoundary>
-      <Layout onClearSettings={clearAllSettings}>
-        <div className="flex flex-col items-center justify-center space-y-8">
-          {/* Welcome Section */}
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl font-bold">Welcome to CraftyPrep</h2>
-            <p className="text-lg text-slate-700 max-w-2xl mx-auto">
-              Transform your images for laser engraving with our powerful image preparation tool.
-            </p>
-          </div>
-
-          {/* File Upload - Pass all state and handlers as props */}
-          <FileUploadComponent
-            selectedFile={selectedFile}
-            uploadedImage={uploadedImage}
-            isLoading={isLoading}
-            error={uploadError}
-            info={info}
-            progress={progress}
-            handleFileSelect={handleFileSelect}
-            clearError={clearError}
-            clearInfo={clearInfo}
-          />
-
-          {/* Auto-Prep Button (shown after upload) */}
-          {uploadedImage && (
-            <div className="w-full max-w-2xl mx-auto px-4">
-              <AutoPrepButton
-                disabled={!uploadedImage || isProcessing}
-                loading={isProcessing}
-                onClick={handleAutoPrepClick}
-              />
+    <ThemeProvider>
+      <ErrorBoundary>
+        <Layout onClearSettings={clearAllSettings}>
+          <div className="flex flex-col items-center justify-center space-y-8">
+            {/* Welcome Section */}
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl font-bold">Welcome to CraftyPrep</h2>
+              <p className="text-lg text-slate-700 max-w-2xl mx-auto">
+                Transform your images for laser engraving with our powerful image preparation tool.
+              </p>
             </div>
-          )}
 
-          {/* Processing Error Display */}
-          {processingError && (
-            <div className="w-full max-w-2xl mx-auto px-4">
-              <div
-                className="p-4 bg-red-50 border border-red-200 rounded-lg"
-                role="alert"
-                aria-live="assertive"
-              >
-                <p className="text-sm font-medium text-red-800">{processingError}</p>
+            {/* File Upload - Pass all state and handlers as props */}
+            <FileUploadComponent
+              selectedFile={selectedFile}
+              uploadedImage={uploadedImage}
+              isLoading={isLoading}
+              error={uploadError}
+              info={info}
+              progress={progress}
+              handleFileSelect={handleFileSelect}
+              clearError={clearError}
+              clearInfo={clearInfo}
+            />
+
+            {/* Auto-Prep Button (shown after upload) */}
+            {uploadedImage && (
+              <div className="w-full max-w-2xl mx-auto px-4">
+                <AutoPrepButton
+                  disabled={!uploadedImage || isProcessing}
+                  loading={isProcessing}
+                  onClick={handleAutoPrepClick}
+                />
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Control Panel (shown after processing) */}
-          {baselineImageData && (
-            <div className="w-full max-w-2xl mx-auto px-4">
-              <ControlPanel
-                selectedPreset={selectedPreset}
-                onPresetChange={handlePresetChange}
-                backgroundRemovalEnabled={backgroundRemovalEnabled}
-                backgroundRemovalSensitivity={backgroundRemovalSensitivity}
-                onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
-                onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
-                brightness={brightness}
-                contrast={contrast}
-                threshold={threshold}
-                onBrightnessChange={handleBrightnessChange}
-                onContrastChange={handleContrastChange}
-                onThresholdChange={handleThresholdChange}
-                canUndo={canUndo}
-                canRedo={canRedo}
-                onUndo={handleUndo}
-                onRedo={handleRedo}
-                canvas={processedCanvas}
-                originalFilename={selectedFile?.name}
-                onReset={handleReset}
-                isResetting={isProcessing}
-                disabled={isProcessing}
-              />
-            </div>
-          )}
+            {/* Processing Error Display */}
+            {processingError && (
+              <div className="w-full max-w-2xl mx-auto px-4">
+                <div
+                  className="p-4 bg-red-50 border border-red-200 rounded-lg"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  <p className="text-sm font-medium text-red-800">{processingError}</p>
+                </div>
+              </div>
+            )}
 
-          {/* Image Preview (shown after upload or processing) */}
-          {uploadedImage && (
-            <div className="w-full max-w-6xl mx-auto px-4">
-              <ImagePreview
-                originalImage={uploadedImage}
-                processedImage={processedImage}
-                isLoading={shouldShowLoading}
-              />
-            </div>
-          )}
-        </div>
-      </Layout>
-    </ErrorBoundary>
+            {/* Control Panel (shown after processing) */}
+            {baselineImageData && (
+              <div className="w-full max-w-2xl mx-auto px-4">
+                <ControlPanel
+                  selectedPreset={selectedPreset}
+                  onPresetChange={handlePresetChange}
+                  backgroundRemovalEnabled={backgroundRemovalEnabled}
+                  backgroundRemovalSensitivity={backgroundRemovalSensitivity}
+                  onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
+                  onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
+                  brightness={brightness}
+                  contrast={contrast}
+                  threshold={threshold}
+                  onBrightnessChange={handleBrightnessChange}
+                  onContrastChange={handleContrastChange}
+                  onThresholdChange={handleThresholdChange}
+                  canUndo={canUndo}
+                  canRedo={canRedo}
+                  onUndo={handleUndo}
+                  onRedo={handleRedo}
+                  canvas={processedCanvas}
+                  originalFilename={selectedFile?.name}
+                  onReset={handleReset}
+                  isResetting={isProcessing}
+                  disabled={isProcessing}
+                />
+              </div>
+            )}
+
+            {/* Image Preview (shown after upload or processing) */}
+            {uploadedImage && (
+              <div className="w-full max-w-6xl mx-auto px-4">
+                <ImagePreview
+                  originalImage={uploadedImage}
+                  processedImage={processedImage}
+                  isLoading={shouldShowLoading}
+                />
+              </div>
+            )}
+          </div>
+        </Layout>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 }
 
