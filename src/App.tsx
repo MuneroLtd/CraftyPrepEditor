@@ -4,9 +4,7 @@ import Layout from './components/Layout';
 import { FileUploadComponent } from './components/FileUploadComponent';
 import { AutoPrepButton } from './components/AutoPrepButton';
 import { ImagePreview } from './components/ImagePreview';
-import { DownloadButton } from './components/DownloadButton';
-import { RefinementControls } from './components/RefinementControls';
-import { UndoRedoButtons } from './components/UndoRedoButtons';
+import { ControlPanel } from './components/ControlPanel';
 import { useImageProcessing } from './hooks/useImageProcessing';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useDebounce } from './hooks/useDebounce';
@@ -510,37 +508,32 @@ function App() {
             </div>
           )}
 
-          {/* Refinement Controls (shown after processing) */}
+          {/* Control Panel (shown after processing) */}
           {baselineImageData && (
-            <div className="w-full max-w-2xl mx-auto px-4 space-y-6">
-              <h3 className="text-xl font-semibold text-center">Refine Your Image</h3>
-              <RefinementControls
-                brightness={brightness}
-                contrast={contrast}
-                threshold={threshold}
+            <div className="w-full max-w-2xl mx-auto px-4">
+              <ControlPanel
                 selectedPreset={selectedPreset}
                 onPresetChange={handlePresetChange}
                 backgroundRemovalEnabled={backgroundRemovalEnabled}
                 backgroundRemovalSensitivity={backgroundRemovalSensitivity}
+                onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
+                onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
+                brightness={brightness}
+                contrast={contrast}
+                threshold={threshold}
                 onBrightnessChange={handleBrightnessChange}
                 onContrastChange={handleContrastChange}
                 onThresholdChange={handleThresholdChange}
-                onBackgroundRemovalToggle={setBackgroundRemovalEnabled}
-                onBackgroundRemovalSensitivityChange={setBackgroundRemovalSensitivity}
+                canUndo={canUndo}
+                canRedo={canRedo}
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                canvas={processedCanvas}
+                originalFilename={selectedFile?.name}
                 onReset={handleReset}
                 isResetting={isProcessing}
                 disabled={isProcessing}
               />
-
-              {/* Undo/Redo Buttons */}
-              <div className="flex justify-center">
-                <UndoRedoButtons
-                  canUndo={canUndo}
-                  canRedo={canRedo}
-                  onUndo={handleUndo}
-                  onRedo={handleRedo}
-                />
-              </div>
             </div>
           )}
 
@@ -551,17 +544,6 @@ function App() {
                 originalImage={uploadedImage}
                 processedImage={processedImage}
                 isLoading={shouldShowLoading}
-              />
-            </div>
-          )}
-
-          {/* Download Button (shown after processing) */}
-          {processedImage && selectedFile && (
-            <div className="w-full max-w-2xl mx-auto px-4">
-              <DownloadButton
-                canvas={processedCanvas}
-                originalFilename={selectedFile.name}
-                disabled={!processedCanvas}
               />
             </div>
           )}

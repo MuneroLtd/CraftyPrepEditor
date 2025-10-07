@@ -193,12 +193,50 @@ export default {
       animation: {
         'spin-slow': 'spin 3s linear infinite',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        // Accordion animations respect prefers-reduced-motion
+        'accordion-down': 'accordion-down 300ms cubic-bezier(0, 0, 0.2, 1)',
+        'accordion-up': 'accordion-up 300ms cubic-bezier(0, 0, 0.2, 1)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0', opacity: '0' },
+          to: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+          to: { height: '0', opacity: '0' },
+        },
       },
     },
   },
   plugins: [
     forms,
     typography,
+    // Custom plugin for prefers-reduced-motion support
+    function({ addBase }) {
+      addBase({
+        // Disable accordion animations when user prefers reduced motion
+        '@media (prefers-reduced-motion: reduce)': {
+          '.data-\\[state\\=open\\]\\:animate-accordion-down': {
+            animation: 'none !important',
+            transition: 'none !important',
+          },
+          '.data-\\[state\\=closed\\]\\:animate-accordion-up': {
+            animation: 'none !important',
+            transition: 'none !important',
+          },
+          // Ensure content appears/disappears instantly
+          '[data-state="open"]': {
+            height: 'auto',
+            opacity: '1',
+          },
+          '[data-state="closed"]': {
+            height: '0',
+            opacity: '0',
+          },
+        },
+      });
+    },
     // Custom plugin for editor-specific utilities
     function({ addUtilities, theme }) {
       addUtilities({
