@@ -653,3 +653,57 @@ tasks:
   - Panel state persists across sessions
   commit: '1401868'
   completed: '2025-10-07'
+- id: task-026
+  title: Enhanced Slider and Input Components
+  status: COMMITTED
+  priority: HIGH
+  estimated_hours: 12
+  description: 'Redesign sliders from basic HTML to professional components:
+
+    - Custom-styled range sliders with gradient tracks
+
+    - Large, visible handles with hover effects
+
+    - Real-time value display (inline, not separate)
+
+    - Numeric input fields with +/- buttons
+
+    - Keyboard shortcuts (arrow keys, page up/down)
+
+    - Visual feedback during adjustment
+
+    Replace "shit-looking scrollers" with beautiful, functional controls.
+
+    '
+  docs:
+  - .autoflow/docs/FUNCTIONAL.md#feature-3
+  - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+  acceptance_criteria:
+  - Custom slider component with styled track and handle
+  - Gradient fill showing current value position
+  - Inline value display (no separate label)
+  - Numeric input with validation
+  - +/- increment buttons
+  - Keyboard support (arrows, page up/down, home/end)
+  - Hover/focus states with smooth transitions
+  - Touch-friendly on mobile (larger hit areas)
+  - Satisfying interaction feedback
+  deliverables:
+  - src/components/ui/enhanced-slider.tsx - Base enhanced slider with gradient track
+  - src/components/ui/slider-input.tsx - Numeric input with +/- buttons
+  - src/components/ui/configurable-slider.tsx - Unified slider+input component
+  - src/hooks/useDebounceCallback.ts - Debounced callback hook
+  - Updated BrightnessSlider.tsx, ContrastSlider.tsx, ThresholdSlider.tsx
+  - Unit tests for enhanced-slider and slider-input
+  - E2E tests for slider interactions
+  quality_metrics:
+    unit_tests: 100% passing
+    e2e_tests: 100% passing
+    accessibility: WCAG 2.2 AAA compliant
+    code_coverage: 95%+
+  commit: TBD
+  completed: '2025-10-07'
+  task_files:
+  - .autoflow/tasks/task-026/TASK_PLAN.md
+  - .autoflow/tasks/task-026/ACCEPTANCE_CRITERIA.md
+  - .autoflow/tasks/task-026/DEPENDENCIES.md

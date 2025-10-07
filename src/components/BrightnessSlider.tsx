@@ -1,4 +1,5 @@
-import { RefinementSlider } from '@/components/RefinementSlider';
+import * as React from 'react';
+import { ConfigurableSlider } from '@/components/ui/configurable-slider';
 
 /**
  * Props for the BrightnessSlider component
@@ -13,10 +14,21 @@ export interface BrightnessSliderProps {
 }
 
 /**
- * BrightnessSlider - Slider for adjusting image brightness
+ * BrightnessSlider - Enhanced slider for adjusting image brightness
  *
  * Allows users to adjust image brightness from -100 (darker) to +100 (lighter).
  * Default value is 0 (no adjustment).
+ *
+ * Features:
+ * - Blue gradient track (dark to light)
+ * - Floating value badge on hover/drag
+ * - Numeric input with +/- buttons
+ * - Full keyboard support
+ * - Touch-friendly (44px targets)
+ *
+ * @errorHandling
+ * Relies on ConfigurableSlider which uses Radix UI primitives.
+ * Parent components should implement error boundaries for graceful degradation.
  *
  * @example
  * ```tsx
@@ -32,15 +44,17 @@ export function BrightnessSlider({
   disabled = false,
 }: BrightnessSliderProps): React.JSX.Element {
   return (
-    <RefinementSlider
+    <ConfigurableSlider
       label="Brightness"
       value={value}
       min={-100}
       max={100}
       step={1}
       onChange={onChange}
-      ariaLabel="Adjust image brightness from -100 to +100"
       disabled={disabled}
+      gradientColors={{ start: '#1e40af', end: '#93c5fd' }} // blue-800 to blue-300
+      ariaLabel="Adjust image brightness from -100 to +100"
+      id="brightness-slider"
     />
   );
 }

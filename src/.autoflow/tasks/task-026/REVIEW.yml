@@ -1,0 +1,332 @@
+task_id: task-026
+title: Enhanced Slider and Input Components
+status: REVIEWFIX
+last_updated: 2025-10-07
+phase: TEST
+
+summary: |
+  Unit tests: 45/45 PASSED ✅
+  E2E tests: FAILING ❌ (application not properly loaded/configured)
+
+  All unit tests for EnhancedSlider and SliderInput components passed successfully.
+  E2E tests are failing due to application state/configuration issues.
+
+test_results:
+  unit_tests:
+    total: 45
+    passed: 45
+    failed: 0
+    coverage: "Excellent coverage of core functionality"
+    files:
+      - tests/unit/components/ui/enhanced-slider.test.tsx (23 tests)
+      - tests/unit/components/ui/slider-input.test.tsx (22 tests)
+
+  e2e_tests:
+    total: 19
+    passed: 0
+    failed: 19
+    status: "All tests timing out or failing at setup"
+
+issues:
+  - id: TEST-001
+    severity: HIGH
+    category: E2E Testing
+    status: OPEN
+    title: E2E tests cannot locate file upload input
+    location: tests/e2e/enhanced-sliders.spec.ts
+
+    description: |
+      All E2E tests in enhanced-sliders.spec.ts are failing because the test setup
+      cannot find the file upload input element. The test attempts to upload an image
+      in beforeEach() but gets "TimeoutError: page.setInputFiles: Timeout exceeded"
+
+    error_message: |
+      TimeoutError: page.setInputFiles: Timeout 10000ms exceeded.
+      Call log:
+        - waiting for locator('input[type="file"]')
+
+    root_cause: |
+      One of the following:
+      1. The file upload input is not visible/rendered on page load
+      2. The selector 'input[type="file"]' is incorrect or too generic
+      3. The application requires user interaction before showing file input
+      4. The page hasn't fully loaded when test tries to interact
+      5. The file input is hidden/replaced by custom upload component
+
+    impact: |
+      - Cannot run E2E tests for enhanced sliders
+      - Cannot verify visual appearance, interactions, or accessibility in real browser
+      - Acceptance criteria requiring E2E validation cannot be confirmed
+      - 19 E2E test cases blocked
+
+    reproduction:
+      1. Navigate to https://craftyprep.demosrv.uk
+      2. Try to locate input[type="file"] element
+      3. Attempt to upload file
+      4. Test times out waiting for element
+
+    expected_behavior: |
+      File upload input should be:
+      - Present in DOM on page load
+      - Accessible via 'input[type="file"]' selector
+      - Ready to accept file uploads immediately
+      - Or: Test should wait for proper application initialization
+
+    root_cause_analysis: |
+      **FOUND**: The file input element in FileDropzone.tsx (line 86-94) has `className="hidden"`,
+      making it invisible. Playwright's `page.setInputFiles()` requires the element to be visible
+      by default, which causes the timeout.
+
+      However, Playwright CAN interact with hidden file inputs using `locator().setInputFiles()`.
+      The issue is using the wrong method - `page.setInputFiles()` instead of
+      `page.locator('input[type="file"]').setInputFiles()`.
+
+    solution: |
+      **CORRECT APPROACH** (Works with hidden inputs):
+      ```typescript
+      await page.goto(BASE_URL);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Use locator().setInputFiles() - works with hidden inputs
+      await page.locator('input[type="file"]').setInputFiles({
+        name: 'test-image.png',
+        mimeType: 'image/png',
+        buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64'),
+      });
+
+      await page.waitForSelector('[data-testid="preview-canvas"]', { timeout: 5000 });
+      await page.click('button:has-text("Auto Prep")');
+      await page.waitForSelector('text=Brightness', { timeout: 5000 });
+      ```
+
+    fix_details: |
+      The FileDropzone component (components/FileDropzone.tsx):
+      - Has hidden file input (line 86-94: `className="hidden"`)
+      - Input is triggered by clicking the visible dropzone area (line 42-46)
+      - This is a common UX pattern for custom file uploads
+
+      Playwright can handle hidden file inputs, but requires using the Locator API:
+      - ❌ WRONG: `page.setInputFiles('input[type="file"]', ...)`
+      - ✅ CORRECT: `page.locator('input[type="file"]').setInputFiles(...)`
+
+    suggested_fixes:
+      - priority: CRITICAL
+        action: Update enhanced-sliders.spec.ts beforeEach()
+        changes: |
+          1. Change `await page.setInputFiles('input[type="file"]', ...)`
+             to `await page.locator('input[type="file"]').setInputFiles(...)`
+          2. Add `await page.waitForLoadState('domcontentloaded')` after goto()
+          3. The hidden input will accept file uploads via Playwright
+
+        patch: |
+          --- a/tests/e2e/enhanced-sliders.spec.ts
+          +++ b/tests/e2e/enhanced-sliders.spec.ts
+          @@ -6,7 +6,10 @@ test.describe('Enhanced Sliders', () => {
+             test.beforeEach(async ({ page }) => {
+               await page.goto(BASE_URL);
+          +    await page.waitForLoadState('domcontentloaded');
+          +
+               // Upload a test image to enable sliders
+          -    await page.setInputFiles('input[type="file"]', {
+          +    await page.locator('input[type="file"]').setInputFiles({
+                 name: 'test-image.png',
+
+    blocking:
+      - All E2E slider tests (19 tests)
+      - E2E acceptance criteria validation
+      - Visual regression testing
+      - Touch interaction testing
+      - Keyboard navigation E2E testing
+
+  - id: TEST-002
+    severity: MEDIUM
+    category: Test Coverage
+    status: OPEN
+    title: Missing integration tests for component integration
+
+    description: |
+      While unit tests cover individual components well, there are no integration
+      tests verifying how EnhancedSlider and SliderInput work together with parent
+      components (BrightnessSlider, ContrastSlider, ThresholdSlider).
+
+    impact: |
+      - Cannot verify slider integration with actual image processing
+      - Cannot verify value changes trigger correct image updates
+      - Risk of integration bugs not caught by unit tests
+
+    suggested_fixes:
+      - Add integration tests for:
+        * BrightnessSlider with EnhancedSlider
+        * ContrastSlider with EnhancedSlider
+        * ThresholdSlider with EnhancedSlider
+        * Verify onChange callbacks propagate correctly
+        * Verify image processing triggers with slider changes
+
+  - id: TEST-003
+    severity: LOW
+    category: Test Organization
+    status: OPEN
+    title: E2E test file in root instead of src/tests/e2e/
+
+    description: |
+      The enhanced-sliders.spec.ts file is in the correct location (src/tests/e2e/)
+      but Playwright may be looking in the wrong directory due to configuration.
+
+    impact: Minimal - tests are found, but organizational clarity could be better
+
+    suggested_fixes:
+      - Verify playwright.config.ts points to correct test directory
+      - Ensure testDir is set to './tests/e2e' or './src/tests/e2e'
+
+acceptance_criteria_status:
+  AC1_custom_slider_styled_track:
+    status: PASS
+    evidence: "Unit tests verify track rendering, gradient, and handle styling"
+    tests:
+      - "EnhancedSlider > Rendering > should render slider with correct value"
+      - "EnhancedSlider > Handle Styling > should apply correct handle size"
+      - "EnhancedSlider > Handle Styling > should have border and shadow"
+
+  AC2_gradient_fill_value_position:
+    status: PASS
+    evidence: "Unit tests verify gradient calculation for all value positions"
+    tests:
+      - "EnhancedSlider > Gradient Fill Calculation > should calculate 0% fill"
+      - "EnhancedSlider > Gradient Fill Calculation > should calculate 50% fill"
+      - "EnhancedSlider > Gradient Fill Calculation > should calculate 100% fill"
+      - "EnhancedSlider > Gradient Fill Calculation > should handle negative range"
+
+  AC3_inline_value_display:
+    status: PARTIAL
+    evidence: "Unit tests verify badge container, but cannot test hover behavior without E2E"
+    tests:
+      - "EnhancedSlider > Value Badge > should have container for hover detection"
+    blocking: "E2E tests needed to verify hover/drag badge visibility (TEST-001)"
+
+  AC4_numeric_input_validation:
+    status: PASS
+    evidence: "Unit tests thoroughly verify input validation and clamping"
+    tests:
+      - "SliderInput > Input Field > should allow typing numeric values"
+      - "SliderInput > Input Field > should clamp value to minimum on blur"
+      - "SliderInput > Input Field > should clamp value to maximum on blur"
+      - "SliderInput > Input Field > should reject non-numeric input"
+      - "SliderInput > Input Field > should handle negative range"
+
+  AC5_increment_decrement_buttons:
+    status: PASS
+    evidence: "Unit tests verify button functionality and disabled states"
+    tests:
+      - "SliderInput > Increment Button > should increase value by step"
+      - "SliderInput > Decrement Button > should decrease value by step"
+      - "SliderInput > Increment Button > should be disabled at maximum value"
+      - "SliderInput > Decrement Button > should be disabled at minimum value"
+
+  AC6_keyboard_support:
+    status: PASS
+    evidence: "Unit tests verify keyboard shortcuts including PageUp/PageDown"
+    tests:
+      - "EnhancedSlider > Keyboard Support > should handle PageUp key"
+      - "EnhancedSlider > Keyboard Support > should handle PageDown key"
+      - "EnhancedSlider > Keyboard Support > should clamp PageUp at maximum"
+      - "EnhancedSlider > Keyboard Support > should clamp PageDown at minimum"
+
+  AC7_hover_focus_states:
+    status: PARTIAL
+    evidence: "Unit tests verify CSS classes, E2E needed for visual confirmation"
+    tests:
+      - "EnhancedSlider > Accessibility > should have focus indicator class"
+    blocking: "E2E tests needed for visual state verification (TEST-001)"
+
+  AC8_touch_friendly_mobile:
+    status: PARTIAL
+    evidence: "Unit tests verify handle size (44px), E2E needed for touch interaction"
+    blocking: "E2E tests needed for touch target and mobile interaction (TEST-001)"
+
+  AC9_satisfying_interaction_feedback:
+    status: PARTIAL
+    evidence: "Cannot test animations and feedback without E2E tests"
+    blocking: "E2E tests needed for animation and feedback verification (TEST-001)"
+
+technical_acceptance_criteria_status:
+  TAC1_component_architecture:
+    status: PASS
+    evidence: "Components created with TypeScript, proper interfaces exported"
+
+  TAC2_existing_sliders_migrated:
+    status: UNKNOWN
+    note: "Need to verify BrightnessSlider, ContrastSlider, ThresholdSlider use EnhancedSlider"
+
+  TAC3_styling_theming:
+    status: PASS
+    evidence: "Tailwind classes used, gradient colors passed as props"
+
+  TAC4_accessibility:
+    status: PASS
+    evidence: "ARIA attributes verified in unit tests"
+    tests:
+      - "EnhancedSlider > Accessibility > should have proper ARIA attributes"
+      - "SliderInput > Accessibility > should have proper ARIA attributes"
+      - "SliderInput > Accessibility > should have accessible button labels"
+
+  TAC5_testing_coverage:
+    status: PARTIAL
+    unit_tests: "COMPLETE - 45/45 passing, excellent coverage"
+    e2e_tests: "BLOCKED - 0/19 passing due to TEST-001"
+    accessibility_tests: "PARTIAL - unit tests pass, E2E accessibility blocked"
+    coverage_percentage: "Estimated 80%+ for unit-testable code"
+
+  TAC6_performance:
+    status: UNKNOWN
+    note: "Cannot test without E2E tests running"
+
+  TAC7_documentation:
+    status: UNKNOWN
+    note: "Need to verify JSDoc comments and documentation"
+
+next_steps:
+  immediate:
+    - priority: CRITICAL
+      action: Fix E2E test setup (TEST-001)
+      details: |
+        1. Inspect live application at https://craftyprep.demosrv.uk
+        2. Identify correct selector for file upload input
+        3. Update enhanced-sliders.spec.ts beforeEach() with correct selector
+        4. Add proper wait conditions for application ready state
+        5. Consider adding data-testid attributes to file upload component
+
+    - priority: HIGH
+      action: Re-run E2E tests after fix
+      details: "Verify all 19 E2E tests pass after TEST-001 is resolved"
+
+    - priority: MEDIUM
+      action: Add integration tests (TEST-002)
+      details: "Create integration tests for slider components with parent components"
+
+  if_all_pass:
+    - Update task status to COMPLETE
+    - Run /verify-implementation for full E2E verification
+    - Document test results in task completion notes
+
+recommendations:
+  - Add data-testid attributes to key UI elements for reliable E2E testing
+  - Consider visual regression testing for slider appearance
+  - Add performance benchmarks for animation frame rate
+  - Document keyboard shortcuts in user-facing documentation
+
+test_summary:
+  total_tests_written: 45 (unit) + 19 (E2E) = 64 tests
+  tests_passing: 45 (unit)
+  tests_failing: 19 (E2E - all blocked by setup issue)
+  tests_skipped: 0
+  coverage_estimate: "80%+ (excellent unit coverage, E2E blocked)"
+
+overall_assessment: |
+  PARTIAL PASS - Unit tests are excellent (45/45 passing) with comprehensive
+  coverage of component functionality, props, keyboard shortcuts, and accessibility.
+
+  E2E tests are completely blocked by application setup issue (TEST-001). Once the
+  file upload selector is fixed, E2E tests should be able to run and validate
+  visual appearance, interactions, and real-world usage.
+
+  Status: REVIEWFIX (requires E2E test fix before proceeding to COMPLETE)
