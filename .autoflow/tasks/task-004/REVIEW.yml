@@ -1,0 +1,13 @@
+task:
+  id: "task-004"
+  title: "Image Canvas and Preview Display"
+  status: REVIEWFIX
+  last_updated: "2025-10-06T17:59:07Z"
+
+issues: []
+
+summary:
+  total: 0
+  resolved: 0
+  remaining: 0
+  next_action: "Run /review-fix"

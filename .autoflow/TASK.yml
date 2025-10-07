@@ -1,10 +1,343 @@
 sprint:
   id: 4
-  goal: Advanced Editing (Crop & Resize)
+  goal: Professional UI/UX Redesign
   duration: Week 7-8
   status: PENDING
   progress:
     completed: 0
-    total: 0
-  last_updated: '2025-10-06T20:40:00Z'
-tasks: []
+    total: 10
+  last_updated: '2025-10-06T23:34:51Z'
+tasks:
+  - id: task-023
+    title: UI/UX Audit and Design System
+    status: COMPLETE
+    priority: HIGH
+    estimated_hours: 12
+    description: 'Conduct comprehensive UI/UX audit of current application.
+
+      Identify pain points, usability issues, and areas for improvement.
+
+      Create design system with color palette, typography, spacing, and component
+      patterns.
+
+      Design modern image editor layout inspired by professional tools (Photoshop,
+      Figma, Canva).
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+    acceptance_criteria:
+      - UI/UX audit document with identified issues
+      - Design system specification (colors, typography, spacing)
+      - Component library design (buttons, inputs, panels, toolbars)
+      - Layout mockups for desktop, tablet, mobile
+      - Dark/light theme color schemes defined
+      - Accessibility requirements documented (WCAG 2.2 AAA)
+  - id: task-024
+    title: Modern Image Editor Layout (Toolbar, Canvas, Panels)
+    status: PENDING
+    priority: HIGH
+    estimated_hours: 14
+    description: 'Implement professional image editor layout with distinct areas:
+
+      - Top toolbar (file operations, undo/redo, zoom)
+
+      - Left sidebar (tools: crop, text, filters)
+
+      - Center canvas (main workspace with zoom/pan)
+
+      - Right panel (properties, adjustments, layers)
+
+      - Bottom status bar (dimensions, zoom level, tips)
+
+      Responsive layout that adapts to screen size.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#component-architecture
+    acceptance_criteria:
+      - Top toolbar with icon buttons and dropdowns
+      - Left sidebar with tool selection (vertical)
+      - Center canvas with proper sizing and scrollbars
+      - Right panel with collapsible sections
+      - Bottom status bar with contextual information
+      - Responsive behavior for tablet/mobile
+      - Panel resize/collapse functionality
+      - Layout persists in localStorage
+  - id: task-025
+    title: Professional Control Panel Redesign
+    status: PENDING
+    priority: HIGH
+    estimated_hours: 10
+    description: 'Redesign all control panels with professional styling:
+
+      - Grouped controls with section headers
+
+      - Collapsible sections (accordions)
+
+      - Visual hierarchy and spacing
+
+      - Labeled control groups (Adjustments, Filters, Export)
+
+      - Proper alignment and padding
+
+      Replace basic forms with polished panel system.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-3
+      - .autoflow/docs/ARCHITECTURE.md#component-patterns
+    acceptance_criteria:
+      - Control panels use card/panel components
+      - Section headers with collapse/expand icons
+      - Proper grouping (Brightness/Contrast/Threshold in one section)
+      - Consistent spacing (8px, 16px, 24px grid)
+      - Visual separators between sections
+      - Smooth collapse/expand animations
+      - Panel state persists across sessions
+  - id: task-026
+    title: Enhanced Slider and Input Components
+    status: PENDING
+    priority: HIGH
+    estimated_hours: 12
+    description: 'Redesign sliders from basic HTML to professional components:
+
+      - Custom-styled range sliders with gradient tracks
+
+      - Large, visible handles with hover effects
+
+      - Real-time value display (inline, not separate)
+
+      - Numeric input fields with +/- buttons
+
+      - Keyboard shortcuts (arrow keys, page up/down)
+
+      - Visual feedback during adjustment
+
+      Replace "shit-looking scrollers" with beautiful, functional controls.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-3
+      - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+    acceptance_criteria:
+      - Custom slider component with styled track and handle
+      - Gradient fill showing current value position
+      - Inline value display (no separate label)
+      - Numeric input with validation
+      - +/- increment buttons
+      - Keyboard support (arrows, page up/down, home/end)
+      - Hover/focus states with smooth transitions
+      - Touch-friendly on mobile (larger hit areas)
+      - Satisfying interaction feedback
+  - id: task-027
+    title: Dark/Light Theme System
+    status: PENDING
+    priority: MEDIUM
+    estimated_hours: 8
+    description: 'Implement complete dark/light theme system:
+
+      - Theme toggle button in toolbar
+
+      - Dark theme colors (dark grays, muted accents)
+
+      - Light theme colors (light grays, vibrant accents)
+
+      - CSS custom properties for theme switching
+
+      - System preference detection (prefers-color-scheme)
+
+      - Theme persistence in localStorage
+
+      All components must support both themes with proper contrast.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#ui-framework-and-styling
+    acceptance_criteria:
+      - Theme toggle in top toolbar
+      - Dark theme with proper contrast (WCAG AAA)
+      - Light theme with proper contrast (WCAG AAA)
+      - CSS variables for theme colors
+      - Detects system theme preference on first load
+      - Theme choice persists across sessions
+      - All components styled for both themes
+      - Smooth transition between themes
+  - id: task-028
+    title: Icon System and Visual Assets
+    status: PENDING
+    priority: MEDIUM
+    estimated_hours: 8
+    description: 'Implement comprehensive icon system for professional look:
+
+      - Icon library (Lucide, Heroicons, or custom)
+
+      - Consistent icon sizes (16px, 20px, 24px)
+
+      - Icons for all tools and actions
+
+      - Icon buttons with hover states
+
+      - Tooltips for all icons
+
+      - SVG icons with proper accessibility (aria-labels)
+
+      Replace text-only buttons with icon+text or icon-only where appropriate.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#component-architecture
+    acceptance_criteria:
+      - Icon library integrated (Lucide recommended)
+      - Icons for all primary actions (upload, download, crop, etc.)
+      - Consistent sizing across application
+      - Icon buttons with proper hover/focus states
+      - Tooltips on icon-only buttons
+      - ARIA labels for screen readers
+      - Icon color adapts to theme
+      - Proper icon spacing in toolbar/sidebar
+  - id: task-029
+    title: Animations and Micro-interactions
+    status: PENDING
+    priority: MEDIUM
+    estimated_hours: 8
+    description: 'Add polished animations and micro-interactions:
+
+      - Smooth transitions for panel collapse/expand
+
+      - Button hover/press animations
+
+      - Loading spinners and progress indicators
+
+      - Toast notifications with slide-in animation
+
+      - Drag feedback (cursor changes, visual highlights)
+
+      - Success/error state animations
+
+      Respect prefers-reduced-motion for accessibility.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#performance-considerations
+    acceptance_criteria:
+      - Smooth panel transitions (200-300ms ease)
+      - Button hover states with scale/shadow effects
+      - Loading states with spinners
+      - Toast notifications slide from bottom-right
+      - Drag operations show visual feedback
+      - Success indicators (checkmarks, green highlights)
+      - Error indicators (shake animation, red highlights)
+      - All animations respect prefers-reduced-motion
+      - No janky or stuttering animations (60fps)
+  - id: task-030
+    title: Context-Aware Toolbars and Floating Panels
+    status: PENDING
+    priority: MEDIUM
+    estimated_hours: 10
+    description: 'Implement context-aware UI elements:
+
+      - Crop tool activates floating crop toolbar
+
+      - Text tool shows text formatting panel
+
+      - Export shows format options panel
+
+      - Floating panels can be positioned/dragged
+
+      - Context menu on canvas (right-click)
+
+      - Keyboard shortcuts panel (Ctrl+K or ?)
+
+      UI adapts to current tool/mode for cleaner experience.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+      - .autoflow/docs/ARCHITECTURE.md#component-architecture
+    acceptance_criteria:
+      - Tool-specific panels appear when tool selected
+      - Floating panels draggable and repositionable
+      - Context menu on canvas right-click
+      - Keyboard shortcuts panel (modal)
+      - Panel positions persist per tool
+      - Escape key closes floating panels
+      - Panels don't block main canvas
+      - Smooth show/hide transitions
+  - id: task-031
+    title: User Onboarding and Tooltips System
+    status: PENDING
+    priority: MEDIUM
+    estimated_hours: 8
+    description: 'Create user onboarding and help system:
+
+      - First-time user tour (product walkthrough)
+
+      - Contextual tooltips on all controls
+
+      - Help button with quick tips panel
+
+      - Keyboard shortcuts reference
+
+      - Empty states with helpful instructions
+
+      - Status messages and hints
+
+      Make the app self-explanatory for new users.
+
+      '
+    docs:
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+    acceptance_criteria:
+      - First-time tour (dismissible, never shows again)
+      - Tooltips on all buttons/controls (hover delay)
+      - Help panel with FAQ and tips
+      - Keyboard shortcuts reference (modal)
+      - Empty state: Drag image here to start
+      - Status bar shows contextual hints
+      - Tour progress indicator
+      - Skip tour button
+      - Tour state persists in localStorage
+  - id: task-032
+    title: UI/UX E2E Testing and Accessibility Audit
+    status: PENDING
+    priority: HIGH
+    estimated_hours: 10
+    description: 'Comprehensive testing of new UI/UX:
+
+      - E2E tests for all UI interactions (Playwright)
+
+      - Accessibility audit (WCAG 2.2 AAA)
+
+      - Responsive design testing (mobile, tablet, desktop)
+
+      - Dark/light theme testing
+
+      - Keyboard navigation testing
+
+      - Screen reader testing
+
+      - Performance testing (animations, transitions)
+
+      Ensure professional polish meets accessibility standards.
+
+      '
+    docs:
+      - .autoflow/docs/TESTING.md
+      - .autoflow/docs/FUNCTIONAL.md#feature-5
+    acceptance_criteria:
+      - E2E test: Theme switching works
+      - E2E test: Panel collapse/expand functional
+      - E2E test: Slider interaction and value update
+      - E2E test: Toolbar navigation and tool selection
+      - Lighthouse accessibility score ≥95
+      - All color contrast meets WCAG AAA
+      - Keyboard navigation works for all controls
+      - Screen reader announces all UI changes
+      - Responsive layout tested on 3+ screen sizes
+      - Smooth animations (no janky frame drops)

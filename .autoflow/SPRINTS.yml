@@ -1,6 +1,6 @@
 project:
   name: CraftyPrep - Laser Engraving Image Prep Tool
-  total_sprints: 7
+  total_sprints: 8
   current_sprint: 3
   last_updated: '2025-10-06'
 sprints:
@@ -126,9 +126,58 @@ sprints:
     commit: 1ad0616
   completed: '2025-10-06'
 - id: 4
-  goal: Advanced Editing (Crop & Resize)
+  goal: Professional UI/UX Redesign
   status: PENDING
   duration: Week 7-8
+  progress:
+    completed: 0
+    total: 10
+  deliverables:
+  - Modern image editor UI layout (toolbar, canvas, panels)
+  - Professional control panels with proper grouping
+  - Polished slider designs and input controls
+  - Context-aware toolbars and floating panels
+  - Dark/light theme support
+  - Responsive layout for all screen sizes
+  - Icon system and visual consistency
+  - Smooth animations and transitions
+  - Professional typography and spacing
+  - User onboarding and tooltips
+  tasks:
+  - id: task-023
+    status: COMPLETE
+    title: UI/UX Audit and Design System
+  - id: task-024
+    status: PENDING
+    title: Modern Image Editor Layout (Toolbar, Canvas, Panels)
+  - id: task-025
+    status: PENDING
+    title: Professional Control Panel Redesign
+  - id: task-026
+    status: PENDING
+    title: Enhanced Slider and Input Components
+  - id: task-027
+    status: PENDING
+    title: Dark/Light Theme System
+  - id: task-028
+    status: PENDING
+    title: Icon System and Visual Assets
+  - id: task-029
+    status: PENDING
+    title: Animations and Micro-interactions
+  - id: task-030
+    status: PENDING
+    title: Context-Aware Toolbars and Floating Panels
+  - id: task-031
+    status: PENDING
+    title: User Onboarding and Tooltips System
+  - id: task-032
+    status: PENDING
+    title: UI/UX E2E Testing and Accessibility Audit
+- id: 5
+  goal: Advanced Editing (Crop & Resize)
+  status: PENDING
+  duration: Week 9-10
   progress:
     completed: 0
     total: 10
@@ -143,11 +192,41 @@ sprints:
   - Unit conversion utilities
   - Image quality preservation during resize
   - Integration with existing processing pipeline
-  tasks: []
-- id: 5
+  tasks:
+  - id: task-033
+    status: PENDING
+    title: Crop Tool Component Foundation
+  - id: task-034
+    status: PENDING
+    title: Interactive Crop Handles and Dragging
+  - id: task-035
+    status: PENDING
+    title: Aspect Ratio Presets and Lock Toggle
+  - id: task-036
+    status: PENDING
+    title: Resize Controls with Unit Conversion
+  - id: task-037
+    status: PENDING
+    title: DPI Configuration System
+  - id: task-038
+    status: PENDING
+    title: Canvas Zoom and Pan Controls
+  - id: task-039
+    status: PENDING
+    title: Crop Preview Overlay and Visual Feedback
+  - id: task-040
+    status: PENDING
+    title: Crop/Resize Integration with Processing Pipeline
+  - id: task-041
+    status: PENDING
+    title: Image Quality Preservation Algorithm
+  - id: task-042
+    status: PENDING
+    title: Crop/Resize E2E Testing and Accessibility
+- id: 6
   goal: Text Overlay & Material Presets
   status: PENDING
-  duration: Week 9-10
+  duration: Week 11-12
   progress:
     completed: 0
     total: 10
@@ -162,11 +241,41 @@ sprints:
   - Text layer management
   - Material algorithm documentation
   - Integration with export pipeline
-  tasks: []
-- id: 6
+  tasks:
+  - id: task-043
+    status: PENDING
+    title: Text Overlay Component and Canvas Integration
+  - id: task-044
+    status: PENDING
+    title: Font Selection and Text Styling Controls
+  - id: task-045
+    status: PENDING
+    title: Text Positioning, Dragging, and Rotation
+  - id: task-046
+    status: PENDING
+    title: Text Layer Management System
+  - id: task-047
+    status: PENDING
+    title: Dithering Algorithms (Stucki, Floyd-Steinberg, Atkinson)
+  - id: task-048
+    status: PENDING
+    title: Enhanced Material Preset System
+  - id: task-049
+    status: PENDING
+    title: Material-Specific Preview Rendering
+  - id: task-050
+    status: PENDING
+    title: Custom Preset Creation and Persistence
+  - id: task-051
+    status: PENDING
+    title: Material Algorithm Documentation
+  - id: task-052
+    status: PENDING
+    title: Text/Material Integration with Export Pipeline
+- id: 7
   goal: Export Formats & Dithering
   status: PENDING
-  duration: Week 11-12
+  duration: Week 13-14
   progress:
     completed: 0
     total: 10
@@ -181,11 +290,41 @@ sprints:
   - Color palette reduction
   - Export quality settings
   - Final documentation and polish
-  tasks: []
-- id: 7
+  tasks:
+  - id: task-053
+    status: PENDING
+    title: BMP Export Format Implementation
+  - id: task-054
+    status: PENDING
+    title: Dithered Export Integration (PNG/BMP)
+  - id: task-055
+    status: PENDING
+    title: Grayscale Export Options
+  - id: task-056
+    status: PENDING
+    title: SVG Trace Export (Optional)
+  - id: task-057
+    status: PENDING
+    title: Format-Specific Optimization Engine
+  - id: task-058
+    status: PENDING
+    title: Multi-Format Batch Export System
+  - id: task-059
+    status: PENDING
+    title: Export Presets (Cricut, Glowforge, Generic)
+  - id: task-060
+    status: PENDING
+    title: Color Palette Reduction Algorithm
+  - id: task-061
+    status: PENDING
+    title: Export Quality Settings UI
+  - id: task-062
+    status: PENDING
+    title: Export Documentation and User Guide
+- id: 8
   goal: Testing, Deployment & Production
   status: PENDING
-  duration: Week 13-14
+  duration: Week 15-16
   progress:
     completed: 0
     total: 11
@@ -201,4 +340,37 @@ sprints:
   - Final security and performance audit
   - All quality gates passed
   - Production-ready application
-  tasks: []
+  tasks:
+  - id: task-063
+    status: PENDING
+    title: Cross-Browser Compatibility Testing (Chrome, Firefox, Safari, Edge)
+  - id: task-064
+    status: PENDING
+    title: Performance Optimization and Profiling
+  - id: task-065
+    status: PENDING
+    title: Final Code Review and Refactoring
+  - id: task-066
+    status: PENDING
+    title: Docker Production Configuration
+  - id: task-067
+    status: PENDING
+    title: nginx Security Headers and Configuration
+  - id: task-068
+    status: PENDING
+    title: Traefik Integration and HTTPS Setup
+  - id: task-069
+    status: PENDING
+    title: Production Deployment to craftyprep.demosrv.uk
+  - id: task-070
+    status: PENDING
+    title: Monitoring and Logging Infrastructure
+  - id: task-071
+    status: PENDING
+    title: Complete User Documentation and Guide
+  - id: task-072
+    status: PENDING
+    title: Final Security Audit (OWASP)
+  - id: task-073
+    status: PENDING
+    title: Final Performance Audit and Optimization
